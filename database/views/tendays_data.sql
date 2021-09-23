@@ -40,9 +40,8 @@ SELECT
 
     MAX(`data`.`lluvia_24_horas`) AS `lluvia_24_horas_total`,
 
-    floor((to_days(`data`.`fecha_hora`) / 10))  as `group_by`
-
+    ceil((to_days(`data`.`fecha_hora`) / 10))  as `group_by`
 
     FROM `data`
 
-    LEFT JOIN `stations` ON `stations`.`id` = `data`.`id_station` GROUP BY `group_by`,`data`.`id_station`;
+    LEFT JOIN `stations` ON `stations`.`id` = `data`.`id_station` GROUP BY `group_by`, `data`.`id_station`;
