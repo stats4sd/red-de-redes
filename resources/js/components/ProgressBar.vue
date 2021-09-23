@@ -11,7 +11,7 @@
                             'pb_active' : currentStep == step.id
                         }"
                     >
-                        <h3>Step {{ step.id }}</h3>
+                        <h3>Paso {{ step.id }}</h3>
                         {{ step.title }}
                     </li>
                 </ul>

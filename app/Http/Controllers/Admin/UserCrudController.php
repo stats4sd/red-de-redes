@@ -32,7 +32,7 @@ class UserCrudController extends CrudController
         */
         $this->crud->setModel('App\Models\User');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/user');
-        $this->crud->setEntityNameStrings('user', 'users');
+        $this->crud->setEntityNameStrings('usuario', 'usuarios');
 
         /*
         |--------------------------------------------------------------------------
@@ -45,7 +45,7 @@ class UserCrudController extends CrudController
             $this->crud->setColumns([
                 [
                     'name' => 'name',
-                    'label' => 'Name',
+                    'label' => 'Nombre',
                     'type' => 'text',
                 ],
                 [
@@ -55,7 +55,7 @@ class UserCrudController extends CrudController
                 ],
                 [
                     'name' => 'type',
-                    'label' => 'Type',
+                    'label' => 'Tipo',
                     'type' => 'text',
                 ],
                 [
@@ -72,13 +72,13 @@ class UserCrudController extends CrudController
             $this->crud->addFields([
                 [
                     'name' => 'name',
-                    'label' => 'Name',
+                    'label' => 'Nombre',
                     'type' => 'text',
                     'priority' => 1,
                 ],
                 [
                     'name' => 'password',
-                    'label' => 'Password',
+                    'label' => 'Contraseña',
                     'type' => 'password',
                     'priority' => 1,
                 ],
@@ -89,7 +89,7 @@ class UserCrudController extends CrudController
                 ],
                 [
                     'name' => 'type',
-                    'label' => 'Type',
+                    'label' => 'Tipo',
                     'type' => 'select_from_array',
                     'options' => ['default' => 'Default', 'admin' => 'Admin'],        
                 ],

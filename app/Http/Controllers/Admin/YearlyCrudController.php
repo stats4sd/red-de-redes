@@ -35,7 +35,7 @@ class YearlyCrudController extends CrudController
         */
         CRUD::setModel('App\Models\Yearly');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/yearly');
-        CRUD::setEntityNameStrings('yearly', 'yearly');
+        CRUD::setEntityNameStrings('anual', 'anual');
 
         /*
         |--------------------------------------------------------------------------
@@ -222,7 +222,7 @@ class YearlyCrudController extends CrudController
         $this->crud->addFilter([
             'name' => 'id_station',
             'type' => 'select2',
-            'label' => 'Station',
+            'label' => 'Estación',
         ],function(){
 
             return Station::all()->pluck('label', 'id')->toArray();;
@@ -235,7 +235,7 @@ class YearlyCrudController extends CrudController
         $this->crud->addFilter([
             'name' => 'fecha',
             'type' => 'select2_multiple',
-            'label' => 'Year',
+            'label' => 'Año',
         ],function(){
            $years = Yearly::select('fecha')->orderBy('fecha')->pluck('fecha', 'fecha')->toArray();
             return $years;

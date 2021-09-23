@@ -23,7 +23,7 @@ class ManejoParcelaCrudController extends CrudController
     {
         $this->crud->setModel('App\Models\ManejoParcela');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/manejoparcela');
-        $this->crud->setEntityNameStrings('manejoparcela', 'manejo_parcelas');
+        $this->crud->setEntityNameStrings('manejo parcela', 'manejo parcela');
     }
 
     protected function setupListOperation()

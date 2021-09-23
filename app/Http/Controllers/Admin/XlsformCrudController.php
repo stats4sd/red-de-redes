@@ -40,7 +40,7 @@ class XlsformCrudController extends CrudController
         */
         CRUD::setModel('App\Models\Xlsform');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/xlsform');
-        CRUD::setEntityNameStrings('xlsform', 'xlsforms');
+        CRUD::setEntityNameStrings('XLS Form', 'XLS Forms');
     }
 
     protected function setupListOperation()

@@ -50,10 +50,10 @@
 	   	
 	   		<div class="card" style="width: 200px;">
 	   			<div class="mx-3 mt-3 mb-3">
-		   			<label><b>Insert radius in Km: </b></label>
+		   			<label><b>Ingrese el radio en km: </b></label>
 		   			<input v-model="radius" placeholder="edit me">
 		   			
-		   			<p><b>Stations:</b> {{neasterStation}}</p>
+		   			<p><b>Estaciones:</b> {{neasterStation}}</p>
 		   			<p><b>Parcelas:</b> {{neasterParcela}}</p>
 	   			</div>
 	   		</div>

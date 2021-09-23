@@ -24,7 +24,7 @@ return [
     // ----
 
     // Project name. Shown in the breadcrumbs and a few other places.
-    'project_name' => 'Weather Station Platform ',
+    'project_name' => 'WeatherStations',
 
     // Content of the HTML meta robots tag to prevent indexing and link following
     'meta_robots_content' => 'noindex, nofollow',

@@ -31,7 +31,7 @@ class WeatherDataCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\WeatherData::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/weather_data');
-        CRUD::setEntityNameStrings('weather data', 'weather data');
+        CRUD::setEntityNameStrings('datos meteorológicos', 'datos meteorológicos');
     }
 
     /**
@@ -337,7 +337,7 @@ class WeatherDataCrudController extends CrudController
         $this->crud->addFilter([
             'name' => 'station',
             'type' => 'select2',
-            'label' => 'Station',
+            'label' => 'Estación',
         ], function () {
             return Station::all()->pluck('label', 'label')->toArray();
         }, function ($value) {
@@ -348,7 +348,7 @@ class WeatherDataCrudController extends CrudController
             [ // daterange filter
                 'type' => 'date_range',
                 'name' => 'from_to',
-                'label'=> 'Date range'
+                'label'=> 'Rango de fechas'
 
             ],
             false,

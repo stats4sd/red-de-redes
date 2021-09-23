@@ -23,7 +23,7 @@ class ComunidadCrudController extends CrudController
     {
         $this->crud->setModel('App\Models\Comunidad');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/comunidad');
-        $this->crud->setEntityNameStrings('comunidad', 'comunidads');
+        $this->crud->setEntityNameStrings('comunidad', 'comunidades');
     }
 
     protected function setupListOperation()

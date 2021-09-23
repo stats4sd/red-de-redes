@@ -28,7 +28,7 @@ class EnfermedadeCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Enfermedade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/enfermedade');
-        CRUD::setEntityNameStrings('enfermedade', 'enfermedades');
+        CRUD::setEntityNameStrings('enfermedad', 'enfermedades');
     }
 
     /**

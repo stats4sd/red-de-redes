@@ -37,7 +37,7 @@ class MonthlyCrudController extends CrudController
         */
         CRUD::setModel('App\Models\Monthly');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/monthly');
-        CRUD::setEntityNameStrings('monthly', 'monthly');
+        CRUD::setEntityNameStrings('mensual', 'mensual');
 
         /*
         |--------------------------------------------------------------------------
@@ -223,7 +223,7 @@ class MonthlyCrudController extends CrudController
         $this->crud->addFilter([
             'name' => 'id_station',
             'type' => 'select2',
-            'label' => 'Station',
+            'label' => 'Estación',
         ],function(){
 
             return Station::all()->pluck('label', 'id')->toArray();
@@ -237,7 +237,7 @@ class MonthlyCrudController extends CrudController
          $this->crud->addFilter([
             'name' => 'year',
             'type' => 'select2_multiple',
-            'label' => 'Years',
+            'label' => 'Años',
         ],function(){
 
            return Yearly::select('fecha')->orderBy('fecha')->pluck('fecha', 'fecha')->toArray();
@@ -251,22 +251,22 @@ class MonthlyCrudController extends CrudController
         $this->crud->addFilter([
             'name' => 'month',
             'type' => 'select2_multiple',
-            'label' => 'Months',
+            'label' => 'Meses',
         ],function(){
 
             return [
-                '01' => 'January',
-                '02' => 'February',
-                '03' => 'March',
-                '04' => 'April',
-                '05' => 'May',
-                '06' => 'June',
-                '07' => 'July',
-                '08' => 'August',
-                '09' => 'September',
-                '10' => 'October',
-                '11' => 'November',
-                '12' => 'December'
+                '01' => 'Enero',
+                '02' => 'Febrero',
+                '03' => 'Marzo',
+                '04' => 'Abril',
+                '05' => 'Mayo',
+                '06' => 'Junio',
+                '07' => 'Julio',
+                '08' => 'Agosto',
+                '09' => 'Septiembre',
+                '10' => 'Octubre',
+                '11' => 'Noviembre',
+                '12' => 'Diciembre'
             ];
 
         },function($values){

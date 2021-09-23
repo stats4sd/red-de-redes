@@ -28,8 +28,8 @@ class SubmissionCrudController extends CrudController
 
     protected function setupListOperation()
     {
-        // TODO: remove setFromDb() and manually define Columns, maybe Filters
-        $this->crud->setFromDb();
+        CRUD::column('xls_form')->type('relationship');
+        CRUD::column('uuid')->label('UUID From Kobotoolbox');
     }
 
     protected function setupCreateOperation()

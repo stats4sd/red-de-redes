@@ -57,7 +57,7 @@
        
             <b-form-group
             v-if="modulesSelected.includes('parcelas')"
-            label="What are you interested about plots?"
+            label="¿Qué le interesa de las parcelas?"
             class="mt-3"
             v-slot="{ selectPlotLabel }"
             >
@@ -74,7 +74,7 @@
    
             <b-form-group
             v-if="modulesSelected.includes('cultivos')"
-            label="What are you interested about crops?"
+            label="¿Qué le interesa de los cultivos?"
             class="mt-3"
             v-slot="{ selectCultivoLabel }"
             >
