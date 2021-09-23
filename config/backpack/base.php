@@ -187,11 +187,11 @@ return [
 
     // The guard that protects the Backpack admin panel.
     // If null, the config.auth.defaults.guard value will be used.
-    'guard' => 'backpack',
+    'guard' => 'web',
 
     // The password reset configuration for Backpack.
     // If null, the config.auth.defaults.passwords value will be used.
-    'passwords' => 'backpack',
+    'passwords' => 'web',
 
     // What kind of avatar will you like to show to the user?
     // Default: gravatar (automatically use the gravatar for his email)
