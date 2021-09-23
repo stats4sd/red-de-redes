@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.2",
+        "php": "^7.4|^8.0",
         "backpack/crud": "4.1.*",
         "backpack/settings": "^3.0.0",
         "barryvdh/laravel-elfinder": "^0.4.3",
@@ -27,7 +27,6 @@
         "predis/predis": "^1.1",
         "prologue/alerts": "^0.4.3",
         "pusher/pusher-php-server": "^4.0",
-        "simplesoftwareio/simple-qrcode": "~3",
         "spatie/laravel-translatable": "^4.0",
         "stats4sd/laravel-sql-views": "^1.02",
         "symfony/process": "5.1.*",
@@ -43,11 +42,9 @@
         "facade/ignition": "^2.0",
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
-        "laracasts/generators": "^2.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^4.1",
-        "phpunit/phpunit": "^8.5",
-        "webfactor/laravel-generators": "^3.3"
+        "phpunit/phpunit": "^8.5"
     },
     "config": {
         "optimize-autoloader": true,
