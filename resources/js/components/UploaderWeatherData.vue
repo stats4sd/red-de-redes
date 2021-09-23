@@ -15,44 +15,44 @@
                             aria-controls="collapse-1"
                             @click="currentStep = 1"
                         >
-                            Step 1: {{ steps[0].title }}
+                            Paso 1: {{ steps[0].title }}
                         </b-button>
                     </div>
                     <b-collapse id="collapse-1" accordion="accordion" role="tabpanel" v-model="visible1">
                         <div class="py-4 mx-4">
-                            <h3>Upload data file</h3>
-                            <p>Upload the .csv or .txt file you extracted from the weatherstation. Make sure you upload the original, un-edited data file.</p>
+                            <h3>Sube el archivo de datos</h3>
+                            <p>Sube el archivo .csv o .txt que extrajo de la estación meteorológica. Asegúrese de subir el archivo de datos original sin editar.</p>
                             <div class="row mx-4 justify-content-center">
-                                <label class="control-label col-sm-6" style="color: black"><h5>Select the station</h5>
+                                <label class="control-label col-sm-6" style="color: black"><h5>Seleccione la estación</h5>
                                     <v-select @change="modalShow = !modalShow" :options="stations" label="label" v-model="selectedStation"></v-select>
                                 </label>
                             </div>
                             <div class="row mx-4 justify-content-center">
-                                <b-button @click="modalShow = !modalShow">Confirm Station</b-button>
+                                <b-button @click="modalShow = !modalShow">Confirmar estación</b-button>
 
-                                    <b-modal  v-model="modalShow" title="Station" v-if="selectedStation" @ok="handleOk">
-                                        <p class="my-4"><b>Station:</b> {{selectedStation.label}}</p>
-                                        <p class="my-4"><b>Latitude:</b> {{selectedStation.latitude}}</p>
-                                        <p class="my-4"><b>Longitude:</b> {{selectedStation.longitude}}</p>
-                                        <p class="my-4"><b>Altitude:</b> {{selectedStation.altitude}}</p>
-                                        <p class="my-4"><b>Type:</b> {{selectedStation.type}}</p>
-                                        <p class="my-4"><b>Are you sure that {{selectedStation.label}} is the right Station?</b></p>
+                                    <b-modal  v-model="modalShow" title="Estación" v-if="selectedStation" @ok="handleOk">
+                                        <p class="my-4"><b>Estación:</b> {{selectedStation.label}}</p>
+                                        <p class="my-4"><b>Latitud:</b> {{selectedStation.latitude}}</p>
+                                        <p class="my-4"><b>Longitud:</b> {{selectedStation.longitude}}</p>
+                                        <p class="my-4"><b>Altitud:</b> {{selectedStation.altitude}}</p>
+                                        <p class="my-4"><b>Tipo:</b> {{selectedStation.type}}</p>
+                                        <p class="my-4"><b>¿Está seguro de que {{selectedStation.label}} es la estación correcta?</b></p>
                                     </b-modal>
                             </div>
                                     
                     
                             <div class="row mx-4 justify-content-center" v-show="showUploadFile">
-                                <label class="control-label col-sm-6" style="color: black"><h5>Select the file</h5>
-                                    <b-form-file  v-model="file" placeholder="Choose a file or drop it here..."></b-form-file>
+                                <label class="control-label col-sm-6" style="color: black"><h5>Seleccione el archivo de datos</h5>
+                                    <b-form-file  v-model="file" placeholder="Elija un archivo o suéltelo aquí..."></b-form-file>
                                 </label>
                             </div>
                             <div class="row mx-4 justify-content-center" v-show="showUploadFile">
-                                <label class="control-label col-sm-6" style="color: black"><h5>Select the file Observations</h5>
-                                    <b-form-file  v-model="filesObservation" placeholder="Choose a file or drop it here..."></b-form-file>
+                                <label class="control-label col-sm-6" style="color: black"><h5>Selccione el archivo con comentarios sobre los datos</h5>
+                                    <b-form-file  v-model="filesObservation" placeholder="Elija un archivo o suéltelo aquí..."></b-form-file>
                                 </label>
                             </div>
-                            <h3>Select the units</h3>
-                            <p class="mt-3">Select the units used in the file for the following variable types:</p>
+                            <h3>Seleccione las unidades</h3>
+                            <p class="mt-3">Seleccione las unidades utilizadas en el archivo para los siguientes tipos de variables:</p>
 
                             <div class="row img-block py-4 mx-4 justify-content-center">
                                 <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
@@ -70,10 +70,10 @@
                             </div>
 
                             <div style="text-align: center;">
-                                <b-alert show varient="info">After you upload the file, you will have a chance to review the data values and confirm that these are the correct units before continuing.</b-alert>
+                                <b-alert show varient="info">Después de subir el archivo, tendrá la oportunidad de revisar los valores de los datos y confirmar que estas son las unidades correctas antes de continuar.</b-alert>
                                 <b-alert show variant="danger" v-if="uploadError!=null">{{uploadError}}</b-alert>
                                 <button class="site-btn my-4" v-on:click="submit();" :disabled="busy_upload">
-                                    <b-spinner small v-if="busy_upload" label="Spinning"></b-spinner> Upload File
+                                    <b-spinner small v-if="busy_upload" label="Spinning"></b-spinner> Subir
                                 </button>
                             </div>
                         </div>
@@ -88,15 +88,15 @@
                             aria-controls="collapse-2"
                             @click="currentStep = 2"
                         >
-                            Step 2: {{ steps[1].title }}
+                            Paso 2: {{ steps[1].title }}
                         </b-button>
                     </div>
                     <b-collapse id="collapse-2" accordion="accordion" role="tabpanel" v-model="visible2">
                         <div class="py-4 mx-4">
-                            <h3>Data Preview</h3>
-                            <p class="mt-3">This is an example of your data.</p>
-                            <b-alert show varient="success" >Please check that the columns you expect to be filled contain data, and that the values look sensible for the selected location, the time of year and the units chosen.</b-alert>
-                            <b-alert varient="secondary" v-if="previewData!=null">There are {{total_rows}} rows</b-alert>
+                            <h3>Vista preliminar de datos</h3>
+                            <p class="mt-3">Este es un ejemplo de sus datos</p>
+                            <b-alert show varient="success" >Verifique que las columnas que espera llenar contengan datos y que los valores parezcan adecuados para la ubicación seleccionada, la época del año y las unidades elegidas.</b-alert>
+                            <b-alert varient="secondary" v-if="previewData!=null">Hay {{total_rows}} filas</b-alert>
                            
                             <div class="d-flex mx-4 justify-content-center">
 
@@ -167,7 +167,7 @@
                             </div>
 
                             <div class="row py-4 mx-4 justify-content-center" v-if="error_data!=null">
-                                <b-alert show variant="danger" v-if="error_temp || error_press || error_wind||error_rain ">There are some values with the wrong units please check the following table and proceed with <b>Cancel</b> for uploading a new file or press <b>Store Data in DB</b> if the values are correct.</b-alert>
+                                <b-alert show variant="danger" v-if="error_temp || error_press || error_wind||error_rain ">Hay algunos valores con las unidades incorrectas, consulte la siguiente tabla y continúe con <b>Cancelar</b> para subir un nuevo archivo o haga clic en <b>Guardar en la base de datos</b> si los valores son correctos.</b-alert>
 
                                 <b-table sticky-header="600px" striped hover responsive :items="error_data">
                                     <template v-if="error_temp" v-slot:cell(temperatura_interna)="data">
@@ -236,12 +236,12 @@
 
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
                                     aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable" style="background: red;"><b-spinner small v-if="busy_clean" label="Spinning"></b-spinner> 
-                                    Cancel
+                                    Cancelar
                                 </button>
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
                                     aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile">
                                     <b-spinner small v-if="busy_store" label="Spinning"></b-spinner> 
-                                    Store Data in DB
+                                    Guardar en la base de datos
                                 </button>
 
                             </div>
@@ -264,11 +264,11 @@ const rootUrl = process.env.MIX_APP_URL
                 steps: [
                     {
                         'id': 1,
-                        'title': "Upload the file",
+                        'title': "Subir el archivo de datos",
                     },
                     {
                         'id': 2,
-                        'title': "Check units and Store data",
+                        'title': "Comprobar unidades y guardar datos",
                     }
                 ],
                 unitTemp : [
@@ -402,12 +402,12 @@ const rootUrl = process.env.MIX_APP_URL
                 this.uploadError = null;
 
                 if(!this.file) {
-                    this.uploadError = "Please choose a file to upload";
+                    this.uploadError = "Elija un archivo para subir";
                     return;
                 }
 
                 if(!this.selectedStation) {
-                    this.uploadError = "Please select the station this data came from";
+                    this.uploadError = "Seleccione la estación de la que provienen estos datos";
                     return;
                 }
 
@@ -446,7 +446,7 @@ const rootUrl = process.env.MIX_APP_URL
                         this.uploadError = error.response.data.message;
                     }
                     else {
-                        this.uploadError = "The file could not be uploaded. Please check it is in the correct format, or contact the site administrator for more information";
+                        this.uploadError = "No se pudo subir el archivo. Verifique que esté en el formato correcto o póngase en contacto con el administrador de la plataforma para obtener más información.";
                     }
                 })
                 .then(() => {

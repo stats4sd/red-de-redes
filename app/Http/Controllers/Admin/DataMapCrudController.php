@@ -25,7 +25,7 @@ class DataMapCrudController extends CrudController
     {
         $this->crud->setModel('App\Models\DataMap');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/datamap');
-        $this->crud->setEntityNameStrings('datamap', 'data_maps');
+        $this->crud->setEntityNameStrings('data map', 'data maps');
     }
 
     protected function setupListOperation()

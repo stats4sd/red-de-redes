@@ -44,16 +44,16 @@
 
                         @elseif(Auth::user()->type=="admin")
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='home') active @endif" href="home">Home</a>
+                          <a class="nav-link @if(Route::current()->uri==='home') active @endif" href="home">Inicio</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='weatherstations' && Auth::user()->type=="admin") active @endif" href="weatherstations">Upload Weather Data</a>
+                          <a class="nav-link @if(Route::current()->uri==='weatherstations' && Auth::user()->type=="admin") active @endif" href="weatherstations">Subir Datos Meteorológicos</a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link @if(Route::current()->uri==='admin' && Auth::user()->type=="admin") active @endif" href="admin">Admin</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='qr-codes' && Auth::user()->type=="admin") active @endif" href="{{ url('qr-codes') }}">QR Codes</a>
+                          <a class="nav-link @if(Route::current()->uri==='qr-codes' && Auth::user()->type=="admin") active @endif" href="{{ url('qr-codes') }}">Códigos QR</a>
                         </li>
                          @endguest
                     </ul>
@@ -63,11 +63,11 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}" style="color:white;" >{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}" style="color:white;" >{{ __('Iniciar sesión') }}</a>
                             </li>
                             <li class="nav-item">
                                 @if (Route::has('register'))
-                                    <a class="nav-link" href="{{ route('register') }}" style="color:white;" >{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}" style="color:white;" >{{ __('Registrar') }}</a>
                                 @endif
                             </li>
                         @else
@@ -80,7 +80,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('Salir') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

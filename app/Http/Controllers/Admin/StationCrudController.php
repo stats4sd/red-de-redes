@@ -30,7 +30,7 @@ class StationCrudController extends CrudController
         */
         $this->crud->setModel('App\Models\Station');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/station');
-        $this->crud->setEntityNameStrings('station', 'stations');
+        $this->crud->setEntityNameStrings('estación', 'estaciones');
 
         /*
         |--------------------------------------------------------------------------
@@ -43,12 +43,12 @@ class StationCrudController extends CrudController
         $this->crud->setColumns([
             [
                 'name' => 'id',
-                'label' => 'Id',
+                'label' => 'ID',
                 'type' => 'number',
             ],
             [
                 'name' => 'hardware_id',
-                'label' => 'Hardware id',
+                'label' => 'Hardware ID',
                 'type' => 'text',
             ],
             [
@@ -58,22 +58,22 @@ class StationCrudController extends CrudController
             ],
             [
                 'name' => 'type',
-                'label' => 'Station Type',
+                'label' => 'Tipo de estación',
                 'type' => 'text',
             ],
             [
                 'name' => 'latitude',
-                'label' => 'latitude',
+                'label' => 'Latitud',
                 'type' => 'decimal',
             ],
             [
                 'name' => 'longitude',
-                'label' => 'longitude',
+                'label' => 'Longitud',
                 'type' => 'decimal',
             ],
             [
                 'name' => 'altitude',
-                'label' => 'altitude',
+                'label' => 'Altitud',
                 'type' => 'decimal',
             ],
         ]);
@@ -81,7 +81,7 @@ class StationCrudController extends CrudController
         $this->crud->addFields([
             [
                 'name' => 'hardware_id',
-                'label' => 'Hardware id',
+                'label' => 'Hardware ID',
                 'type' => 'text',
             ],
             [
@@ -91,7 +91,7 @@ class StationCrudController extends CrudController
             ],
             [
                 'name' => 'type',
-                'label' => 'Station Type',
+                'label' => 'Tipo de estación',
                 'type' => 'select2_from_array',
                 'options' => ['davis' => 'Davis', 'chinas' => 'Chinas'],
                 'allows_null' => false,
@@ -99,7 +99,7 @@ class StationCrudController extends CrudController
             ],
             [
                 'name' => 'latitude',
-                'label' => 'latitude',
+                'label' => 'Latitud',
                 'type' => 'number',
                   // optionals
                 'attributes' => ["step" => "any"], // allow decimals
@@ -107,13 +107,13 @@ class StationCrudController extends CrudController
             ],
             [
                 'name' => 'longitude',
-                'label' => 'longitude',
+                'label' => 'Longitud',
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
             ],
             [
                 'name' => 'altitude',
-                'label' => 'altitude',
+                'label' => 'Altitud',
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
             ],

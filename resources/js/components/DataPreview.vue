@@ -66,12 +66,12 @@
                                       
                                     </b-col>
                                     <b-col cols="auto" class="p-3">
-                                        <p><b>Latitude :</b> {{stationDetails.latitude }}</p>
-                                        <p><b>Longitude :</b> {{stationDetails.longitude }}</p>
-                                        <p><b>Altitude :</b> {{stationDetails.altitude }}</p>
+                                        <p><b>Latitud :</b> {{stationDetails.latitude }}</p>
+                                        <p><b>Longitud :</b> {{stationDetails.longitude }}</p>
+                                        <p><b>Altitud :</b> {{stationDetails.altitude }}</p>
                                     </b-col>
                                 </b-row>
-                                <p v-if="weather.length!==0">Showing {{weather.to}} of {{weather.total}} entries</p> 
+                                <p v-if="weather.length!==0">Mostrando {{weather.to}} de {{weather.total}} entradas</p> 
                                 <tables :data="weather.data" :fields="weatherFields"></tables>
                             </b-card-text>
                         </b-tab>
@@ -80,16 +80,16 @@
                                 <b-row>
                                     <b-col cols="auto" class="mr-auto p-3">
                                         <p><b>Estación :</b> {{ stationDetails.label }}</p>
-                                        <p v-if="aggregationSelected=='senamhi_daily'"><b>Year :</b> {{ yearSelected }}</p>
-                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Month Initial :</b> {{ months[monthInitialSelected-1].label }}</p>
-                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Month Final :</b> {{ months[monthFinalSelected-1].label }}</p>
-                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Year Initial :</b> {{ yearInitialSelected }}</p>
-                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Year Final :</b> {{ yearFinalSelected }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_daily'"><b>Año :</b> {{ yearSelected }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Mes Initial :</b> {{ months[monthInitialSelected-1].label }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Mes Final :</b> {{ months[monthFinalSelected-1].label }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Año Initial :</b> {{ yearInitialSelected }}</p>
+                                        <p v-if="aggregationSelected=='senamhi_monthly'"><b>Año Final :</b> {{ yearFinalSelected }}</p>
                                     </b-col>
                                     <b-col cols="auto" class="p-3">
-                                        <p><b>Latitude :</b> {{stationDetails.latitude }}</p>
-                                        <p><b>Longitude :</b> {{stationDetails.longitude }}</p>
-                                        <p><b>Altitude :</b> {{stationDetails.altitude }}</p>
+                                        <p><b>Latitud :</b> {{stationDetails.latitude }}</p>
+                                        <p><b>Longitud :</b> {{stationDetails.longitude }}</p>
+                                        <p><b>Altitud :</b> {{stationDetails.altitude }}</p>
                                     </b-col>
                                 </b-row>
                                 <h4 class="text-center"><b>{{ meteoParameterLabel }}</b></h4>
@@ -99,47 +99,47 @@
                         </b-tab>
                         <b-tab v-if="parcelasData.length!==0" title="Parcelas">
                             <b-card-text>
-                                <p v-if="parcelasData.length!==0">Showing {{parcelasData.to}} of {{parcelasData.total}} entries</p>
+                                <p v-if="parcelasData.length!==0">Mostrando {{parcelasData.to}} de {{parcelasData.total}} registros</p>
                                 <tables :data="parcelasData.data"></tables>
                             </b-card-text>
                         </b-tab>
                         <b-tab v-if="fenologia.length!==0" title="Fenologia">
                             <b-card-text>
-                                <p v-if="fenologia.length!==0">Showing {{fenologia.to}} of {{fenologia.total}} entries</p>
+                                <p v-if="fenologia.length!==0">Mostrando {{fenologia.to}} de {{fenologia.total}} registros</p>
                                 <tables :data="fenologia.data"></tables>
                             </b-card-text>
                         </b-tab>
                         <b-tab v-if="suelos.length!==0" title="Suelos">
                             <b-card-text>
-                                <p v-if="suelos.length!==0">Showing {{suelos.to}} of {{suelos.total}} entries</p>
+                                <p v-if="suelos.length!==0">Mostrando {{suelos.to}} de {{suelos.total}} registros</p>
                                 <tables :data="suelos.data"></tables>
                             </b-card-text>
                         </b-tab>
                         <b-tab v-if="manejo_parcelas.length!==0" title="Manejo de la parcelas">
                             <b-card-text>
-                                <p v-if="manejo_parcelas.length!==0">Showing {{manejo_parcelas.to}} of {{manejo_parcelas.total}} entries</p>
+                                <p v-if="manejo_parcelas.length!==0">Mostrando {{manejo_parcelas.to}} de {{manejo_parcelas.total}} registros</p>
                                 <tables :data="manejo_parcelas.data"></tables>
                             </b-card-text>
                         </b-tab>
                         <b-tab v-if="plagas.length!==0" title="Plagas">
                             <b-card-text>
-                                <p v-if="plagas.length!==0">Showing {{plagas.to}} of {{plagas.total}} entries</p>
+                                <p v-if="plagas.length!==0">Mostrando {{plagas.to}} de {{plagas.total}} registros</p>
                                 <tables :data="plagas.data"></tables>
                             </b-card-text>
                         </b-tab>
                         <b-tab v-if="enfermedades.length!==0" title="Enfermedades">
                             <b-card-text>
-                                <p v-if="enfermedades.length!==0">Showing {{enfermedades.to}} of {{enfermedades.total}} entries</p>
+                                <p v-if="enfermedades.length!==0">Mostrando {{enfermedades.to}} de {{enfermedades.total}} registros</p>
                                 <tables :data="enfermedades.data"></tables>
                             </b-card-text>
                         </b-tab>
                         <b-tab v-if="rendimentos.length!==0" title="Rendimentos">
                             <b-card-text>
-                                <p v-if="rendimentos.length!==0">Showing {{rendimentos.to}} of {{rendimentos.total}} entries</p>
+                                <p v-if="rendimentos.length!==0">Mostrando {{rendimentos.to}} de {{rendimentos.total}} registros</p>
                                 <tables :data="rendimentos.data"></tables>
                             </b-card-text>
                         </b-tab>
-                        <button class="site-btn mt-5 mb-2 mx-2" v-on:click="download" style="float: right;">Download</button>
+                        <button class="site-btn mt-5 mb-2 mx-2" v-on:click="download" style="float: right;">Descargar</button>
                     </b-tabs>
               </b-card>
             </div>
@@ -155,7 +155,7 @@ export default {
             return{
                 modules: [{label:'Información meteorológica', value:'daily_data'},{label:'Parcelas', value:'parcelas'}, {label:'Cultivos', value:'cultivos'} ],
 
-                aggregations: [{label: 'Senamhi daily', value:'senamhi_daily'}, {label: 'Senamhi monthly', value:'senamhi_monthly'}, {label: 'Daily', value:'daily_data'}, {label: 'Ten days', value:'tendays_data'}, {label: 'Monthly', value:'monthly_data'}, {label: 'yearly', value:'yearly_data'}],
+                aggregations: [{label: 'Senamhi Diario', value:'senamhi_daily'}, {label: 'Senamhi Mensual', value:'senamhi_monthly'}, {label: 'Diario', value:'daily_data'}, {label: 'Diez días', value:'tendays_data'}, {label: 'Mensual', value:'monthly_data'}, {label: 'Anual', value:'yearly_data'}],
 
                 meteoParameters: [
                     {label: 'Temperatura Máxima Interna (°C)', value:'max_temperatura_interna'}, {label: 'Temperatura Mínima Interna (°C)', value:'min_temperatura_interna'}, {label: 'Temperatura Media Interna (°C)', value:'avg_temperatura_interna'},

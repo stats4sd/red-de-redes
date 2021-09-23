@@ -28,7 +28,7 @@ class MuestraSueloCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\MuestraSuelo::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/muestrasuelo');
-        CRUD::setEntityNameStrings('muestrasuelo', 'muestra_suelos');
+        CRUD::setEntityNameStrings('muestra suelo', 'muestra suelos');
     }
 
     /**

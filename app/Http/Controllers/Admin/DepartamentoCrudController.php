@@ -31,7 +31,7 @@ class DepartamentoCrudController extends CrudController
         // TODO: remove setFromDb() and manually define Columns, maybe Filters
         $this->crud->setColumns([
             [// 1-n relationship
-               'label'     => 'Region', // Table column heading
+               'label'     => 'Región', // Table column heading
                'type'      => 'select',
                'name'      => 'region_id', // the column that contains the ID of that connected entity;
                'entity'    => 'region', // the method that defines the relationship in your Model
@@ -49,7 +49,7 @@ class DepartamentoCrudController extends CrudController
         // TODO: remove setFromDb() and manually define Fields
         $this->crud->addFields([
             [  // Select2
-               'label'     => "Region",
+               'label'     => "Región",
                'type'      => 'select2',
                'name'      => 'region_id', // the db column for the foreign key
                // optional

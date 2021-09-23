@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <h5 class="card-header">Chart filters</h5>
+                    <h5 class="card-header">Filtros de gráficos</h5>
                     <div class="card-body">
                         <form method="post">
                     @csrf
@@ -34,7 +34,7 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-sm">
-                                    <label for="station" ><b>Select station</b></label>
+                                    <label for="station" ><b>Seleccione la estación</b></label>
                                     
                                         <select class="form-control" id="station" style="width:200px;">
                                             @foreach($stations as $station)
@@ -45,17 +45,17 @@
                                 </div>
                                 <div class="col-sm">
                                     
-                                    <label for="aggregation"><b>Select aggregation level</b></label>
+                                    <label for="aggregation"><b>Seleccione la agregación</b></label>
                                     
                                     <select class="form-control" id="aggregation" style="width:200px;">
-                                        <option value="daily">Daily</option>
-                                        <option value="ten_days">Ten Days</option>
-                                        <option value="monthly">Monthly</option>
-                                        <option value="yearly">Yearly</option>
+                                        <option value="daily">Diario</option>
+                                        <option value="ten_days">Diez Días</option>
+                                        <option value="monthly">Mensual</option>
+                                        <option value="yearly">Anual</option>
                                     </select>   
                                 </div>
                                 <div class="col-sm">
-                                    <label for="year"><b>Select year</b></label>
+                                    <label for="year"><b>Seleccione el año</b></label>
                                     <select class="form-control" id="year" style="width:200px;">
                                         @foreach($years as $year)
 
@@ -67,26 +67,26 @@
                                     
                                 </div>
                                 <div class="col-sm">
-                                    <label for="month"><b>Select month</b></label>
+                                    <label for="month"><b>Seleccione el mes</b></label>
                                     <select class="form-control" id="month" style="width:200px;">
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
+                                        <option value="01">Enero</option>
+                                        <option value="02">Febrero</option>
+                                        <option value="03">Marzo</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Mayo</option>
+                                        <option value="06">Junio</option>
+                                        <option value="07">Julio</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Septiembre</option>
+                                        <option value="10">Octubre</option>
+                                        <option value="11">Noviembre</option>
+                                        <option value="12">Diciembre</option>
                                     </select>                   
 
                                     
                                 </div>
                                 <div class="col-sm">
-                                     <button type="submit" id="filter" class="btn btn-dark mt-4" checked>Generate Charts</button>
+                                     <button type="submit" id="filter" class="btn btn-dark mt-4" checked>GENERAR GRÁFICOS</button>
                                 </div>
                             </div>
                         </div>
@@ -188,7 +188,7 @@ jQuery(document).ready(function(){
         event.preventDefault();
         var target = event.target;
         target.disabled = true;
-        target.innerHTML = `<div class="spinner-border spinner-border-sm"></div> Preparing...`;
+        target.innerHTML = `<div class="spinner-border spinner-border-sm"></div> Preparando...`;
             var station_id = jQuery('#station').val();
             var agg = jQuery('#aggregation').val();
             var year = jQuery('#year').val();
@@ -207,7 +207,7 @@ jQuery(document).ready(function(){
             
         }).done(function(response) {
             target.disabled = false;
-            target.innerHTML = " Generate Charts ";
+            target.innerHTML = " GENERAR GRÁFICOS ";
             var data = response.data;
             var fecha = data.map(x => {
                 return x.fecha;
@@ -284,7 +284,7 @@ jQuery(document).ready(function(){
 
                 data: {
                     datasets: [{
-                        label: 'Max Temp In',
+                        label: 'Max Temp Int',
                         data: max,
                         borderColor: 'rgb(255, 99, 132)',
                         options: {
@@ -295,7 +295,7 @@ jQuery(document).ready(function(){
                                 }
                         
                     }, {
-                        label: 'Min Temp In',
+                        label: 'Min Temp Int',
                         data: min,
                         borderColor: 'rgb(54, 162, 235)',
 
@@ -320,11 +320,11 @@ jQuery(document).ready(function(){
                 type: 'line',
                 data: {
                     datasets: [{
-                        label: 'Max Temp Out',
+                        label: 'Max Temp Ext',
                         data: max_temp_ext,
                         borderColor: 'rgb(255, 99, 132)',
                     }, {
-                        label: 'Min Temp Out',
+                        label: 'Min Temp Ext',
                         data: min_temp_ext,
                         borderColor: 'rgb(54, 162, 235)',
 
@@ -350,11 +350,11 @@ jQuery(document).ready(function(){
                 type: 'line',
                 data: {
                     datasets: [{
-                        label: 'Max Humedad In',
+                        label: 'Max Humedad Int',
                         data: max_hum_int,
                         borderColor: 'rgb(255, 99, 132)'
                     }, {
-                        label: 'Min Humedad In',
+                        label: 'Min Humedad Int',
                         data: min_hum_int,
                         borderColor: 'rgb(54, 162, 235)',
 
@@ -381,11 +381,11 @@ jQuery(document).ready(function(){
                 type: 'line',
                 data: {
                     datasets: [{
-                        label: 'Max Humedad Out',
+                        label: 'Max Humedad Ext',
                         data: max_hum_ext,
                         borderColor: 'rgb(255, 99, 132)'
                     }, {
-                        label: 'Min Humedad Out',
+                        label: 'Min Humedad Ext',
                         data: min_hum_ext,
                         borderColor: 'rgb(54, 162, 235)',
 
@@ -412,11 +412,11 @@ jQuery(document).ready(function(){
                 type: 'line',
                 data: {
                     datasets: [{
-                        label: 'Max Presion Relativa',
+                        label: 'Max Presión Relativa',
                         data: max_pres_rel,
                         borderColor: 'rgb(255, 99, 132)'
                     }, {
-                        label: 'Min Presion Relativa',
+                        label: 'Min Presión Relativa',
                         data: min_pres_rel,
                         borderColor: 'rgb(54, 162, 235)',
 
@@ -444,11 +444,11 @@ jQuery(document).ready(function(){
                 type: 'line',
                 data: {
                     datasets: [{
-                        label: 'Max Presion Absoluta',
+                        label: 'Max Presión Absoluta',
                         data: max_pres_abs,
                         borderColor: 'rgb(255, 99, 132)'
                     }, {
-                        label: 'Min Presion Absoluta',
+                        label: 'Min Presión Absoluta',
                         data: min_pres_abs,
                         borderColor: 'rgb(54, 162, 235)',
 
@@ -473,11 +473,11 @@ jQuery(document).ready(function(){
                 type: 'line',
                 data: {
                     datasets: [{
-                        label: 'Max Sensacion Termica',
+                        label: 'Max Sensación Térmica',
                         data: max_sen_term,
                         borderColor: 'rgb(255, 99, 132)'
                     }, {
-                        label: 'Min Sensacion Termica',
+                        label: 'Min Sensación Térmica',
                         data: min_sen_term,
                         borderColor: 'rgb(54, 162, 235)',
 

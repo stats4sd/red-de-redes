@@ -28,7 +28,7 @@ class LkpCultivoCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\LkpCultivo::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/lkpcultivo');
-        CRUD::setEntityNameStrings('Cultivo Option', 'Cultivo Options');
+        CRUD::setEntityNameStrings('Cultivo Opción', 'Cultivo Opciones');
     }
 
     /**

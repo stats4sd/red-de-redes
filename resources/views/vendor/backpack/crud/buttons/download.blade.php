@@ -1,6 +1,6 @@
 
 
-<a href="javascript:void(0)" onclick="getDownload(event)" class="btn btn-sm btn-secondary" data-toggle="popover"><i class="fa fa-download"></i> Download by filter</a>
+<a href="javascript:void(0)" onclick="getDownload(event)" class="btn btn-sm btn-secondary" data-toggle="popover"><i class="fa fa-download"></i> Descargar por filtro</a>
 
 <div hidden class="alert alert-danger alert-block" id="error"></div>
 
@@ -21,7 +21,7 @@
       		var target = e.target;
 
       		target.disabled = true;
-			target.innerHTML = `<div class="spinner-border spinner-border-sm"></div> Preparing...`;
+			target.innerHTML = `<div class="spinner-border spinner-border-sm"></div> Preparando...`;
 	      	
 			$.ajax({
 				"url": "{{ url($crud->route . '/download') }}",
@@ -41,7 +41,7 @@
 				},
 				"complete": function() {
 					target.disabled = false;
-					target.innerHTML = "<i class='fa fa-download'></i> Download";
+					target.innerHTML = "<i class='fa fa-download'></i> Descargar";
 				}
 			})
 		}

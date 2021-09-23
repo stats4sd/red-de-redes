@@ -35,7 +35,7 @@ class DailyCrudController extends CrudController
         */
         CRUD::setModel('App\Models\Daily');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/daily');
-        CRUD::setEntityNameStrings('daily', 'daily');
+        CRUD::setEntityNameStrings('diario', 'diario');
 
         /*
         |--------------------------------------------------------------------------
@@ -225,7 +225,7 @@ class DailyCrudController extends CrudController
         $this->crud->addFilter([
             'name' => 'id_station',
             'type' => 'select2',
-            'label' => 'Station',
+            'label' => 'Estación',
         ],function(){
 
             return Station::all()->pluck('label', 'id')->toArray();;
@@ -238,7 +238,7 @@ class DailyCrudController extends CrudController
         $this->crud->addFilter([ // date filter
           'type' => 'date',
           'name' => 'date',
-          'label'=> 'Date'
+          'label'=> 'Fecha'
         ],
         false,
         function($value) { // if the filter is active, apply these constraints
@@ -248,7 +248,7 @@ class DailyCrudController extends CrudController
         $this->crud->addFilter([ // daterange filter
            'type' => 'date_range',
            'name' => 'from_to',
-           'label'=> 'Date range'
+           'label'=> 'Rango de fechas'
         ],
         false,
         function($value) { // if the filter is active, apply these constraints
