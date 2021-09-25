@@ -79,10 +79,10 @@ Route::group([
 
     Route::crud('xlsform', XlsformCrudController::class);
     Route::crud('datamap', DataMapCrudController::class);
-    Route::post('xlsform/{xlsform}/deploytokobo', XlsformCrudController::class,'deployToKobo');
-    Route::post('xlsform/{xlsform}/syncdata', XlsformCrudController::class,'syncData');
-    Route::post('xlsform/{xlsform}/archive', XlsformCrudController::class,'archiveOnKobo');
-    Route::post('xlsform/{xlsform}/csvgenerate', XlsformCrudController::class,'regenerateCsvFileAttachments');
+    Route::post('xlsform/{xlsform}/deploytokobo', [XlsformCrudController::class,'deployToKobo']);
+    Route::post('xlsform/{xlsform}/syncdata', [XlsformCrudController::class,'syncData']);
+    Route::post('xlsform/{xlsform}/archive', [XlsformCrudController::class,'archiveOnKobo']);
+    Route::post('xlsform/{xlsform}/csvgenerate', [XlsformCrudController::class,'regenerateCsvFileAttachments']);
 
 
     Route::crud('lkpcultivo', LkpCultivoCrudController::class);

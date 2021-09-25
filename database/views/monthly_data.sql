@@ -1,9 +1,9 @@
-
 SELECT
 
     LEFT(`data`.`fecha_hora`,7) as `fecha`,
     `data`.`id_station` AS `id_station`,
     `stations`.`label` AS `station`,
+
 
     MAX(`data`.`temperatura_interna`) AS `max_temperatura_interna`,
     MIN(`data`.`temperatura_interna`) AS `min_temperatura_interna`,
@@ -39,5 +39,5 @@ SELECT
 
     MAX(`data`.`lluvia_24_horas`) AS `lluvia_24_horas_total`
 
-    FROM `data` 
+    FROM `data`
     LEFT JOIN `stations` ON `stations`.`id` = `data`.`id_station` GROUP BY `fecha`,`data`.`id_station`;
