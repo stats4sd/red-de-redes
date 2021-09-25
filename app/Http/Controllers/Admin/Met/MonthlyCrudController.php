@@ -1,27 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Met;
 
-use App\Http\Requests\TenDaysRequest as StoreRequest;
-use App\Http\Requests\TenDaysRequest as UpdateRequest;
-use App\Jobs\ProcessDataExport;
 use App\Models\Station;
+use App\Models\Yearly;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 /**
- * Class TenDaysCrudController
+ * Class Monthly_dataCrudController
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class TenDaysCrudController extends CrudController
+class MonthlyCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
@@ -33,9 +30,9 @@ class TenDaysCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        CRUD::setModel('App\Models\TenDays');
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/tenDays');
-        CRUD::setEntityNameStrings('diez días', 'diez días');
+        CRUD::setModel('App\Models\Monthly');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/monthly');
+        CRUD::setEntityNameStrings('mensual', 'mensual');
 
         /*
         |--------------------------------------------------------------------------
@@ -44,17 +41,13 @@ class TenDaysCrudController extends CrudController
         */
 
         // TODO: remove setFromDb() and manually define Fields and Columns
-        $this->crud->operation('list', function() {
+        $this->crud->addButtonFromView('top', 'download', 'download', 'end');
 
-            $this->crud->addColumns([
-                [
-                    'label' => 'Max Fecha',
-                    'name' => 'max_fecha',
-                    'type' => 'date',
-                ],
-                [
-                    'label' => 'Min Fecha',
-                    'name' => 'min_fecha',
+        $this->crud->operation('list', function(){
+           $this->crud->addColumns([
+               [
+                    'label' => 'Fecha',
+                    'name' => 'fecha',
                     'type' => 'date',
                 ],
                 [
@@ -218,14 +211,8 @@ class TenDaysCrudController extends CrudController
                 ],
 
             ]);
-           #$this->crud->setFromDb();
-
-
         });
 
-        // add asterisk for fields that are required in TenDaysRequest
-
-        $this->crud->addButtonFromView('top', 'download', 'download', 'end');
 
         // Filter
         $this->crud->addFilter([
@@ -234,42 +221,72 @@ class TenDaysCrudController extends CrudController
             'label' => 'Estación',
         ],function(){
 
-            return Station::all()->pluck('label', 'id')->toArray();;
+            return Station::all()->pluck('label', 'id')->toArray();
 
         },function($value){
+
             $this->crud->addClause('where', 'id_station', $value);
 
         });
 
-        $this->crud->addFilter([ // date filter
-          'type' => 'date',
-          'name' => 'date',
-          'label'=> 'Fecha'
-        ],
-        false,
-        function($value) { // if the filter is active, apply these constraints
-          $this->crud->addClause('where', 'max_fecha', $value);
+         $this->crud->addFilter([
+            'name' => 'year',
+            'type' => 'select2_multiple',
+            'label' => 'Años',
+        ],function(){
+
+           return Yearly::select('fecha')->orderBy('fecha')->pluck('fecha', 'fecha')->toArray();
+
+        },function($values){
+
+            $this->crud->query = $this->crud->query->whereIn('year', json_decode($values));
+
         });
 
-        $this->crud->addFilter([ // daterange filter
-           'type' => 'date_range',
-           'name' => 'from_to',
-           'label'=> 'Rango de fechas'
-        ],
-        false,
-        function($value) { // if the filter is active, apply these constraints
-           $dates = json_decode($value);
-           $this->crud->addClause('where', 'max_fecha', '>=', $dates->from);
-           $this->crud->addClause('where', 'max_fecha', '<=', $dates->to . ' 23:59:59');
+        $this->crud->addFilter([
+            'name' => 'month',
+            'type' => 'select2_multiple',
+            'label' => 'Meses',
+        ],function(){
+
+            return [
+                '01' => 'Enero',
+                '02' => 'Febrero',
+                '03' => 'Marzo',
+                '04' => 'Abril',
+                '05' => 'Mayo',
+                '06' => 'Junio',
+                '07' => 'Julio',
+                '08' => 'Agosto',
+                '09' => 'Septiembre',
+                '10' => 'Octubre',
+                '11' => 'Noviembre',
+                '12' => 'Diciembre'
+            ];
+
+        },function($values){
+
+            $this->crud->query = $this->crud->query->whereIn('month', json_decode($values));
+
         });
+
+          /**
+         * Get the SQL definition of the query being run:
+         * This includes all the active filters;
+         * Save it to the session to pass to the download function.
+         * $query = string - escaped SQL statement;
+         * $params = array - parameters to insert into the escaped SQL query.
+         */
+
 
         if($this->crud->actionIs('list') || $this->crud->actionIs('search') ){
-            $tendays_query = $this->crud->query->getQuery()->toSql();
-            $tendays_params = $this->crud->query->getQuery()->getBindings();
-            Session(['tendays_query' => $tendays_query ]);
-            Session(['tendays_params' => $tendays_params ]);
+            $monthly_query = $this->crud->query->getQuery()->toSql();
+            $monthly_params = $this->crud->query->getQuery()->getBindings();
+            Session(['monthly_query' => $monthly_query ]);
+            Session(['monthly_params' => $monthly_params ]);
 
         }
+
     }
 
     public function download(Request $request)
@@ -277,9 +294,9 @@ class TenDaysCrudController extends CrudController
         $scriptName = 'save_data_csv.py';
         $scriptPath = base_path() . '/scripts/' . $scriptName;
         $base_path = base_path();
-        $query = Session('tendays_query');
-        $params = join(",",Session('tendays_params'));
-        $file_name = date('c')."tendays.csv";
+        $query = Session('monthly_query');
+        $params = join(",",Session('monthly_params'));
+        $file_name = date('c')."monthly.csv";
         $query = str_replace('`',' ',$query);
 
         //python script accepts 4 arguments in this order: base_path(), query, params and file name

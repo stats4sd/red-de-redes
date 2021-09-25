@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class AddUploaderIdToDailyDataTemplate extends Migration
@@ -79,7 +77,7 @@ class AddUploaderIdToDailyDataTemplate extends Migration
                 -- ## So, for days we can just use the 24_horas column.
 
                 MAX(lluvia_24_horas) as lluvia_24_horas_total
-                
+
 
                 FROM data_template
                 GROUP BY fecha, id_station, uploader_id;

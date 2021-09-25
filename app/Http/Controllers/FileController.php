@@ -2,18 +2,13 @@
 namespace App\Http\Controllers;
 
 use DB;
-use Alert;
-use Excel;
 use App\File;
 use App\Models\Daily;
-use \GuzzleHttp\Client;
 use App\Models\Observation;
 use Illuminate\Http\Request;
-use App\Models\DailyDataPreview;
 use App\Models\WeatherDataPreview;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Process;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -74,7 +69,7 @@ class FileController extends Controller
             $scriptPath = base_path() . '/scripts/' . $scriptName;
             $path_name = Storage::path("/").$path;
             $uploader_id = $this->generateRandomString();
-            
+
             //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
             if($request->hasFile('data-filesObservation')){
                 $newObservation_id = $newObservation->id;
@@ -91,9 +86,9 @@ class FileController extends Controller
             if(!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
-    
+
             $data_template = WeatherDataPreview::where('uploader_id', '=', $uploader_id)->orderBy('id')->paginate(10);
-            
+
             // $error_data = $this->checkValues($uploader_id);
 
             return response()->json([
@@ -163,9 +158,9 @@ class FileController extends Controller
         $error_wind = false;
         $error_rain = false;
 
-       
+
         $daily_preview = DB::table('daily_data_preview')->where('uploader_id', '=', $uploader_id)->get();
-        
+
         foreach ($daily_preview as $key => $value) {
 
             $daily_temp_int = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->take(10)->get();
@@ -214,8 +209,8 @@ class FileController extends Controller
 
     }
 
-    public function generateRandomString($length = 10) 
-    { 
+    public function generateRandomString($length = 10)
+    {
         $random_string = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
         return $random_string;
     }
@@ -223,7 +218,7 @@ class FileController extends Controller
     public function cleanTable($uploader_id)
     {
         DB::table('data_template')->where('uploader_id', '=', $uploader_id)->delete();
-        
+
         return Redirect::back();
 
     }

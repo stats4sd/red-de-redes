@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Agronomic;
 
-use App\Http\Requests\DailyDataPreviewRequest;
+use App\Http\Requests\FenologiaRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use function config;
 
 /**
- * Class DailyDataPreviewCrudController
+ * Class FenologiaCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class DailyDataPreviewCrudController extends CrudController
+class FenologiaCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -21,9 +21,9 @@ class DailyDataPreviewCrudController extends CrudController
 
     public function setup()
     {
-        $this->crud->setModel('App\Models\DailyDataPreview');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/dailydatapreview');
-        $this->crud->setEntityNameStrings('dailydatapreview', 'daily_data_previews');
+        $this->crud->setModel('App\Models\Fenologia');
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/fenologia');
+        $this->crud->setEntityNameStrings('fenología', 'fenología');
     }
 
     protected function setupListOperation()
@@ -34,7 +34,7 @@ class DailyDataPreviewCrudController extends CrudController
 
     protected function setupCreateOperation()
     {
-        $this->crud->setValidation(DailyDataPreviewRequest::class);
+        $this->crud->setValidation(FenologiaRequest::class);
 
         // TODO: remove setFromDb() and manually define Fields
         $this->crud->setFromDb();

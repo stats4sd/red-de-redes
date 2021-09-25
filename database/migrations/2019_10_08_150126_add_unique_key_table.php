@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class AddUniqueKeyTable extends Migration
@@ -19,7 +17,7 @@ class AddUniqueKeyTable extends Migration
             ADD COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT AFTER `fecha_hora`,
             ADD PRIMARY KEY (`id`),
             ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `id_station`);
-         
+
         ");
         DB::statement("
             ALTER TABLE `data_template`
@@ -27,7 +25,7 @@ class AddUniqueKeyTable extends Migration
             ADD COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT AFTER `fecha_hora`,
             ADD PRIMARY KEY (`id`),
             ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `id_station`);
-         
+
         ");
         DB::statement("
             ALTER TABLE `meteobridge`
@@ -35,7 +33,7 @@ class AddUniqueKeyTable extends Migration
             ADD COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT AFTER `fecha_hora`,
             ADD PRIMARY KEY (`id`),
             ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `id_station`);
-         
+
         ");
 
     }

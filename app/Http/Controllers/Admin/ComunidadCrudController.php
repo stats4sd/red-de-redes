@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ComunidadRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use function config;
 
 /**
  * Class ComunidadCrudController
@@ -28,7 +28,6 @@ class ComunidadCrudController extends CrudController
 
     protected function setupListOperation()
     {
-        // TODO: remove setFromDb() and manually define Columns, maybe Filters
         $this->crud->setColumns([
 
             [// 1-n relationship
@@ -42,7 +41,7 @@ class ComunidadCrudController extends CrudController
         ]);
 
         $this->crud->setFromDb();
-           
+
     }
 
     protected function setupCreateOperation()

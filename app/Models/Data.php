@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Station;
-use App\Models\Observation;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 
 class Data extends Model
 {

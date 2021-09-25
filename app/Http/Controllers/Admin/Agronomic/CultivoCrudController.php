@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Agronomic;
 
-use App\Http\Requests\ManejoParcelaRequest;
+use App\Http\Requests\CultivoRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use function config;
 
 /**
- * Class ManejoParcelaCrudController
+ * Class CultivoCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class ManejoParcelaCrudController extends CrudController
+class CultivoCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -21,9 +21,9 @@ class ManejoParcelaCrudController extends CrudController
 
     public function setup()
     {
-        $this->crud->setModel('App\Models\ManejoParcela');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/manejoparcela');
-        $this->crud->setEntityNameStrings('manejo parcela', 'manejo parcela');
+        $this->crud->setModel('App\Models\Cultivo');
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/cultivo');
+        $this->crud->setEntityNameStrings('cultivo', 'cultivos');
     }
 
     protected function setupListOperation()
@@ -34,7 +34,7 @@ class ManejoParcelaCrudController extends CrudController
 
     protected function setupCreateOperation()
     {
-        $this->crud->setValidation(ManejoParcelaRequest::class);
+        $this->crud->setValidation(CultivoRequest::class);
 
         // TODO: remove setFromDb() and manually define Fields
         $this->crud->setFromDb();

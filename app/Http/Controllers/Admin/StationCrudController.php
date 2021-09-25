@@ -8,7 +8,6 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\StationRequest as StoreRequest;
 use App\Http\Requests\StationRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 /**
  * Class StationCrudController
@@ -103,7 +102,7 @@ class StationCrudController extends CrudController
                 'type' => 'number',
                   // optionals
                 'attributes' => ["step" => "any"], // allow decimals
-               
+
             ],
             [
                 'name' => 'longitude',

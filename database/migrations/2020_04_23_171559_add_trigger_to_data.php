@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class AddTriggerToData extends Migration
@@ -12,9 +10,9 @@ class AddTriggerToData extends Migration
      * @return void
      */
     public function up()
-    {  
-        DB::unprepared(" 
-          
+    {
+        DB::unprepared("
+
             CREATE TRIGGER get_station_id  BEFORE INSERT ON data
                 FOR EACH ROW
                 BEGIN
@@ -25,11 +23,11 @@ class AddTriggerToData extends Migration
                         latitude = NEW.meteobridge_latitude
                        );
                 END IF ;
-                   
+
                 END
 
             ");
-             
+
     }
 
     /**

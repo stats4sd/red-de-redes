@@ -1,17 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Met;
 
-use App\Http\Requests\Monthly_dataRequest as StoreRequest;
-use App\Http\Requests\Monthly_dataRequest as UpdateRequest;
-use App\Jobs\ProcessDataExport;
-use App\Models\Monthly;
 use App\Models\Station;
-use App\Models\Yearly;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
@@ -19,14 +13,15 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 /**
- * Class Monthly_dataCrudController
+ * Class DailyCrudController
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class MonthlyCrudController extends CrudController
+class DailyCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+
 
     public function setup()
     {
@@ -35,9 +30,9 @@ class MonthlyCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        CRUD::setModel('App\Models\Monthly');
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/monthly');
-        CRUD::setEntityNameStrings('mensual', 'mensual');
+        CRUD::setModel('App\Models\Daily');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/daily');
+        CRUD::setEntityNameStrings('diario', 'diario');
 
         /*
         |--------------------------------------------------------------------------
@@ -45,12 +40,11 @@ class MonthlyCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
 
-        // TODO: remove setFromDb() and manually define Fields and Columns
-        $this->crud->addButtonFromView('top', 'download', 'download', 'end');
-
         $this->crud->operation('list', function(){
-           $this->crud->addColumns([
-               [
+            #$this->crud->orderBy('fecha');
+            #$this->crud->addColumn('fecha')->makeFirstColumn();
+            $this->crud->addColumns([
+                     [
                     'label' => 'Fecha',
                     'name' => 'fecha',
                     'type' => 'date',
@@ -216,8 +210,12 @@ class MonthlyCrudController extends CrudController
                 ],
 
             ]);
+
+
         });
 
+
+        $this->crud->addButtonFromView('top', 'download', 'download', 'end');
 
         // Filter
         $this->crud->addFilter([
@@ -226,72 +224,42 @@ class MonthlyCrudController extends CrudController
             'label' => 'Estación',
         ],function(){
 
-            return Station::all()->pluck('label', 'id')->toArray();
+            return Station::all()->pluck('label', 'id')->toArray();;
 
         },function($value){
-
             $this->crud->addClause('where', 'id_station', $value);
 
         });
 
-         $this->crud->addFilter([
-            'name' => 'year',
-            'type' => 'select2_multiple',
-            'label' => 'Años',
-        ],function(){
-
-           return Yearly::select('fecha')->orderBy('fecha')->pluck('fecha', 'fecha')->toArray();
-
-        },function($values){
-
-            $this->crud->query = $this->crud->query->whereIn('year', json_decode($values));
-
+        $this->crud->addFilter([ // date filter
+          'type' => 'date',
+          'name' => 'date',
+          'label'=> 'Fecha'
+        ],
+        false,
+        function($value) { // if the filter is active, apply these constraints
+          $this->crud->addClause('where', 'fecha', $value);
         });
 
-        $this->crud->addFilter([
-            'name' => 'month',
-            'type' => 'select2_multiple',
-            'label' => 'Meses',
-        ],function(){
-
-            return [
-                '01' => 'Enero',
-                '02' => 'Febrero',
-                '03' => 'Marzo',
-                '04' => 'Abril',
-                '05' => 'Mayo',
-                '06' => 'Junio',
-                '07' => 'Julio',
-                '08' => 'Agosto',
-                '09' => 'Septiembre',
-                '10' => 'Octubre',
-                '11' => 'Noviembre',
-                '12' => 'Diciembre'
-            ];
-
-        },function($values){
-
-            $this->crud->query = $this->crud->query->whereIn('month', json_decode($values));
-
+        $this->crud->addFilter([ // daterange filter
+           'type' => 'date_range',
+           'name' => 'from_to',
+           'label'=> 'Rango de fechas'
+        ],
+        false,
+        function($value) { // if the filter is active, apply these constraints
+           $dates = json_decode($value);
+           $this->crud->addClause('where', 'fecha', '>=', $dates->from);
+           $this->crud->addClause('where', 'fecha', '<=', $dates->to . ' 23:59:59');
         });
-
-          /**
-         * Get the SQL definition of the query being run:
-         * This includes all the active filters;
-         * Save it to the session to pass to the download function.
-         * $query = string - escaped SQL statement;
-         * $params = array - parameters to insert into the escaped SQL query.
-         */
-
 
         if($this->crud->actionIs('list') || $this->crud->actionIs('search') ){
-            $monthly_query = $this->crud->query->getQuery()->toSql();
-            $monthly_params = $this->crud->query->getQuery()->getBindings();
-            Session(['monthly_query' => $monthly_query ]);
-            Session(['monthly_params' => $monthly_params ]);
+            $daily_query = $this->crud->query->getQuery()->toSql();
+            $daily_params = $this->crud->query->getQuery()->getBindings();
+            Session(['daily_query' => $daily_query ]);
+            Session(['daily_params' => $daily_params ]);
 
         }
-
     }
 
     public function download(Request $request)
@@ -299,13 +267,13 @@ class MonthlyCrudController extends CrudController
         $scriptName = 'save_data_csv.py';
         $scriptPath = base_path() . '/scripts/' . $scriptName;
         $base_path = base_path();
-        $query = Session('monthly_query');
-        $params = join(",",Session('monthly_params'));
-        $file_name = date('c')."monthly.csv";
+        $query = Session('daily_query');
+        $params = implode(",",Session('daily_params'));
+        $file_name = date('c')."daily.csv";
         $query = str_replace('`',' ',$query);
 
-        //python script accepts 4 arguments in this order: base_path(), query, params and file name
-        Log::info($query);
+
+        //python script accepts 7 arguments in this order: db_user db_password db_name base_path() query params
 
         $process = new Process(["pipenv", "run", "python3", $scriptPath, $base_path, $query, $params, $file_name]);
 
@@ -325,6 +293,5 @@ class MonthlyCrudController extends CrudController
         $path_download =  Storage::url('/data/'.$file_name);
         return response()->json(['path' => $path_download]);
     }
-
 
 }

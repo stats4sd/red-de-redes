@@ -3,8 +3,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use App\Models\Parcela; 
+use App\Models\Parcela;
 use App\Http\Controllers\Controller;
 
 class ParcelaController extends Controller
@@ -13,7 +12,7 @@ class ParcelaController extends Controller
     {
         $parcelas = Parcela::with(['submissions'])->get();
 
-        return $parcelas->toJson(); 
+        return $parcelas->toJson();
     }
 }
 

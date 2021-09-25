@@ -42,18 +42,18 @@
                     <ul class="navbar-nav mr-auto">
                         @guest
 
-                        @elseif(Auth::user()->type=="admin")
+                        @elseif(Auth::user()->type==="admin")
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='home') active @endif" href="home">Inicio</a>
+                          <a class="nav-link @if(Route::current()->uri==='home') active @endif" href="{{url('home')}}">Inicio</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='weatherstations' && Auth::user()->type=="admin") active @endif" href="weatherstations">Subir Datos Meteorológicos</a>
+                          <a class="nav-link @if(Route::current()->uri==='data-upload' && Auth::user()->type==="admin") active @endif" href="{{url('data-upload')}}">Subir Datos Meteorológicos</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='admin' && Auth::user()->type=="admin") active @endif" href="admin">Admin</a>
+                          <a class="nav-link @if(Route::current()->uri==='admin' && Auth::user()->type==="admin") active @endif" href="{{url('admin')}}">Admin</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='qr-codes' && Auth::user()->type=="admin") active @endif" href="{{ url('qr-codes') }}">Códigos QR</a>
+                          <a class="nav-link @if(Route::current()->uri==='qr-codes' && Auth::user()->type==="admin") active @endif" href="{{ url('qr-codes') }}">Códigos QR</a>
                         </li>
                          @endguest
                     </ul>

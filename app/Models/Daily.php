@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Station;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 
 class Daily extends Model
 {
     use CrudTrait;
-    use HasCompositePrimaryKey;
+    // use HasCompositePrimaryKey;
 
     /*
     |--------------------------------------------------------------------------

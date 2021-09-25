@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Agronomic;
 
-use App\Http\Requests\FenologiaRequest;
+use App\Http\Requests\ParcelaRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use function config;
 
 /**
- * Class FenologiaCrudController
+ * Class ParcelaCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class FenologiaCrudController extends CrudController
+class ParcelaCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -21,9 +21,9 @@ class FenologiaCrudController extends CrudController
 
     public function setup()
     {
-        $this->crud->setModel('App\Models\Fenologia');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/fenologia');
-        $this->crud->setEntityNameStrings('fenología', 'fenología');
+        $this->crud->setModel('App\Models\Parcela');
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/parcela');
+        $this->crud->setEntityNameStrings('parcela', 'parcelas');
     }
 
     protected function setupListOperation()
@@ -34,7 +34,7 @@ class FenologiaCrudController extends CrudController
 
     protected function setupCreateOperation()
     {
-        $this->crud->setValidation(FenologiaRequest::class);
+        $this->crud->setValidation(ParcelaRequest::class);
 
         // TODO: remove setFromDb() and manually define Fields
         $this->crud->setFromDb();

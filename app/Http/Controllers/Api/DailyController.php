@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Khill\Lavacharts\Lavacharts;
 use App\Models\Daily;
 use App\Http\Controllers\Controller;
 
@@ -19,7 +18,7 @@ class DailyController extends Controller
         $weatherDaily = Daily::paginate(5);
 
 
-        return $weatherDaily->toJson(); 
+        return $weatherDaily->toJson();
     }
 
     /**

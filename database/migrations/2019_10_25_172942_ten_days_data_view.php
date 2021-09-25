@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class TenDaysDataView extends Migration
@@ -26,9 +24,9 @@ class TenDaysDataView extends Migration
                 min(LEFT(fecha_hora, 10)) as min_fecha,
                 max(LEFT(fecha_hora,10)) as max_fecha,
 
-                
 
-              
+
+
 
                 -- #########################################
                 -- #########################################

@@ -1,7 +1,5 @@
 <?php
 
-use App\Events\GenerateFileCompleted;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,6 +12,10 @@ use App\Events\GenerateFileCompleted;
 */
 
 
+use App\Http\Controllers\Admin\Met\DataCrudController;
+use App\Http\Controllers\DataController;
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\QrController;
 
 Route::get('', function () {
     return redirect('/home');
@@ -21,33 +23,25 @@ Route::get('', function () {
 
 Auth::routes();
 
-Route::resource('home', 'DataController')->middleware('auth');
-Route::post('download', 'DataController@download');
+Route::resource('home', DataController::class)->middleware('auth');
+Route::post('download', [DataController::class,'download']);
 
-Route::get('weatherstations', function () {
-    return view('weatherstations');
-})->middleware('auth');
-Route::resource('stations', 'StationController');
 
-Route::post('show', 'DataController@show');
+Route::post('show', [DataController::class,'show']);
 
 
 //NEW Upload page
-Route::post('files', 'FileController@store');
-Route::post('storeFile/{uploader_id}', 'FileController@storeFile');
-Route::post('cleanTable/{uploader_id}', 'FileController@cleanTable');
+Route::view('data-upload', 'data-upload')->middleware('auth');
+Route::post('files', [FileController::class,'store']);
+Route::post('storeFile/{uploader_id}', [FileController::class,'storeFile']);
+Route::post('cleanTable/{uploader_id}', [FileController::class,'cleanTable']);
 
-Route::get('admin/upload', 'UploadController@index');
-Route::get('data/{id}/delete', 'DataCrudController@destroy');
+Route::get('data/{id}/delete', [DataCrudController::class,'destroy']);
 
-Route::post('files.store', 'FileController@store');
-//Dashboard
-Route::get('admin/dashboard', 'DashboardController@index');
-Route::post('admin/dashboard/charts', 'DashboardController@charts');
+Route::post('files.store', [FileController::class,'store']);
 
-Route::get('xlsforms/{xlsform}/downloadsubmissions', 'SubmissionController@download')->name('xlsforms.downloadsubmissions');
 
 Route::view('qr-codes', 'qr_code')->name('qr-codes');
 
-Route::post('qr-newcodes', 'QrController@newCodes')->name('qr-newcodes');
-Route::get('qr-print', 'QrController@printView')->name('qr-print');
+Route::post('qr-newcodes', [QrController::class,'newCodes'])->name('qr-newcodes');
+Route::get('qr-print', [QrController::class,'printView'])->name('qr-print');

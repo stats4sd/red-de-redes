@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Met;
 
-use App\Http\Requests\ParcelaRequest;
+use App\Http\Requests\DailyDataPreviewRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class ParcelaCrudController
+ * Class DailyDataPreviewCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class ParcelaCrudController extends CrudController
+class DailyDataPreviewCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -21,9 +20,9 @@ class ParcelaCrudController extends CrudController
 
     public function setup()
     {
-        $this->crud->setModel('App\Models\Parcela');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/parcela');
-        $this->crud->setEntityNameStrings('parcela', 'parcelas');
+        $this->crud->setModel('App\Models\DailyDataPreview');
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/dailydatapreview');
+        $this->crud->setEntityNameStrings('dailydatapreview', 'daily_data_previews');
     }
 
     protected function setupListOperation()
@@ -34,7 +33,7 @@ class ParcelaCrudController extends CrudController
 
     protected function setupCreateOperation()
     {
-        $this->crud->setValidation(ParcelaRequest::class);
+        $this->crud->setValidation(DailyDataPreviewRequest::class);
 
         // TODO: remove setFromDb() and manually define Fields
         $this->crud->setFromDb();
