@@ -21,7 +21,7 @@ class SueloCrudController extends CrudController
 
     public function setup()
     {
-        $this->crud->setModel('App\Models\Suelo');
+        $this->crud->setModel('App\Models\Agronomic\Suelo');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/suelo');
         $this->crud->setEntityNameStrings('suelo', 'suelos');
     }

@@ -1,42 +1,41 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Met;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use App\Models\Met\Observation;
+use App\Models\Met\Station;
 use Illuminate\Database\Eloquent\Model;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
-class Observation extends Model
+class MetData extends Model
 {
     use CrudTrait;
 
     /*
-    |--------------------------------------------------------------------------
+    |--------------------------------------------------------------
     | GLOBAL VARIABLES
-    |--------------------------------------------------------------------------
+    |--------------------------------------------------------------
     */
 
-    protected $table = 'observations';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
+    # use HasCompositePrimaryKey;
+    protected $primaryKey = 'id';
+    protected $table = 'data';
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
 
-    /*
-    |--------------------------------------------------------------------------
-    | FUNCTIONS
-    |--------------------------------------------------------------------------
-    */
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function data()
+    public function station()
     {
-        return $this->hasMany(Data::class);
+        return $this->belongsTo(Station::class, 'id_station');
+    }
+
+    public function observation()
+    {
+        return $this->belongsTo(Observation::class, 'observation_id');
     }
 
 
@@ -48,7 +47,7 @@ class Observation extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | ACCESSORS
+    | ACCESORS
     |--------------------------------------------------------------------------
     */
 

@@ -21,7 +21,7 @@ class CultivoCrudController extends CrudController
 
     public function setup()
     {
-        $this->crud->setModel('App\Models\Cultivo');
+        $this->crud->setModel('App\Models\Agronomic\Cultivo');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/cultivo');
         $this->crud->setEntityNameStrings('cultivo', 'cultivos');
     }

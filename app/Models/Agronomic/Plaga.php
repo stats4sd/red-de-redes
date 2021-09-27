@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Agronomic;
 
+use App\Models\Agronomic\Cultivo;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Rendimento extends Model
+class Plaga extends Model
 {
     use CrudTrait;
 
@@ -15,8 +16,7 @@ class Rendimento extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'rendimentos';
-
+    protected $table = 'plagas';
     protected $guarded = ['id'];
 
 

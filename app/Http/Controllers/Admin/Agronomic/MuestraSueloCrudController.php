@@ -27,7 +27,7 @@ class MuestraSueloCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\MuestraSuelo::class);
+        CRUD::setModel(\App\Models\Agronomic\MuestraSuelo::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/muestrasuelo');
         CRUD::setEntityNameStrings('muestra suelo', 'muestra suelos');
     }

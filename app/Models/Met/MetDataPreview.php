@@ -1,41 +1,39 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Met;
 
-use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Model;
 
-class Data extends Model
+class MetDataPreview extends Model
 {
     use CrudTrait;
 
     /*
-    |--------------------------------------------------------------
+    |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
-    |--------------------------------------------------------------
+    |--------------------------------------------------------------------------
     */
 
-    # use HasCompositePrimaryKey;
-    protected $primaryKey = 'id';
-    protected $table = 'data';
+    protected $table = 'met_data_preview';
+    // protected $primaryKey = 'id';
+    // public $timestamps = false;
     protected $guarded = ['id'];
+    // protected $fillable = [];
+    // protected $hidden = [];
+    // protected $dates = [];
 
+    /*
+    |--------------------------------------------------------------------------
+    | FUNCTIONS
+    |--------------------------------------------------------------------------
+    */
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function station()
-    {
-        return $this->belongsTo(Station::class, 'id_station');
-    }
-
-    public function observation()
-    {
-        return $this->belongsTo(Observation::class, 'observation_id');
-    }
-
 
     /*
     |--------------------------------------------------------------------------
@@ -45,7 +43,7 @@ class Data extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | ACCESORS
+    | ACCESSORS
     |--------------------------------------------------------------------------
     */
 

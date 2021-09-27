@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Met;
 
-use App\Models\Station;
-use App\Models\Yearly;
+use App\Models\Met\Station;
+use App\Models\Met\Yearly;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -30,7 +30,7 @@ class YearlyCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        CRUD::setModel('App\Models\Yearly');
+        CRUD::setModel('App\Models\Met\Yearly');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/yearly');
         CRUD::setEntityNameStrings('anual', 'anual');
 
@@ -54,7 +54,7 @@ class YearlyCrudController extends CrudController
                     'name' => 'id_station',
                     'entity' => 'station',
                     'attribute' => 'label',
-                    'model' => 'App\Models\Station',
+                    'model' => 'App\Models\Met\Station',
                     'key' => 'updated_at'
                 ],
                 [

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Met;
 
+use App\Models\Met\MetData;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
-class DailyDataPreview extends Model
+class Station extends Model
 {
     use CrudTrait;
 
@@ -15,13 +16,18 @@ class DailyDataPreview extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'daily_data_preview';
+    protected $table = 'stations';
     protected $guarded = ['id'];
-
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
+    public function data()
+    {
+        return $this->hasMany(MetData::class, 'id_station');
+    }
+
 }

@@ -27,7 +27,7 @@ class ObservationCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Observation::class);
+        CRUD::setModel(\App\Models\Met\Observation::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/observation');
         CRUD::setEntityNameStrings('observación', 'observaciones');
     }

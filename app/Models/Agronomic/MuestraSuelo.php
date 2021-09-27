@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Agronomic;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Agronomic\Parcela;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Model;
 
-class Station extends Model
+class MuestraSuelo extends Model
 {
     use CrudTrait;
 
@@ -15,7 +16,7 @@ class Station extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'stations';
+    protected $table = 'muestras_suelo';
     protected $guarded = ['id'];
 
     /*
@@ -24,9 +25,8 @@ class Station extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function data()
+    public function parcela()
     {
-        return $this->hasMany(Data::class, 'id_station');
+        return $this->belongsTo(Parcela::class);
     }
-
 }

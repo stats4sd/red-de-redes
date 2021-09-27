@@ -27,7 +27,7 @@ class RendimientoCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Rendimento::class);
+        CRUD::setModel(\App\Models\Agronomic\Rendimento::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/rendimiento');
         CRUD::setEntityNameStrings('rendimiento', 'rendimientos');
     }

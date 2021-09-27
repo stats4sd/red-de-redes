@@ -21,7 +21,7 @@ class ParcelaCrudController extends CrudController
 
     public function setup()
     {
-        $this->crud->setModel('App\Models\Parcela');
+        $this->crud->setModel('App\Models\Agronomic\Parcela');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/parcela');
         $this->crud->setEntityNameStrings('parcela', 'parcelas');
     }

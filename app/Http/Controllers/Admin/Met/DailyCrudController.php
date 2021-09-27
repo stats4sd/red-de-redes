@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Met;
 
-use App\Models\Station;
+use App\Models\Met\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -30,7 +30,7 @@ class DailyCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        CRUD::setModel('App\Models\Daily');
+        CRUD::setModel('App\Models\Met\Daily');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/daily');
         CRUD::setEntityNameStrings('diario', 'diario');
 
@@ -55,7 +55,7 @@ class DailyCrudController extends CrudController
                     'name' => 'id_station',
                     'entity' => 'station',
                     'attribute' => 'label',
-                    'model' => 'App\Models\Station',
+                    'model' => 'App\Models\Met\Station',
                     'key' => 'updated_at'
                 ],
                 [

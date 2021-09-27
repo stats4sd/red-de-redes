@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Models\Daily;
+use App\Models\Met\Daily;
 use App\Http\Controllers\Controller;
 
 class DailyController extends Controller

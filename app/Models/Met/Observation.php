@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Met;
 
+use App\Models\Met\MetData;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class WeatherDataPreview extends Model
+class Observation extends Model
 {
     use CrudTrait;
 
@@ -15,7 +16,7 @@ class WeatherDataPreview extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'data_template';
+    protected $table = 'observations';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -34,6 +35,11 @@ class WeatherDataPreview extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function data()
+    {
+        return $this->hasMany(MetData::class);
+    }
+
 
     /*
     |--------------------------------------------------------------------------

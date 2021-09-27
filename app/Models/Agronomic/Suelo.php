@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Agronomic;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use App\Models\Agronomic\Parcela;
 use Illuminate\Database\Eloquent\Model;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
-class Plaga extends Model
+class Suelo extends Model
 {
     use CrudTrait;
 
@@ -15,7 +16,7 @@ class Plaga extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'plagas';
+    protected $table = 'suelo';
     protected $guarded = ['id'];
 
 
@@ -25,8 +26,8 @@ class Plaga extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function cultivo()
+    public function parcela()
     {
-        return $this->belongsTo(Cultivo::class);
+        return $this->belongsTo(Parcela::class);
     }
 }

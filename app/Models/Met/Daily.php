@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Met;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Met\Station;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Model;
 
-class TenDays extends Model
+class Daily extends Model
 {
     use CrudTrait;
+    // use HasCompositePrimaryKey;
 
     /*
     |--------------------------------------------------------------------------
@@ -15,7 +17,12 @@ class TenDays extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'tendays_data';
+    protected $table = 'daily_data';
+
+    protected $guarded = ['id'];
+    protected $casts = [
+        'id_station',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -24,6 +31,12 @@ class TenDays extends Model
     */
     public function station()
     {
-        return $this->belongsTo(Station::class,'id_station');
+        return $this->belongsTo(Station::class, 'id_station');
     }
+
+    // public function getIdStationAttribute($value)
+    // {
+    //     $label = Station::find($value)->first()->label;
+    //     return $label;
+    // }
 }

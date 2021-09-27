@@ -20,7 +20,7 @@ class DailyDataPreviewCrudController extends CrudController
 
     public function setup()
     {
-        $this->crud->setModel('App\Models\DailyDataPreview');
+        $this->crud->setModel('App\Models\Met\DailyDataPreview');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/dailydatapreview');
         $this->crud->setEntityNameStrings('dailydatapreview', 'daily_data_previews');
     }

@@ -13,7 +13,7 @@ class RenameDataToMetDataTable extends Migration
      */
     public function up()
     {
-        Schema::rename('data_template', 'met_data_temp');
+        Schema::rename('data_template', 'met_data_preview');
         Schema::rename('data', 'met_data');
     }
 
@@ -25,6 +25,6 @@ class RenameDataToMetDataTable extends Migration
     public function down()
     {
         Schema::rename('met_data', 'data');
-        Schema::rename('met_data_temp', 'data_template');
+        Schema::rename('met_data_preview', 'data_template');
     }
 }

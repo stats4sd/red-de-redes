@@ -12,7 +12,7 @@
 */
 
 
-use App\Http\Controllers\Admin\Met\DataCrudController;
+use App\Http\Controllers\Admin\Met\MetDataCrudController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\QrController;
@@ -36,7 +36,7 @@ Route::post('files', [FileController::class,'store']);
 Route::post('storeFile/{uploader_id}', [FileController::class,'storeFile']);
 Route::post('cleanTable/{uploader_id}', [FileController::class,'cleanTable']);
 
-Route::get('data/{id}/delete', [DataCrudController::class,'destroy']);
+Route::get('data/{id}/delete', [MetDataCrudController::class,'destroy']);
 
 Route::post('files.store', [FileController::class,'store']);
 

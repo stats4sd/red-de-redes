@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\LkpCultivoCrudController;
 use App\Http\Controllers\Admin\LkpVariedadCrudController;
 use App\Http\Controllers\Admin\Met\DailyCrudController;
 use App\Http\Controllers\Admin\Met\DailyDataPreviewCrudController;
-use App\Http\Controllers\Admin\Met\DataCrudController;
+use App\Http\Controllers\Admin\Met\MetDataCrudController;
 use App\Http\Controllers\Admin\Met\MonthlyCrudController;
 use App\Http\Controllers\Admin\Met\ObservationCrudController;
 use App\Http\Controllers\Admin\Met\TenDaysCrudController;
@@ -40,15 +40,15 @@ Route::group([
     Route::crud('user', UserCrudController::class);
 
     // Met Data
-    Route::crud('data', DataCrudController::class);
+    Route::crud('data', MetDataCrudController::class);
     Route::crud('daily', DailyCrudController::class);
     Route::crud('tenDays', TenDaysCrudController::class);
     Route::crud('monthly', MonthlyCrudController::class);
     Route::crud('yearly', YearlyCrudController::class);
 
     Route::post('daily/download', [DailyCrudController::class, 'download']);
-    Route::post('data/deleteByFilters', [DataCrudController::class, 'deleteByFilters']);
-    Route::post('data/download', [DataCrudController::class, 'download']);
+    Route::post('data/deleteByFilters', [MetDataCrudController::class, 'deleteByFilters']);
+    Route::post('data/download', [MetDataCrudController::class, 'download']);
     Route::post('tenDays/download', [TenDaysCrudController::class, 'download']);
     Route::post('monthly/download', [MonthlyCrudController::class, 'download']);
     Route::post('yearly/download', [YearlyCrudController::class, 'download']);

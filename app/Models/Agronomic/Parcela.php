@@ -1,7 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Agronomic;
 
+use App\Models\Agronomic\Cultivo;
+use App\Models\Agronomic\MuestraSuelo;
+use App\Models\Submission;
+use App\Models\Agronomic\Suelo;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 

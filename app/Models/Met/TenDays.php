@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Met;
 
+use App\Models\Met\Station;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
-class Suelo extends Model
+class TenDays extends Model
 {
     use CrudTrait;
 
@@ -15,18 +16,15 @@ class Suelo extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'suelo';
-    protected $guarded = ['id'];
-
+    protected $table = 'tendays_data';
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
-    public function parcela()
+    public function station()
     {
-        return $this->belongsTo(Parcela::class);
+        return $this->belongsTo(Station::class,'id_station');
     }
 }

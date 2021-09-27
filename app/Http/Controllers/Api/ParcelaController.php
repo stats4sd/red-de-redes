@@ -3,7 +3,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Parcela;
+use App\Models\Agronomic\Parcela;
 use App\Http\Controllers\Controller;
 
 class ParcelaController extends Controller

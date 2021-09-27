@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Met;
 
-use App\Models\Station;
+use App\Models\Met\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -29,7 +29,7 @@ class TenDaysCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        CRUD::setModel('App\Models\TenDays');
+        CRUD::setModel('App\Models\Met\TenDays');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/tenDays');
         CRUD::setEntityNameStrings('diez días', 'diez días');
 
@@ -59,7 +59,7 @@ class TenDaysCrudController extends CrudController
                     'name' => 'id_station',
                     'entity' => 'station',
                     'attribute' => 'label',
-                    'model' => 'App\Models\Station',
+                    'model' => 'App\Models\Met\Station',
                     'key' => 'updated_at'
                 ],
                 [

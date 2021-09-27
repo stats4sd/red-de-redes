@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Dashboard;
-use App\Models\Daily;
+use App\Models\Met\Daily;
 use App\Models\Monthly;
-use App\Models\TenDays;
-use App\Models\Yearly;
-use App\Models\Station;
+use App\Models\Met\TenDays;
+use App\Models\Met\Yearly;
+use App\Models\Met\Station;
 use Illuminate\Http\Request;
 use stdClass;
 

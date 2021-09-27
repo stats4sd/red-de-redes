@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Met\Station;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 

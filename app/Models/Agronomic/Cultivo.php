@@ -1,7 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Agronomic;
 
+use App\Models\Agronomic\Enfermedade;
+use App\Models\Agronomic\Fenologia;
+use App\Models\LkpCultivo;
+use App\Models\LkpVariedad;
+use App\Models\Agronomic\ManejoParcela;
+use App\Models\Agronomic\Parcela;
+use App\Models\Agronomic\Plaga;
+use App\Models\Agronomic\Rendimento;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 

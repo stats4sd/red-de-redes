@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin\Met;
 
 use App\Http\Requests\DataRequest as StoreRequest;
 use App\Http\Requests\DataRequest as UpdateRequest;
-use App\Models\Data;
-use App\Models\Station;
+use App\Models\Met\MetData;
+use App\Models\Met\Station;
 use Backpack\CRUD\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -19,11 +19,11 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 /**
- * Class DataCrudController
+ * Class MetDataCrudController
  * @package App\Http\Controllers\Admin
  * @property-read CrudPanel $crud
  */
-class DataCrudController extends CrudController
+class MetDataCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
@@ -41,7 +41,7 @@ class DataCrudController extends CrudController
         |---------------------------------------------------------------------
         */
 
-        CRUD::setModel("App\Models\Data");
+        CRUD::setModel("App\Models\Met\MetData");
         CRUD::setRoute(config('backpack.base.route_prefix').'/data');
         CRUD::setEntityNameStrings('data', 'data');
 
@@ -74,7 +74,7 @@ class DataCrudController extends CrudController
                 'name' => 'id_station',
                 'entity' => 'station',
                 'attribute' => 'label',
-                'model' => 'App\Models\Station',
+                'model' => 'App\Models\Met\Station',
                 'key' => 'updated_at'
 
             ],
@@ -167,22 +167,22 @@ class DataCrudController extends CrudController
         {
             if($id_station_pos < $date_pos)
             {
-                $response = Data::where('id_station', $bindings[0])->whereBetween('fecha_hora', [$bindings[1], $bindings[2]])->delete();
+                $response = MetData::where('id_station', $bindings[0])->whereBetween('fecha_hora', [$bindings[1], $bindings[2]])->delete();
 
 
             }else if($id_station_pos > $date_pos)
             {
-                $response = Data::where('id_station', $bindings[2])->whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
+                $response = MetData::where('id_station', $bindings[2])->whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
             }
             \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
 
         }else if (!empty($id_station_pos) and empty($date_pos))
         {
-            $response = Data::where('id_station', $bindings[0])->delete();
+            $response = MetData::where('id_station', $bindings[0])->delete();
             \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
         } else if (!empty($date_pos) and empty($id_station_pos))
         {
-            $response = Data::whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
+            $response = MetData::whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
             \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
         } else
         {

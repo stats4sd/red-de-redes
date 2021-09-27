@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Met;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
-class Daily extends Model
+class DailyDataPreview extends Model
 {
     use CrudTrait;
-    // use HasCompositePrimaryKey;
 
     /*
     |--------------------------------------------------------------------------
@@ -16,26 +15,13 @@ class Daily extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'daily_data';
-
+    protected $table = 'daily_data_preview';
     protected $guarded = ['id'];
-    protected $casts = [
-        'id_station',
-    ];
+
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function station()
-    {
-        return $this->belongsTo(Station::class, 'id_station');
-    }
-
-    // public function getIdStationAttribute($value)
-    // {
-    //     $label = Station::find($value)->first()->label;
-    //     return $label;
-    // }
 }

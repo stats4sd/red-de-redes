@@ -27,7 +27,7 @@ class StationCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('App\Models\Station');
+        $this->crud->setModel('App\Models\Met\Station');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/station');
         $this->crud->setEntityNameStrings('estación', 'estaciones');
 

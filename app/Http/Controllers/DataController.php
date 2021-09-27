@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use DB;
 use ZipArchive;
 use Carbon\Carbon;
-use App\Models\Data;
+use App\Models\Met\MetData;
 use Illuminate\Support\Str;
 use App\Models\DataTemplate;
 use Illuminate\Http\Request;
-use App\Models\Station;
+use App\Models\Met\Station;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -323,7 +323,7 @@ class DataController extends Controller
         }
 
         #Create Zip Archive for observation files.
-        $weather_observation = Data::whereHas('observation')->with('observation')->where('id_station', $request->stationsSelected)->whereBetween('fecha_hora',[$request->startDate, $request->endDate])->get();
+        $weather_observation = MetData::whereHas('observation')->with('observation')->where('id_station', $request->stationsSelected)->whereBetween('fecha_hora',[$request->startDate, $request->endDate])->get();
 
         $list_files = array();
         foreach ($weather_observation as $observation) {

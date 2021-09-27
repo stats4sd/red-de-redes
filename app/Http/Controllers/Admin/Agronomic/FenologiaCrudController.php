@@ -21,7 +21,7 @@ class FenologiaCrudController extends CrudController
 
     public function setup()
     {
-        $this->crud->setModel('App\Models\Fenologia');
+        $this->crud->setModel('App\Models\Agronomic\Fenologia');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/fenologia');
         $this->crud->setEntityNameStrings('fenología', 'fenología');
     }

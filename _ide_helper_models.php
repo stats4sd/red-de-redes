@@ -40,7 +40,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Cultivo
+ * App\Models\Agronomic\Cultivo
  *
  * @property int $id
  * @property string $lkp_cultivo_id
@@ -50,42 +50,42 @@ namespace App\Models{
  * @property string|null $propiedad_variedad
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Enfermedade[] $enfermedades
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Agronomic\Enfermedade[] $enfermedades
  * @property-read int|null $enfermedades_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Fenologia[] $fenologias
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Agronomic\Fenologia[] $fenologias
  * @property-read int|null $fenologias_count
  * @property-read \App\Models\LkpCultivo $lkp_cultivos
  * @property-read \App\Models\LkpVariedad|null $lkp_variedad
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ManejoParcela[] $manejo_parcelas
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Agronomic\ManejoParcela[] $manejo_parcelas
  * @property-read int|null $manejo_parcelas_count
- * @property-read \App\Models\Parcela $parcela
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Plaga[] $plagas
+ * @property-read \App\Models\Agronomic\Parcela $parcela
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Agronomic\Plaga[] $plagas
  * @property-read int|null $plagas_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rendimento[] $rendimentos
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Agronomic\Rendimento[] $rendimentos
  * @property-read int|null $rendimentos_count
- * @method static \Illuminate\Database\Eloquent\Builder|Cultivo newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Cultivo newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Cultivo query()
- * @method static \Illuminate\Database\Eloquent\Builder|Cultivo whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Cultivo whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Cultivo whereLkpCultivoId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Cultivo whereLkpVariedadId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Cultivo whereParcelaId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Cultivo wherePropiedadCultivo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Cultivo wherePropiedadVariedad($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Cultivo whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Cultivo newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Cultivo newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Cultivo query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Cultivo whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Cultivo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Cultivo whereLkpCultivoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Cultivo whereLkpVariedadId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Cultivo whereParcelaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Cultivo wherePropiedadCultivo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Cultivo wherePropiedadVariedad($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Cultivo whereUpdatedAt($value)
  */
 	class Cultivo extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- * App\Models\Daily
+ * App\Models\Met\Daily
  *
  * @property int|null $id
  * @property string $fecha
  * @property int|null $id_station
- * @property \App\Models\Station|null $station
+ * @property \App\Models\Met\Station|null $station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
  * @property string|null $avg_temperatura_interna
@@ -111,45 +111,45 @@ namespace App\Models{
  * @property string|null $min_sensacion_termica
  * @property string|null $avg_sensacion_termica
  * @property string|null $lluvia_24_horas_total
- * @method static \Illuminate\Database\Eloquent\Builder|Daily newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Daily newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Daily query()
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereAvgHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereAvgHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereAvgPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereAvgPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereAvgSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereAvgTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereAvgTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereAvgVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereFecha($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereIdStation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereLluvia24HorasTotal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMaxHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMaxHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMaxPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMaxPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMaxSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMaxTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMaxTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMaxVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMinHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMinHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMinPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMinPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMinSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMinTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMinTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereMinVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Daily whereStation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereAvgHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereAvgHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereAvgPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereAvgPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereAvgSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereAvgTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereAvgTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereAvgVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereFecha($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereIdStation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereLluvia24HorasTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMaxHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMaxHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMaxPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMaxPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMaxSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMaxTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMaxTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMaxVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMinHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMinHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMinPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMinPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMinSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMinTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMinTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereMinVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Daily whereStation($value)
  */
 	class Daily extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- * App\Models\DailyDataPreview
+ * App\Models\Met\DailyDataPreview
  *
  * @property int|null $id
  * @property string $fecha
@@ -180,46 +180,48 @@ namespace App\Models{
  * @property string|null $min_sensacion_termica
  * @property string|null $avg_sensacion_termica
  * @property string|null $lluvia_24_horas_total
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview query()
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereAvgHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereAvgHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereAvgPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereAvgPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereAvgSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereAvgTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereAvgTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereAvgVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereFecha($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereIdStation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereLluvia24HorasTotal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMaxHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMaxHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMaxPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMaxPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMaxSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMaxTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMaxTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMaxVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMinHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMinHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMinPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMinPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMinSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMinTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMinTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereMinVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|DailyDataPreview whereUploaderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereAvgHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereAvgHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereAvgPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereAvgPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereAvgSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereAvgTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereAvgTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereAvgVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereFecha($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereIdStation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereLluvia24HorasTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMaxHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMaxHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMaxPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMaxPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMaxSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMaxTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMaxTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMaxVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMinHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMinHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMinPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMinPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMinSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMinTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMinTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereMinVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\DailyDataPreview whereUploaderId($value)
  */
 	class DailyDataPreview extends \Eloquent {}
 }
 
 namespace App\Models{
-/**
- * App\Models\Data
- *
+
+    use App\Models\Met\MetData;
+
+    /**
+ * AppModelsData *
  * @property string $fecha_hora
  * @property int $id
  * @property int|null $intervalo
@@ -292,83 +294,83 @@ namespace App\Models{
  * @property string|null $soil_4_moist
  * @property int $meteobridge
  * @property string|null $hardware_id
- * @property-read \App\Models\Observation|null $observation
- * @property-read \App\Models\Station|null $station
- * @method static \Illuminate\Database\Eloquent\Builder|Data newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Data newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Data query()
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereCoolDaysD($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereDireccionDelViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereEvapotran($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereFechaHora($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereHardwareId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereHeatDaysD($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereHiDir($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereHiSpeed($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereHiTemp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereIdStation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereInAirDensity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereInDew($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereInEmc($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereInHeat($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereIndexHeat($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereIndexThsw($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereIndexThw($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereIntervalo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereIssRecept($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLeafTemp1($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLeafTemp2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLeafTemp3($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLeafTemp4($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLeafWet1($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLeafWet2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLeafWet3($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLeafWet4($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLluvia24Horas($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLluviaHora($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLluviaMes($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLluviaSemana($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLluviaTotal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereLowTemp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereMeteobridge($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereMeteobridgeAltitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereMeteobridgeLatitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereMeteobridgeLongitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereObservationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data wherePresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data wherePresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data wherePuntoRocio($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereRadsolarMax($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereRafaga($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereRain($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereSoil1Moist($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereSoil2Moist($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereSoil3Moist($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereSoil4Moist($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereSoilTemp1($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereSoilTemp2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereSoilTemp3($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereSoilTemp4($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereSolarEnergy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereSolarRad($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereUvDose($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereUvIndex($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereUvMax($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereWindChill($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereWindCod($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereWindCodDom($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereWindRun($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereWindSamp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Data whereWindTx($value)
+ * @property-read \App\Models\Met\Observation|null $observation
+ * @property-read \App\Models\Met\Station|null $station
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereCoolDaysD($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereDireccionDelViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereEvapotran($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereFechaHora($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereHardwareId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereHeatDaysD($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereHiDir($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereHiSpeed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereHiTemp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereIdStation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereInAirDensity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereInDew($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereInEmc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereInHeat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereIndexHeat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereIndexThsw($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereIndexThw($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereIntervalo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereIssRecept($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLeafTemp1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLeafTemp2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLeafTemp3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLeafTemp4($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLeafWet1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLeafWet2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLeafWet3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLeafWet4($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLluvia24Horas($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLluviaHora($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLluviaMes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLluviaSemana($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLluviaTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereLowTemp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereMeteobridge($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereMeteobridgeAltitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereMeteobridgeLatitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereMeteobridgeLongitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereObservationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData wherePresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData wherePresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData wherePuntoRocio($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereRadsolarMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereRafaga($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereRain($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereSoil1Moist($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereSoil2Moist($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereSoil3Moist($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereSoil4Moist($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereSoilTemp1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereSoilTemp2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereSoilTemp3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereSoilTemp4($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereSolarEnergy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereSolarRad($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereUvDose($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereUvIndex($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereUvMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereWindChill($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereWindCod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereWindCodDom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereWindRun($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereWindSamp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetData whereWindTx($value)
  */
 	class Data extends \Eloquent {}
 }
@@ -436,7 +438,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Enfermedade
+ * App\Models\Agronomic\Enfermedade
  *
  * @property int $id
  * @property int $cultivo_id
@@ -444,23 +446,23 @@ namespace App\Models{
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Cultivo $cultivo
- * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade query()
- * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereCultivoId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereSubmissionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Enfermedade whereUpdatedAt($value)
+ * @property-read \App\Models\Agronomic\Cultivo $cultivo
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Enfermedade newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Enfermedade newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Enfermedade query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Enfermedade whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Enfermedade whereCultivoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Enfermedade whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Enfermedade whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Enfermedade whereSubmissionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Enfermedade whereUpdatedAt($value)
  */
 	class Enfermedade extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- * App\Models\Fenologia
+ * App\Models\Agronomic\Fenologia
  *
  * @property int $id
  * @property int $cultivo_id
@@ -479,27 +481,27 @@ namespace App\Models{
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Cultivo $cultivo
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia query()
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereCultivoId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereEdadPlantacion($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereEpocaSiembra($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereFechaCosecha($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereFechaCuajado($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereFechaDormida($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereFechaEmergencia($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereFechaFloracion($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereFechaFructificacion($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereFechaHinchada($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereFechaHojas($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereFechaMaduracion($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereFechaSiembra($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereSubmissionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Fenologia whereUpdatedAt($value)
+ * @property-read \App\Models\Agronomic\Cultivo $cultivo
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereCultivoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereEdadPlantacion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereEpocaSiembra($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereFechaCosecha($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereFechaCuajado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereFechaDormida($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereFechaEmergencia($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereFechaFloracion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereFechaFructificacion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereFechaHinchada($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereFechaHojas($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereFechaMaduracion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereFechaSiembra($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereSubmissionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Fenologia whereUpdatedAt($value)
  */
 	class Fenologia extends \Eloquent {}
 }
@@ -513,7 +515,7 @@ namespace App\Models{
  * @property string|null $propiedad
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Cultivo[] $cultivos
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Agronomic\Cultivo[] $cultivos
  * @property-read int|null $cultivos_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\LkpVariedad[] $variedad
  * @property-read int|null $variedad_count
@@ -557,7 +559,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\ManejoParcela
+ * App\Models\Agronomic\ManejoParcela
  *
  * @property int $id
  * @property int $cultivo_id
@@ -588,39 +590,39 @@ namespace App\Models{
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Cultivo $cultivo
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela query()
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereAbonoCantidadKg($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereAbonoOrganico($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereCultivoId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereFechaAporque($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereFechaControlFitosanitario($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereFechaFertilizacion($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereFechaPoda($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereFechaRastradoSuelo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereFechaRoturadoSuelo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereFechaTazeo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereFertilizanteCantidadKg($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereFertilizanteQuimico($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereFoliarProducto($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereFuenteAgua($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereProducto($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereSubmissionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereTipoAporque($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereTipoControlFitosanitario($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereTipoDeshierbe($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereTipoFertilizacionSuelo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereTipoPoda($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereTipoPreparacionRastrado($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereTipoPreparacionRoturado($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereTipoProducto($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereTipoRiego($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereTipoTazeo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ManejoParcela whereUpdatedAt($value)
+ * @property-read \App\Models\Agronomic\Cultivo $cultivo
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereAbonoCantidadKg($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereAbonoOrganico($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereCultivoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereFechaAporque($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereFechaControlFitosanitario($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereFechaFertilizacion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereFechaPoda($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereFechaRastradoSuelo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereFechaRoturadoSuelo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereFechaTazeo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereFertilizanteCantidadKg($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereFertilizanteQuimico($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereFoliarProducto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereFuenteAgua($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereProducto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereSubmissionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereTipoAporque($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereTipoControlFitosanitario($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereTipoDeshierbe($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereTipoFertilizacionSuelo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereTipoPoda($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereTipoPreparacionRastrado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereTipoPreparacionRoturado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereTipoProducto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereTipoRiego($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereTipoTazeo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\ManejoParcela whereUpdatedAt($value)
  */
 	class ManejoParcela extends \Eloquent {}
 }
@@ -631,7 +633,7 @@ namespace App\Models{
  *
  * @property string $fecha
  * @property int|null $id_station
- * @property \App\Models\Station|null $station
+ * @property \App\Models\Met\Station|null $station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
  * @property string|null $avg_temperatura_interna
@@ -694,22 +696,22 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\MuestraSuelo
+ * App\Models\Agronomic\MuestraSuelo
  *
  * @property int $id
  * @property string $parcela_id
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Parcela $parcela
- * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo query()
- * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo whereParcelaId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo whereSubmissionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MuestraSuelo whereUpdatedAt($value)
+ * @property-read \App\Models\Agronomic\Parcela $parcela
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\MuestraSuelo newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\MuestraSuelo newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\MuestraSuelo query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\MuestraSuelo whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\MuestraSuelo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\MuestraSuelo whereParcelaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\MuestraSuelo whereSubmissionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\MuestraSuelo whereUpdatedAt($value)
  */
 	class MuestraSuelo extends \Eloquent {}
 }
@@ -740,28 +742,28 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Observation
+ * App\Models\Met\Observation
  *
  * @property int $id
  * @property string $files
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Data[] $data
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Met\MetData[] $data
  * @property-read int|null $data_count
- * @method static \Illuminate\Database\Eloquent\Builder|Observation newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Observation newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Observation query()
- * @method static \Illuminate\Database\Eloquent\Builder|Observation whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Observation whereFiles($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Observation whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Observation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Observation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Observation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Observation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Observation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Observation whereFiles($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Observation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Observation whereUpdatedAt($value)
  */
 	class Observation extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- * App\Models\Parcela
+ * App\Models\Agronomic\Parcela
  *
  * @property string $id
  * @property int $comunidad_id
@@ -779,39 +781,39 @@ namespace App\Models{
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Cultivo[] $cultivos
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Agronomic\Cultivo[] $cultivos
  * @property-read int|null $cultivos_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MuestraSuelo[] $muestra_suelos
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Agronomic\MuestraSuelo[] $muestra_suelos
  * @property-read int|null $muestra_suelos_count
  * @property-read \App\Models\Submission $submissions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Suelo[] $suelos
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Agronomic\Suelo[] $suelos
  * @property-read int|null $suelos_count
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela query()
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereAccuracy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereAltitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereAreaM2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereAreaOriginale($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereComunidadId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereDrenaje($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereFecha($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereLatitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereLongitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela wherePendiente($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereSalinidad($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereSubmissionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Parcela whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereAccuracy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereAltitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereAreaM2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereAreaOriginale($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereComunidadId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereDrenaje($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereFecha($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereLatitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereLongitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela wherePendiente($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereSalinidad($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereSubmissionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Parcela whereUpdatedAt($value)
  */
 	class Parcela extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- * App\Models\Plaga
+ * App\Models\Agronomic\Plaga
  *
  * @property int $id
  * @property int $cultivo_id
@@ -826,23 +828,23 @@ namespace App\Models{
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Cultivo $cultivo
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga query()
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCantidadInsectosM2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCantidadLarvas($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereCultivoId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereMoscaDias($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereMoscaNumero($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereMoscaTrampas($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga wherePlagaFecha($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga wherePresenciaMosca($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereSubmissionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Plaga whereUpdatedAt($value)
+ * @property-read \App\Models\Agronomic\Cultivo $cultivo
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga whereCantidadInsectosM2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga whereCantidadLarvas($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga whereCultivoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga whereMoscaDias($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga whereMoscaNumero($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga whereMoscaTrampas($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga wherePlagaFecha($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga wherePresenciaMosca($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga whereSubmissionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Plaga whereUpdatedAt($value)
  */
 	class Plaga extends \Eloquent {}
 }
@@ -891,7 +893,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Rendimento
+ * App\Models\Agronomic\Rendimento
  *
  * @property int $id
  * @property int $cultivo_id
@@ -905,29 +907,29 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $cantidad_cosechada_p
- * @property-read \App\Models\Cultivo $cultivo
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento query()
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereCantidadCosechadaKg($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereCantidadCosechadaP($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereCultivoId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePesoDanadoGrano($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePesoDanadosTuberculos($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePesoMuestraGrano($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento wherePesoMuestraTuberculos($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereSubmissionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereSuperficieCosechadaM2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rendimento whereUpdatedAt($value)
+ * @property-read \App\Models\Agronomic\Cultivo $cultivo
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento whereCantidadCosechadaKg($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento whereCantidadCosechadaP($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento whereCultivoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento wherePesoDanadoGrano($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento wherePesoDanadosTuberculos($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento wherePesoMuestraGrano($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento wherePesoMuestraTuberculos($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento whereSubmissionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento whereSuperficieCosechadaM2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Rendimento whereUpdatedAt($value)
  */
 	class Rendimento extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- * App\Models\Station
+ * App\Models\Met\Station
  *
  * @property int $id
  * @property string|null $hardware_id
@@ -938,20 +940,20 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $type
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Data[] $data
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Met\MetData[] $data
  * @property-read int|null $data_count
- * @method static \Illuminate\Database\Eloquent\Builder|Station newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Station newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Station query()
- * @method static \Illuminate\Database\Eloquent\Builder|Station whereAltitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Station whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Station whereHardwareId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Station whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Station whereLabel($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Station whereLatitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Station whereLongitude($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Station whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Station whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station whereAltitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station whereHardwareId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station whereLabel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station whereLatitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station whereLongitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Station whereUpdatedAt($value)
  */
 	class Station extends \Eloquent {}
 }
@@ -990,7 +992,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Suelo
+ * App\Models\Agronomic\Suelo
  *
  * @property int $id
  * @property string $parcela_id
@@ -1000,30 +1002,30 @@ namespace App\Models{
  * @property int $submission_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Parcela $parcela
- * @method static \Illuminate\Database\Eloquent\Builder|Suelo newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Suelo newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Suelo query()
- * @method static \Illuminate\Database\Eloquent\Builder|Suelo whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Suelo whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Suelo whereMateriaOrganica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Suelo wherePH($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Suelo whereParcelaId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Suelo whereSubmissionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Suelo whereTextura($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Suelo whereUpdatedAt($value)
+ * @property-read \App\Models\Agronomic\Parcela $parcela
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Suelo newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Suelo newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Suelo query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Suelo whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Suelo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Suelo whereMateriaOrganica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Suelo wherePH($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Suelo whereParcelaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Suelo whereSubmissionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Suelo whereTextura($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agronomic\Suelo whereUpdatedAt($value)
  */
 	class Suelo extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- * App\Models\TenDays
+ * App\Models\Met\TenDays
  *
  * @property string|null $min_fecha
  * @property string|null $max_fecha
  * @property int|null $id_station
- * @property \App\Models\Station|null $station
+ * @property \App\Models\Met\Station|null $station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
  * @property string|null $avg_temperatura_interna
@@ -1050,39 +1052,39 @@ namespace App\Models{
  * @property string|null $avg_sensacion_termica
  * @property string|null $lluvia_24_horas_total
  * @property int|null $group_by
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays query()
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereAvgHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereAvgHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereAvgPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereAvgPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereAvgSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereAvgTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereAvgTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereAvgVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereGroupBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereIdStation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereLluvia24HorasTotal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMaxFecha($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMaxHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMaxHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMaxPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMaxPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMaxSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMaxTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMaxTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMaxVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMinFecha($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMinHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMinHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMinPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMinPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMinSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMinTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMinTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereMinVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TenDays whereStation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereAvgHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereAvgHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereAvgPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereAvgPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereAvgSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereAvgTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereAvgTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereAvgVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereGroupBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereIdStation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereLluvia24HorasTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMaxFecha($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMaxHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMaxHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMaxPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMaxPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMaxSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMaxTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMaxTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMaxVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMinFecha($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMinHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMinHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMinPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMinPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMinSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMinTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMinTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereMinVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\TenDays whereStation($value)
  */
 	class TenDays extends \Eloquent {}
 }
@@ -1121,8 +1123,11 @@ namespace App\Models{
 }
 
 namespace App\Models{
-/**
- * App\Models\WeatherDataPreview
+
+    use App\Models\Met\MetDataPreview;
+
+    /**
+ * App\Models\Met\MetDataPreview
  *
  * @property string $fecha_hora
  * @property int $id
@@ -1192,77 +1197,77 @@ namespace App\Models{
  * @property string|null $soil_3_moist
  * @property string|null $soil_4_moist
  * @property string $uploader_id
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview query()
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereCoolDaysD($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereDireccionDelViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereEvapotran($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereFechaHora($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereHeatDaysD($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereHiDir($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereHiSpeed($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereHiTemp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereIdStation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereInAirDensity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereInDew($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereInEmc($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereInHeat($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereIndexHeat($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereIndexThsw($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereIndexThw($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereIntervalo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereIssRecept($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLeafTemp1($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLeafTemp2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLeafTemp3($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLeafTemp4($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLeafWet1($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLeafWet2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLeafWet3($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLeafWet4($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLluvia24Horas($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLluviaHora($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLluviaMes($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLluviaSemana($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLluviaTotal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereLowTemp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereObservationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview wherePresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview wherePresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview wherePuntoRocio($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereRadsolarMax($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereRafaga($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereRain($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereSoil1Moist($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereSoil2Moist($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereSoil3Moist($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereSoil4Moist($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereSoilTemp1($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereSoilTemp2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereSoilTemp3($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereSoilTemp4($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereSolarEnergy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereSolarRad($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereUploaderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereUvDose($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereUvIndex($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereUvMax($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereWindChill($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereWindCod($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereWindCodDom($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereWindRun($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereWindSamp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|WeatherDataPreview whereWindTx($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereCoolDaysD($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereDireccionDelViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereEvapotran($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereFechaHora($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereHeatDaysD($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereHiDir($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereHiSpeed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereHiTemp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereIdStation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereInAirDensity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereInDew($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereInEmc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereInHeat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereIndexHeat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereIndexThsw($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereIndexThw($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereIntervalo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereIssRecept($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLeafTemp1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLeafTemp2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLeafTemp3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLeafTemp4($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLeafWet1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLeafWet2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLeafWet3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLeafWet4($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLluvia24Horas($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLluviaHora($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLluviaMes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLluviaSemana($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLluviaTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereLowTemp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereObservationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview wherePresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview wherePresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview wherePuntoRocio($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereRadsolarMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereRafaga($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereRain($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereSoil1Moist($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereSoil2Moist($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereSoil3Moist($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereSoil4Moist($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereSoilTemp1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereSoilTemp2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereSoilTemp3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereSoilTemp4($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereSolarEnergy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereSolarRad($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereUploaderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereUvDose($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereUvIndex($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereUvMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereWindChill($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereWindCod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereWindCodDom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereWindRun($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereWindSamp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MetDataPreview whereWindTx($value)
  */
 	class WeatherDataPreview extends \Eloquent {}
 }
@@ -1312,11 +1317,11 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Yearly
+ * App\Models\Met\Yearly
  *
  * @property string $fecha
  * @property int|null $id_station
- * @property \App\Models\Station|null $station
+ * @property \App\Models\Met\Station|null $station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
  * @property string|null $avg_temperatura_interna
@@ -1342,37 +1347,37 @@ namespace App\Models{
  * @property string|null $min_sensacion_termica
  * @property string|null $avg_sensacion_termica
  * @property string|null $lluvia_24_horas_total
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly query()
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereAvgHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereAvgHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereAvgPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereAvgPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereAvgSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereAvgTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereAvgTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereAvgVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereFecha($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereIdStation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereLluvia24HorasTotal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMaxHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMaxHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMaxPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMaxPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMaxSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMaxTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMaxTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMaxVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMinHumedadExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMinHumedadInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMinPresionAbsoluta($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMinPresionRelativa($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMinSensacionTermica($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMinTemperaturaExterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMinTemperaturaInterna($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereMinVelocidadViento($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Yearly whereStation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereAvgHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereAvgHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereAvgPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereAvgPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereAvgSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereAvgTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereAvgTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereAvgVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereFecha($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereIdStation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereLluvia24HorasTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMaxHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMaxHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMaxPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMaxPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMaxSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMaxTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMaxTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMaxVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMinHumedadExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMinHumedadInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMinPresionAbsoluta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMinPresionRelativa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMinSensacionTermica($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMinTemperaturaExterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMinTemperaturaInterna($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereMinVelocidadViento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Met\Yearly whereStation($value)
  */
 	class Yearly extends \Eloquent {}
 }

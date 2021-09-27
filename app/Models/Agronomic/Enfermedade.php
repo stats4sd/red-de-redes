@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Agronomic;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Agronomic\Cultivo;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Model;
 
-class ManejoParcela extends Model
+class Enfermedade extends Model
 {
     use CrudTrait;
 
@@ -15,11 +16,11 @@ class ManejoParcela extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'manejo_parcela';
+    protected $table = 'enfermedades';
     protected $guarded = ['id'];
 
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
@@ -29,4 +30,7 @@ class ManejoParcela extends Model
     {
         return $this->belongsTo(Cultivo::class);
     }
+
+
+
 }

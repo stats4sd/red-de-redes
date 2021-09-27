@@ -27,7 +27,7 @@ class PlagaCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Plaga::class);
+        CRUD::setModel(\App\Models\Agronomic\Plaga::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/plaga');
         CRUD::setEntityNameStrings('plaga', 'plagas');
     }

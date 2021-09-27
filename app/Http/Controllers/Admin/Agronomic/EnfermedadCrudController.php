@@ -27,7 +27,7 @@ class EnfermedadCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Enfermedade::class);
+        CRUD::setModel(\App\Models\Agronomic\Enfermedade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/enfermedad');
         CRUD::setEntityNameStrings('enfermedad', 'enfermedades');
     }

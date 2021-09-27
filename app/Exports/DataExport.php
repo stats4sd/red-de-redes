@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Data;
+use App\Models\Met\MetData;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -82,7 +82,7 @@ class DataExport implements WithHeadings, FromQuery
     public function query()
 
     {
-    	return Data::whereIn('id_station',$this->id_stations)->orderBy('fecha_hora')->join('stations','id_station','=','stations.id');
+    	return MetData::whereIn('id_station',$this->id_stations)->orderBy('fecha_hora')->join('stations','id_station','=','stations.id');
     }
 
 
