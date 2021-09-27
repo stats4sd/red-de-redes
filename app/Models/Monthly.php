@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Station;
+use App\Models\Met\Station;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
@@ -27,7 +27,7 @@ class Monthly extends Model
     */
     public function station()
     {
-        return $this->belongsTo(Station::class, 'id_station');
+        return $this->belongsTo(Station::class, 'station_id');
     }
     /*
     |--------------------------------------------------------------------------

@@ -4,7 +4,6 @@ namespace App\Exports;
 
 use App\Tendays;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -12,15 +11,15 @@ class TendaysExport implements WithHeadings, FromQuery
 {
      use Exportable;
 
-    public function __construct(Array $id_stations)
+    public function __construct(Array $station_ids)
     {
-    	$this->id_stations = $id_stations;
+    	$this->station_ids = $station_ids;
     }
 
     public function headings() : array{
     	return [
-    		
-    		
+
+
     		'Fecha de inicio',
     		'Fin de la fecha',
     		'Max temperature interna',
@@ -50,9 +49,9 @@ class TendaysExport implements WithHeadings, FromQuery
     }
 
     public function query()
-    
+
     {
-    	return Tendays::whereIn('id_station',$this->id_stations)->orderBy('group_by')->join('stations','id_station','=','stations.id');
+    	return Tendays::whereIn('station_id',$this->station_ids)->orderBy('group_by')->join('stations','station_id','=','stations.id');
     }
 
 

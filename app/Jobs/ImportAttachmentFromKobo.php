@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use Psy\Util\Str;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
@@ -40,11 +39,11 @@ class ImportAttachmentFromKobo implements ShouldQueue
     {
         // As of June 11 2020, downloadable filename is in the format:
         // kobo_username/attachments/submission['formhub/uuid']/submission['_uuid']/submission['photo_variable']
-       
+
         $filename = 'bolivia_agromet/attachments/'. $this->submission['formhub/uuid'].'/'.$this->submission['_uuid'].'/'.$this->name;
 
         $downloadUrl = 'https://kc.kobotoolbox.org/media/original?media_file='.urlencode($filename);
-    
+
         $response = Http::withBasicAuth(config('services.kobo.username'),config('services.kobo.password'))
         ->get($downloadUrl)
         ->throw();

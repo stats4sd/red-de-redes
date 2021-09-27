@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\ComunidadController;
+use App\Http\Controllers\Api\DepartamentoController;
+use App\Http\Controllers\Api\MunicipioController;
+use App\Http\Controllers\Api\ParcelaController;
+use App\Http\Controllers\Api\StationController;
+use App\Http\Controllers\Api\YearController;
 use Illuminate\Http\Request;
 
 /*
@@ -17,9 +23,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('comunidads', 'Api\\ComunidadController');
-Route::apiResource('stations', 'Api\\StationController');
-Route::apiResource('parcelas', 'Api\\ParcelaController');
-Route::apiResource('departamentos', 'Api\\DepartamentoController');
-Route::apiResource('municipios', 'Api\\MunicipioController');
-Route::apiResource('years', 'Api\\YearController');
+Route::apiResource('comunidads', ComunidadController::class);
+Route::apiResource('stations', StationController::class);
+Route::apiResource('parcelas', ParcelaController::class);
+Route::apiResource('departamentos', DepartamentoController::class);
+Route::apiResource('municipios', MunicipioController::class);
+Route::apiResource('years', YearController::class);

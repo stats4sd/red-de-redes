@@ -10,18 +10,18 @@
 
 
             <link href ="{{asset('css/style.css')}}" rel="stylesheet"/>
-           
+
             <div class ="card mt-4">
                 <div class="card-header">Data</div>
 
-                
+
 
                 <div id="temps_div"></div>
-                <?= $lava->render('LineChart', 'Temperature', 'temps_div') ?> 
-  
+                <?= $lava->render('LineChart', 'Temperature', 'temps_div') ?>
+
                <!-- <div id="chartscontent" ></div> -->
 
-                
+
 
             <div class="tab">
                 <button class="tablinks" onclick="openTable(event, 'Daily')" id="defaultOpen">Daily</button>
@@ -29,26 +29,26 @@
                 <button class="tablinks" onclick="openTable(event, 'Monthly')">Monthly</button>
                 <button class="tablinks" onclick="openTable(event, 'Yearly')">Yearly</button>
             </div>
-              
+
 
             <div id="Daily" class="tabcontent">
                 <h3>Daily Data</h3>
                     <p>Daily data summeries from weather station</p>
                         <div class="card-body">
-              
+
                         <table class="table table-striped" id="daily-table"></table>
-                    
+
                     </div>
             </div>
 
             <div id="Tendays" class="tabcontent">
                 <h3>Ten days</h3>
-                    <p>Ten days summeries from weather station</p> 
+                    <p>Ten days summeries from weather station</p>
                         <div class="card-body">
                             <table class= "table table-striped" id="ten-table"></table>
                         </div>
             </div>
-                        
+
 
             <div id="Monthly" class="tabcontent">
                 <h3>Monthly</h3>
@@ -66,16 +66,16 @@
                         </div>
             </div>
         </div>
-                       
 
 
-            
+
+
     </div>
          <div class="col-md-4">
             <div class="card mt-4">
                 <div class="card-header">Panel de Control</div>
                     <div class="card-body">
-                       
+
 
                         <div class="container">
                           <h2>Weather Station Filter</h2>
@@ -83,7 +83,7 @@
                                 <label for="stations-content">Select Weather Station</label>
 
                                 <select id="filter_station" class="form-control">
-                                
+
                                     <option id='1' value='1'>Chojñapata-Davis</option>
                                     <option id='2' value='2'>Chinchaya-Davis</option>
                                     <option id='3' value='3'>Chinchaya-Chinas</option>
@@ -91,25 +91,25 @@
                                     <option id='5' value='5'>Cutusuma-Davis</option>
                                     <option id='6' value='6'>Iñacamaya-Davis</option>
                                     <option id='7' value='7'>Incamya-Chinas</option>
-                                
+
                                 </select>
                             </div>
                              <hr>
                                 <button onclick="filterByStation()">Submit Filter</button>
 
                             <hr>
-                       
+
 
                          <!-- <h2>Graphics</h2>
 
                        <!--  <form action="{{ route('getGraphic') }} " method="POST"> -->
                        <!--  @csrf
 
-                        
+
                           <div class="form-group">
                                 <label for="stations-content">Select Value to Display</label>
                                 <select id="graphics_id" class="form-control">
-                                
+
                                     <option id='1' value='1'>Temperatura Interna</option>
                                     <option id='2' value='2'>Humedad Interna</option>
                                     <option id='3' value='3'>Temperatura Externa</option>
@@ -119,16 +119,16 @@
                                     <option id='7' value='7'>Velocidad Viento</option>
                                     <option id='8' value='8'>Sensacion Termica</option>
                                     <option id='9' value='9'>Lluvia 24 horas</option>
-                                
+
                                 </select>
                             </div>
                              <hr>
                                 <button onclick="openGraphics()">Submit Graphic</button> -->
                       <!--   </form> -->
 
-                     
-                            
-           
+
+
+
                     </div>
                 </div>
             </div>
@@ -160,17 +160,17 @@ $(document).ready(function() {
             {
                 extend: 'csv',
                 filename: 'daily',
-            }   
+            }
         ],
         processing: true,
         serverSide: false,
         "scrollY":  "500px",
-        "scrollX":  true,  
+        "scrollX":  true,
         "scrollCollapse": true,
-        "paging":         true,    
+        "paging":         true,
         ajax: '{!! route('getDaily') !!}',
         columns: [
-            { data: 'id_station', name: 'id_station', title:'Id Station '},
+            { data: 'station_id', name: 'station_id', title:'Id Station '},
             { data: 'fecha', name: 'fecha' , title: 'Fecha'},
             { data: 'max_temperatura_interna', name: 'max_temperatura_interna', title: 'Max Temperatura Interna'},
             { data: 'min_temperatura_interna', name: 'min_temperatura_interna', title: 'Min Temperatura Interna'},
@@ -189,8 +189,8 @@ $(document).ready(function() {
             { data: 'max_sensacion_termica', name: 'max_sensacion_termica', title: 'Max Sensación Termica'},
             { data: 'min_sensacion_termica', name: 'min_sensacion_termica', title: 'Min Sensación Termica'},
             { data: 'lluvia_24_horas_total', name: 'lluvia_24_horas_total', title: 'Max Lluvia 24 horas'},
-      
-           
+
+
         ]
     });
 });
@@ -215,18 +215,18 @@ $(document).ready(function() {
             {
                 extend: 'csv',
                 filename: 'ten_days',
-            }   
+            }
         ],
         processing: true,
         serverSide: false,
         "scrollY":  "500px",
-        "scrollX":  true,  
+        "scrollX":  true,
         "scrollCollapse": true,
-        "paging":         true,    
+        "paging":         true,
         ajax: '{!! route('getTenDays') !!}',
         columns: [
 
-            { data: 'id_station', name: 'id_station', title:'Id Station '},
+            { data: 'station_id', name: 'station_id', title:'Id Station '},
             { data: 'max_fecha', name: 'max_fecha', title: 'Max Fecha', title: 'Primer día'},
             { data: 'min_fecha', name: 'min_fecha' , title: 'Min Fecha', title: 'Último día'},
             { data: 'max_temperatura_interna', name: 'max_temperatura_interna', title: 'Max Temperatura Interna'},
@@ -246,8 +246,8 @@ $(document).ready(function() {
             { data: 'max_sensacion_termica', name: 'max_sensacion_termica', title: 'Max Sensación Termica'},
             { data: 'min_sensacion_termica', name: 'min_sensacion_termica', title: 'Min Sensación Termica'},
             { data: 'lluvia_24_horas_total', name: 'lluvia_24_horas_total', title: 'Max Lluvia 24 horas'},
-      
-           
+
+
         ]
     });
 });
@@ -272,18 +272,18 @@ $(document).ready(function() {
             {
                 extend: 'csv',
                 filename: 'monthly',
-            }   
+            }
         ],
         processing: true,
         serverSide: false,
         "scrollY":  "500px",
-        "scrollX":  true,  
+        "scrollX":  true,
         "scrollCollapse": true,
-        "paging":         true,    
+        "paging":         true,
         ajax: '{!! route('getMonthly') !!}',
         columns: [
 
-            { data: 'id_station', name: 'id_station', title:'Id Station '},
+            { data: 'station_id', name: 'station_id', title:'Id Station '},
             { data: 'fecha', name: 'fecha' , title: 'Fecha'},
             { data: 'max_temperatura_interna', name: 'max_temperatura_interna', title: 'Max Temperatura Interna'},
             { data: 'min_temperatura_interna', name: 'min_temperatura_interna', title: 'Min Temperatura Interna'},
@@ -302,7 +302,7 @@ $(document).ready(function() {
             { data: 'max_sensacion_termica', name: 'max_sensacion_termica', title: 'Max Sensación Termica'},
             { data: 'min_sensacion_termica', name: 'min_sensacion_termica', title: 'Min Sensación Termica'},
             { data: 'lluvia_24_horas_total', name: 'lluvia_24_horas_total', title: 'Max Lluvia 24 horas'},
-           
+
         ]
     });
 });
@@ -326,18 +326,18 @@ $(document).ready(function() {
             {
                 extend: 'csv',
                 filename: 'yearly',
-            }   
+            }
         ],
         processing: true,
         serverSide: false,
         "scrollY":  "500px",
-        "scrollX":  true,  
+        "scrollX":  true,
         "scrollCollapse": true,
-        "paging":         true,    
+        "paging":         true,
         ajax: '{!! route('getMonthly') !!}',
         columns: [
 
-            { data: 'id_station', name: 'id_station', title:'Id Station '},            
+            { data: 'station_id', name: 'station_id', title:'Id Station '},
             { data: 'fecha', name: 'fecha' , title: 'Fecha'},
             { data: 'max_temperatura_interna', name: 'max_temperatura_interna', title: 'Max Temperatura Interna'},
             { data: 'min_temperatura_interna', name: 'min_temperatura_interna', title: 'Min Temperatura Interna'},
@@ -356,7 +356,7 @@ $(document).ready(function() {
             { data: 'max_sensacion_termica', name: 'max_sensacion_termica', title: 'Max Sensación Termica'},
             { data: 'min_sensacion_termica', name: 'min_sensacion_termica', title: 'Min Sensación Termica'},
             { data: 'lluvia_24_horas_total', name: 'lluvia_24_horas_total', title: 'Max Lluvia 24 horas'},
-           
+
         ]
     });
 });
@@ -365,4 +365,4 @@ $(document).ready(function() {
 <!-- Filter table by station
  -->
  <script src="js/filterByStation.js"></script>
-@endsection                   
+@endsection

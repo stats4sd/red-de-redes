@@ -14,9 +14,9 @@ class DeleteUniqueKeysToMeteobridge extends Migration
     public function up()
     {
         Schema::table('meteobridge', function (Blueprint $table) {
-            
-            $table->dropUnique('fecha_hora','id_station');
-   
+
+            $table->dropUnique('fecha_hora','station_id');
+
         });
     }
 

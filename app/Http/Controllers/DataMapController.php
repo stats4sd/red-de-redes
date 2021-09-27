@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\DataMap;
-use App\Models\Parcela;
-use App\Models\Comunidad;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Events\NewDataVariableSpotted;
 use App\Jobs\ImportAttachmentFromKobo;
@@ -15,11 +12,11 @@ class DataMapController extends Controller
     public static function newRecord(DataMap $dataMap, array $data)
     {
         // if the map references a select_multiple and repeat group, then we're creating data at a lower level
-       
+
         if ($dataMap->repeat_group && $dataMap->select_multiple !== "") {
             \Log::info("select_multiple and repeat group being handled");
             \Log::info($data);
-           
+
             foreach ($data[$dataMap['repeat_group']] as $repeatData) {
                 // bring references to lower levels back into repeatData
                 // reference to submission
@@ -42,9 +39,9 @@ class DataMapController extends Controller
                 $newItem = DataMapController::makeNewRecord($dataMap, $repeatData);
             }
         } else if($dataMap->select_multiple && $dataMap->select_multiple !== ""){
-           
-            
-            
+
+
+
         }else {
             $newItem = DataMapController::makeNewRecord($dataMap, $data);
         }
@@ -75,7 +72,7 @@ class DataMapController extends Controller
     {
 
         //add the submission_id
-       
+
         $newModel = [
             "submission_id" => $data['_id']
         ];

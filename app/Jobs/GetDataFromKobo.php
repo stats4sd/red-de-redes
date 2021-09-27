@@ -2,19 +2,12 @@
 
 namespace App\Jobs;
 
-use Exception;
 use App\Models\User;
-use App\Models\Region;
 use App\Models\DataMap;
 use App\Models\Xlsform;
-use App\Models\Comunidad;
-use App\Models\Municipio;
 use App\Models\Submission;
 use Illuminate\Support\Str;
-use App\Models\Departamento;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;

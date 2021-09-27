@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class TenDaysDataView extends Migration
@@ -26,9 +24,9 @@ class TenDaysDataView extends Migration
                 min(LEFT(fecha_hora, 10)) as min_fecha,
                 max(LEFT(fecha_hora,10)) as max_fecha,
 
-                
 
-              
+
+
 
                 -- #########################################
                 -- #########################################
@@ -85,10 +83,10 @@ class TenDaysDataView extends Migration
                 MAX(lluvia_24_horas) as lluvia_24_horas_total,
 
                 floor((to_days(`data`.`fecha_hora`) / 10))  as group_by,
-                id_station as id_station
+                station_id as station_id
 
                 FROM data
-                GROUP BY group_by, id_station;
+                GROUP BY group_by, station_id;
         ");
     }
 

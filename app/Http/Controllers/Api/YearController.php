@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Models\Yearly;
+use App\Models\Met\Yearly;
 use App\Http\Controllers\Controller;
 
 class YearController extends Controller
@@ -17,9 +17,9 @@ class YearController extends Controller
 
     {
         //all data in this model
-        $years = Yearly::select('fecha', 'id_station')->get();
- 
-        return $years->toJson(); 
+        $years = Yearly::select('fecha', 'station_id')->get();
+
+        return $years->toJson();
     }
 
     /**

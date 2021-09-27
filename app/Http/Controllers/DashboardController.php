@@ -3,17 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Dashboard;
-use App\Models\Daily;
+use App\Models\Met\Daily;
 use App\Models\Monthly;
-use App\Models\TenDays;
-use App\Models\Yearly;
-use App\Models\Station;
-use DB;
+use App\Models\Met\TenDays;
+use App\Models\Met\Yearly;
+use App\Models\Met\Station;
 use Illuminate\Http\Request;
-use Khill\Lavacharts\Laravel\LavachartsFacade as Lava;
-use Khill\Lavacharts\Lavacharts;
 use stdClass;
-use Yajra\DataTables\DataTables;
 
 class DashboardController extends Controller
 {
@@ -42,14 +38,14 @@ class DashboardController extends Controller
         $aggr = $request->agg;
         $year = $request->year;
         $month = $request->month;
-        if($aggr=='daily'){
-            $data = Daily::whereYear('fecha','=',$year)->whereMonth('fecha', $month)->where('id_station', $id)->orderBy('fecha')->get();
-        }elseif ($aggr == 'ten_days') {
-            $data = TenDays::whereYear('min_fecha','=',$year)->where('id_station', $id)->orderBy('min_fecha')->get(['min_fecha AS fecha', 'tendays_data.*']);
-        }elseif ($aggr == 'monthly') {
-            $data = Monthly::where('year','=',$year)->orderBy('month')->where('id_station', $id)->get();
-        }elseif ($aggr == 'yearly') {
-            $data = Yearly::where('id_station', $id)->orderBy('fecha')->get();
+        if($aggr === 'daily'){
+            $data = Daily::whereYear('fecha','=',$year)->whereMonth('fecha', $month)->where('station_id', $id)->orderBy('fecha')->get();
+        }elseif ($aggr === 'ten_days') {
+            $data = TenDays::whereYear('min_fecha','=',$year)->where('station_id', $id)->orderBy('min_fecha')->get(['min_fecha AS fecha', 'tendays_data.*']);
+        }elseif ($aggr === 'monthly') {
+            $data = Monthly::where('year','=',$year)->orderBy('month')->where('station_id', $id)->get();
+        }elseif ($aggr === 'yearly') {
+            $data = Yearly::where('station_id', $id)->orderBy('fecha')->get();
         }
 
 

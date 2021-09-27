@@ -39,11 +39,11 @@ def openFile():
 
         #pass the new columns_name to the dataframe
         df.columns = new_columns_names
- 
+
         #rename the column name for davis station into column name for the database
         df = df.rename(columns=columns_name.list_columns_davis_text)
-       
-       
+
+
         #create the timestamp for uploading into database
         date_time = []
         for fecha_hora, time in zip(df.fecha_hora, df.time):
@@ -60,7 +60,7 @@ def openFile():
         # drop rows with missing value / NaN in any column
         df = df.dropna(how='all', subset=columns_name.list_columns_davis_to_drop)
         #add the station_id column
-        df['id_station'] = station_id
+        df['station_id'] = station_id
         #add the uploader_id column
         df['uploader_id'] = uploader_id
         #add the observation_id column
@@ -91,13 +91,13 @@ def openFile():
     else:
 
         data = pd.read_csv(path, na_values=['--.-',' --.-', '--',' --', '---',' ---', '------', ' ------'], sep=",", low_memory=False)
-       
+
         df = pd.DataFrame(data)
         # remove extra space in columns name
         df.columns = df.columns.str.rstrip()
 
-        # add id_station column
-        df['id_station'] = station_id
+        # add station_id column
+        df['station_id'] = station_id
 
         #add the uploader_id column
         df['uploader_id'] = uploader_id
@@ -107,13 +107,13 @@ def openFile():
             df['observation_id'] = None
         else:
             df['observation_id'] = newObservation_id
-     
+
         #drop columns not necessary
         df = df.drop(['No.'], axis=1)
 
         # replace columns name
         df = df.rename(columns=columns_name.list_columns_chinas_csv)
- 
+
         #create the timestamp for uploading into database
         #Chinas can have the time in 12 hours (am, pm) or 24 hours
         date_time = []
@@ -122,9 +122,9 @@ def openFile():
             date = date.split(' ')
             if len(date)==3:
                 hours = date[1]+" "+date[2]
-                hours = convertor.convert24(hours) 
+                hours = convertor.convert24(hours)
             else:
-                hours = date[1]    
+                hours = date[1]
             hours = hours.split(':')
             date_splited = date[0].split('/')
             date_time.append(str(datetime(int(date_splited[2]), int(date_splited[1]), int(date_splited[0]), int(hours[0]), int(hours[1]), int(hours[2]))))
@@ -153,7 +153,7 @@ def openFile():
             df = convertor.convertDataFtoC(df, selected_unit_temp, 0)
 
         df = df.where((pd.notnull(df)), None)
-        
+
 
     return df
 

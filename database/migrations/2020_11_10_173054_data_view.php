@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class DataView extends Migration
 {
@@ -17,12 +15,12 @@ class DataView extends Migration
         DB::statement("
             CREATE VIEW weather_data AS
             SELECT
-                
+
                 `data`.`id` as `id`,
                 DATE(fecha_hora) as fecha,
                 TIME(fecha_hora) as hora,
                 stations.label as station,
-                id_station as station_id,
+                station_id as station_id,
                 intervalo,
                 temperatura_interna,
                 humedad_interna,
@@ -75,9 +73,9 @@ class DataView extends Migration
                 iss_recept
 
                 FROM data
-                
-                LEFT JOIN stations ON stations.id = id_station;
-                
+
+                LEFT JOIN stations ON stations.id = station_id;
+
         ");
     }
 

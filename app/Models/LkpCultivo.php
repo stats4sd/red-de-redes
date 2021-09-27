@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Agronomic\Cultivo;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,7 +19,7 @@ class LkpCultivo extends Model
     protected $table = 'lkp_cultivos';
     protected $guarded = ['created_at'];
     public $incrementing = false;
-   
+
 
     /*
     |--------------------------------------------------------------------------

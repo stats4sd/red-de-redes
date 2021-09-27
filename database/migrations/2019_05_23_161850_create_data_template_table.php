@@ -62,8 +62,8 @@ class CreateDataTemplateTable extends Migration
             $table->decimal('wind_samp')->nullable();
             $table->decimal('wind_tx')->nullable();
             $table->decimal('iss_recept')->nullable();
-            $table->integer('id_station')->default('0');
-            $table->primary(['fecha_hora', 'id_station']);
+            $table->integer('station_id')->default('0');
+            $table->primary(['fecha_hora', 'station_id']);
             $table->timestamps();
         });
     }

@@ -8,8 +8,6 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\UserRequest as StoreRequest;
 use App\Http\Requests\UserRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Illuminate\Support\Facades\Hash;
 
 
 /**
@@ -64,7 +62,7 @@ class UserCrudController extends CrudController
                     'type' => 'date',
                 ],
             ]);
-       
+
         });
 
         $this->crud->operation(['create'], function() {
@@ -91,10 +89,10 @@ class UserCrudController extends CrudController
                     'name' => 'type',
                     'label' => 'Tipo',
                     'type' => 'select_from_array',
-                    'options' => ['default' => 'Default', 'admin' => 'Admin'],        
+                    'options' => ['default' => 'Default', 'admin' => 'Admin'],
                 ],
             ]);
-     
+
         });
 
         $this->crud->operation(['update'], function() {
@@ -115,10 +113,10 @@ class UserCrudController extends CrudController
                     'name' => 'type',
                     'label' => 'Type',
                     'type' => 'select_from_array',
-                    'options' => ['default' => 'Default', 'admin' => 'Admin'],        
+                    'options' => ['default' => 'Default', 'admin' => 'Admin'],
                 ],
             ]);
-     
+
         });
 
 
@@ -127,7 +125,7 @@ class UserCrudController extends CrudController
         $this->crud->setRequiredFields(UpdateRequest::class, 'edit');
         $this->crud->removeButton('create');
 
-       
+
     }
 
     protected function setupCreateOperation()
@@ -140,7 +138,7 @@ class UserCrudController extends CrudController
         $this->crud->setValidation(UpdateRequest::class);
     }
 
-   
+
 
 
 }

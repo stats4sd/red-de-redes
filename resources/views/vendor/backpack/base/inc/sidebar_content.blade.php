@@ -34,7 +34,7 @@
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('fenologia') }}'><i class='nav-icon fa fa-question'></i> Fenología</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('manejoparcela') }}'><i class='nav-icon fa fa-question'></i> Manejo Parcela</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('plaga') }}'><i class='nav-icon fa fa-question'></i> Plagas</a></li>
-        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('enfermedade') }}'><i class='nav-icon fa fa-question'></i> Enfermedades</a></li>
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('enfermedad') }}'><i class='nav-icon fa fa-question'></i> Enfermedades</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('rendimento') }}'><i class='nav-icon fa fa-question'></i> Rendimentos</a></li>
     </ul>
 </li>

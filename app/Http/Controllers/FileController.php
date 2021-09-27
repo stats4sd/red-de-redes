@@ -2,51 +2,34 @@
 namespace App\Http\Controllers;
 
 use DB;
-use Alert;
-use Excel;
 use App\File;
-use App\Models\Daily;
-use \GuzzleHttp\Client;
-use App\Models\Observation;
+use App\Models\Met\Daily;
+use App\Models\Met\Observation;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Models\DailyDataPreview;
-use App\Models\WeatherDataPreview;
+use App\Models\Met\MetDataPreview;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Process;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class FileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
+        // TODO: Update with proper validation
+        $newObservation_id = "null";
+        $station = $request->selectedStation ?? null ;
 
-        $station = $request->selectedStation;
+
         if($request->hasFile('data-filesObservation')){
             // handle file and store it for prosperity
             $filesObservation = $request->file('data-filesObservation');
@@ -56,6 +39,11 @@ class FileController extends Controller
             $newObservation = new Observation;
             $newObservation->files = $path;
             $newObservation->save();
+
+            // refresh it from the database to retrieve ID
+            $newObservation->refresh();
+            $newObservation_id = $newObservation->id;
+
         }
 
 
@@ -74,13 +62,7 @@ class FileController extends Controller
             $scriptPath = base_path() . '/scripts/' . $scriptName;
             $path_name = Storage::path("/").$path;
             $uploader_id = $this->generateRandomString();
-            
-            //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
-            if($request->hasFile('data-filesObservation')){
-                $newObservation_id = $newObservation->id;
-            }else {
-                $newObservation_id = "null";
-            }
+
 
             $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $newObservation_id]);
 
@@ -91,13 +73,13 @@ class FileController extends Controller
             if(!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
-    
-            $data_template = WeatherDataPreview::where('uploader_id', '=', $uploader_id)->orderBy('id')->paginate(10);
-            
+
+            $metDataPreview = MetDataPreview::where('uploader_id', '=', $uploader_id)->orderBy('id')->paginate(10);
+
             // $error_data = $this->checkValues($uploader_id);
 
             return response()->json([
-                'data_template' => $data_template,
+                'data_template' => $metDataPreview,
                 'error_data' => null
 
             ]);
@@ -135,7 +117,7 @@ class FileController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -163,9 +145,9 @@ class FileController extends Controller
         $error_wind = false;
         $error_rain = false;
 
-       
+
         $daily_preview = DB::table('daily_data_preview')->where('uploader_id', '=', $uploader_id)->get();
-        
+
         foreach ($daily_preview as $key => $value) {
 
             $daily_temp_int = Daily::select('max_temperatura_interna')->whereMonth('fecha',  substr($value->fecha, -5, -3))->whereDay('fecha', substr($value->fecha, -2))->take(10)->get();
@@ -200,7 +182,7 @@ class FileController extends Controller
             }
         }
 
-        $error_data = WeatherDataPreview::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $uploader_id)->get();
+        $error_data = MetDataPreview::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $uploader_id)->get();
 
         return response([
 
@@ -214,8 +196,8 @@ class FileController extends Controller
 
     }
 
-    public function generateRandomString($length = 10) 
-    { 
+    public function generateRandomString($length = 10)
+    {
         $random_string = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
         return $random_string;
     }
@@ -223,7 +205,7 @@ class FileController extends Controller
     public function cleanTable($uploader_id)
     {
         DB::table('data_template')->where('uploader_id', '=', $uploader_id)->delete();
-        
+
         return Redirect::back();
 
     }

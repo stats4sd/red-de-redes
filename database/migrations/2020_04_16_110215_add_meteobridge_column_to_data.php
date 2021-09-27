@@ -15,7 +15,7 @@ class AddMeteobridgeColumnToData extends Migration
     {
         Schema::table('data', function (Blueprint $table) {
             $table->tinyInteger('meteobridge')->default(0);
-            $table->decimal('meteobridge_latitude', 9,6)->after('id_station');
+            $table->decimal('meteobridge_latitude', 9,6)->after('station_id');
             $table->decimal('meteobridge_longitude', 9,6)->after('meteobridge_latitude');
         });
     }

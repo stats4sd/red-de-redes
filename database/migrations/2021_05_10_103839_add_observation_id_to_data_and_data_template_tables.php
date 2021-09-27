@@ -14,10 +14,10 @@ class AddObservationIdToDataAndDataTemplateTables extends Migration
     public function up()
     {
         Schema::table('data', function (Blueprint $table) {
-            $table->foreignId('observation_id')->nullable()->after('id_station');
+            $table->foreignId('observation_id')->nullable()->after('station_id');
         });
         Schema::table('data_template', function (Blueprint $table) {
-            $table->foreignId('observation_id')->nullable()->after('id_station');
+            $table->foreignId('observation_id')->nullable()->after('station_id');
         });
     }
 

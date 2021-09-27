@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class YearlyDataView extends Migration
@@ -23,14 +21,14 @@ class YearlyDataView extends Migration
                 -- ## Grouped by weather-station
                 max(`data`.`id`) AS `id`,
                 LEFT(fecha_hora,4) as fecha,
-                id_station as id_station,
+                station_id as station_id,
 
                 -- #########################################
                 -- #########################################
 
                 -- ################# Temperature and Humidity
                 -- ## Min, Max and Avg
-                
+
                 MAX(temperatura_interna) as max_temperatura_interna,
                 MIN(temperatura_interna) as min_temperatura_interna,
                 AVG(temperatura_interna) as avg_temperatura_interna,
@@ -80,7 +78,7 @@ class YearlyDataView extends Migration
                 MAX(lluvia_24_horas) as lluvia_24_horas_total
 
                 FROM data
-                GROUP BY fecha, id_station;
+                GROUP BY fecha, station_id;
         ");
     }
 

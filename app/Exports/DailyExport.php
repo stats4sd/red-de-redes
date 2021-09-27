@@ -4,7 +4,6 @@ namespace App\Exports;
 
 use App\Daily;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -12,14 +11,14 @@ class DailyExport implements WithHeadings, FromQuery
 {
     use Exportable;
 
-    public function __construct(Array $id_stations)
+    public function __construct(Array $station_ids)
     {
-    	$this->id_stations = $id_stations;
+    	$this->station_ids = $station_ids;
     }
 
     public function headings() : array{
     	return [
-    		
+
     		'Fecha',
     		'Id Station',
     		'Max temperature interna',
@@ -47,9 +46,9 @@ class DailyExport implements WithHeadings, FromQuery
     }
 
     public function query()
-    
+
     {
-    	return Daily::whereIn('id_station',$this->id_stations)->orderBy('fecha')->join('stations','id_station','=','stations.id');
+    	return Daily::whereIn('station_id',$this->station_ids)->orderBy('fecha')->join('stations','station_id','=','stations.id');
     }
 
 

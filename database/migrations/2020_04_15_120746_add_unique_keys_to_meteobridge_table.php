@@ -14,7 +14,7 @@ class AddUniqueKeysToMeteobridgeTable extends Migration
     public function up()
     {
         Schema::table('meteobridge', function (Blueprint $table) {
-            $table->unique('fecha_hora','id_station');
+            $table->unique('fecha_hora','station_id');
         });
     }
 

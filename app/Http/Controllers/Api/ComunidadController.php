@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Models\Comunidad;
 use App\Http\Controllers\Controller;
 use DB;
 
@@ -17,7 +16,7 @@ class ComunidadController extends Controller
     public function index()
     {
         $comunidad = DB::table('comunidad')->select('id', 'name', 'municipio_id')->get();
-       
+
         return $comunidad->toJson();
     }
 

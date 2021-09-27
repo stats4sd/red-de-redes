@@ -2,9 +2,8 @@
 
 namespace App\Exports;
 
-use App\Models\Data;
+use App\Models\Met\MetData;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -13,14 +12,14 @@ class DataExport implements WithHeadings, FromQuery
 
     use Exportable;
 
-    public function __construct(Array $id_stations)
+    public function __construct(Array $station_ids)
     {
-    	$this->id_stations = $id_stations;
+    	$this->station_ids = $station_ids;
     }
 
     public function headings() : array{
     	return [
-    		
+
     		'Fecha/Hora',
     		'Intervalo',
     		'Temperatura Interna',
@@ -55,7 +54,7 @@ class DataExport implements WithHeadings, FromQuery
             'Solar_Rad.',
             'Solar_Energy',
             'Hi_Solar_Rad.',
-            'UV_Index', 
+            'UV_Index',
             'UV_Dose',
             'Hi_UV',
             'Heat_D-D',
@@ -71,19 +70,19 @@ class DataExport implements WithHeadings, FromQuery
             'Wind_Samp',
             'Wind_Tx',
             'ISS_Recept',
-            'id_station',
+            'station_id',
             'Id Type Station',
             'Type Station'
 
-               
+
 
     	];
     }
 
     public function query()
-    
+
     {
-    	return Data::whereIn('id_station',$this->id_stations)->orderBy('fecha_hora')->join('stations','id_station','=','stations.id');
+    	return MetData::whereIn('station_id',$this->station_ids)->orderBy('fecha_hora')->join('stations','station_id','=','stations.id');
     }
 
 
