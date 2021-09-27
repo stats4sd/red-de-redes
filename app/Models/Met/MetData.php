@@ -30,7 +30,7 @@ class MetData extends Model
     */
     public function station()
     {
-        return $this->belongsTo(Station::class, 'id_station');
+        return $this->belongsTo(Station::class, 'station_id');
     }
 
     public function observation()

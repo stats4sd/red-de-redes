@@ -23,7 +23,7 @@ Route::get('', function () {
 
 Auth::routes();
 
-Route::resource('home', DataController::class)->middleware('auth');
+Route::resource('home', 'DataController')->middleware('auth');
 Route::post('download', [DataController::class,'download']);
 
 

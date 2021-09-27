@@ -57,4 +57,4 @@ SELECT
     met_data.`iss_recept` AS `iss_recept`,
     met_data.`meteobridge` AS `meteobridge`
 
-FROM (met_data LEFT JOIN `stations` ON((`stations`.`id` = met_data.`id_station`)))
+FROM (met_data LEFT JOIN `stations` ON((`stations`.`id` = met_data.`station_id`)))

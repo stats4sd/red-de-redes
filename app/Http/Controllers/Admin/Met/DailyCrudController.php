@@ -52,7 +52,7 @@ class DailyCrudController extends CrudController
                 [
                     'label' => 'Station',
                     'type' => 'select',
-                    'name' => 'id_station',
+                    'name' => 'station_id',
                     'entity' => 'station',
                     'attribute' => 'label',
                     'model' => 'App\Models\Met\Station',
@@ -219,7 +219,7 @@ class DailyCrudController extends CrudController
 
         // Filter
         $this->crud->addFilter([
-            'name' => 'id_station',
+            'name' => 'station_id',
             'type' => 'select2',
             'label' => 'Estación',
         ],function(){
@@ -227,7 +227,7 @@ class DailyCrudController extends CrudController
             return Station::all()->pluck('label', 'id')->toArray();;
 
         },function($value){
-            $this->crud->addClause('where', 'id_station', $value);
+            $this->crud->addClause('where', 'station_id', $value);
 
         });
 

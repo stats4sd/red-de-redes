@@ -21,7 +21,7 @@ class DailyDataView extends Migration
                 -- ## Grouped by weather-station
                 max(`data`.`id`) as `id`,
                 LEFT(fecha_hora,10) as fecha,
-                id_station as id_station,
+                station_id as station_id,
 
                 -- #########################################
                 -- #########################################
@@ -79,7 +79,7 @@ class DailyDataView extends Migration
 
 
                 FROM data
-                GROUP BY fecha, id_station;
+                GROUP BY fecha, station_id;
         ");
     }
 

@@ -1,28 +1,28 @@
 <template>
     <div class="container">
          <h4  class="mt-3"><b>Módulos</b></h4>
-            
+
                 <b-form-checkbox-group
                     v-model="modulesSelected"
                     :options="modules"
                     value-field="value"
                     text-field="label"
-                   
+
                     :aria-describedby="selectModuleLabel"
                     stacked
                 ></b-form-checkbox-group>
-           
+
         <div class="justify-content-center" v-if="modulesSelected.includes('daily_data')">
 
             <h4  class="mt-3"><b>Estación</b></h4>
             <v-select :options="stations" :reduce="label => label.id" v-model="stationsSelected" multiple></v-select>
-            
+
             <h4  class="mt-3"><b>Agregación</b></h4>
             <v-select :options="aggregations" :reduce="label => label.value" v-model="aggregationSelected"></v-select>
 
             <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')"><b>Parámetros meteorológicos</b></h4>
             <v-select v-if="aggregationSelected.includes('senamhi_daily') || aggregationSelected.includes('senamhi_monthly')" :options="meteoParameters" :reduce="label => label.value" v-model="meteoParameterSelected"></v-select>
-            
+
             <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_daily')"><b>Año</b></h4>
             <v-select v-if="aggregationSelected.includes('senamhi_daily')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearSelected"></v-select>
             <div class="row">
@@ -34,7 +34,7 @@
                 <div class="col">
                     <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Mes Final</b></h4>
                     <v-select v-if="aggregationSelected.includes('senamhi_monthly')" :options="months" :reduce="label => label.value" v-model="monthFinalSelected"></v-select>
-        
+
                 </div>
             </div>
             <div class="row">
@@ -44,17 +44,17 @@
 
                 </div>
                 <div class="col">
-                
+
                     <h4  class="mt-3" v-if="aggregationSelected.includes('senamhi_monthly')"><b>Año Final</b></h4>
                     <v-select v-if="aggregationSelected.includes('senamhi_monthly')" label="fecha" :options="yearsFilter" :reduce="fecha => fecha.fecha" v-model="yearFinalSelected"></v-select>
-                
+
 
                 </div>
-            </div> 
-            
-           
+            </div>
+
+
         </div>
-       
+
             <b-form-group
             v-if="modulesSelected.includes('parcelas')"
             label="¿Qué le interesa de las parcelas?"
@@ -71,7 +71,7 @@
                     stacked
                 ></b-form-checkbox-group>
             </b-form-group>
-   
+
             <b-form-group
             v-if="modulesSelected.includes('cultivos')"
             label="¿Qué le interesa de los cultivos?"
@@ -114,7 +114,7 @@
 
             </div>
             <button class="site-btn mt-3 mb-3 float-right" v-on:click="submit">Visualizar</button>
-        
+
         </div>
     </div>
 </template>
@@ -156,7 +156,7 @@
                 rendimentos: [],
                 fenologia: [],
                 parcelasData:[],
-           
+
             }
 
         },
@@ -191,7 +191,7 @@
             },
             stationsSelected() {
                 this.$emit('update:stationsSelected', this.stationsSelected)
-                this.yearsFilter = this.years.filter(year => this.stationsSelected.includes(year.id_station));
+                this.yearsFilter = this.years.filter(year => this.stationsSelected.includes(year.station_id));
             },
             aggregationSelected() {
                 this.$emit('update:aggregationSelected', this.aggregationSelected)
@@ -219,11 +219,11 @@
                 this.$emit('update:yearFinalSelected', this.yearFinalSelected)
             },
             departamentosSelected() {
-       
+
                 this.municipiosFilter = this.municipios.filter(municipio => this.departamentosSelected.includes(municipio.departamento_id));
             },
             municipiosSelected() {
-       
+
                 this.comunidadsFilter = this.comunidads.filter(comunidad => this.municipiosSelected.includes(comunidad.municipio_id));
             },
             suelos() {
@@ -253,7 +253,7 @@
 
         },
 
-     
+
         methods: {
             submit: function (event) {
                 this.showTable=true
@@ -290,12 +290,12 @@
                     this.senamhi = result.data.senamhi;
                     this.stationDetails = result.data.station;
                     console.log(result);
-                   
+
                 }, (error) => {
                     console.log(error);
-                });          
+                });
             }
-        } 
+        }
     }
 
 </script>

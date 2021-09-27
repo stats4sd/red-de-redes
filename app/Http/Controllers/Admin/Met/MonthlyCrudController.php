@@ -53,7 +53,7 @@ class MonthlyCrudController extends CrudController
                 [
                     'label' => 'Station',
                     'type' => 'select',
-                    'name' => 'id_station',
+                    'name' => 'station_id',
                     'entity' => 'station',
                     'attribute' => 'label',
                     'model' => 'App\Models\Met\Station',
@@ -216,7 +216,7 @@ class MonthlyCrudController extends CrudController
 
         // Filter
         $this->crud->addFilter([
-            'name' => 'id_station',
+            'name' => 'station_id',
             'type' => 'select2',
             'label' => 'Estación',
         ],function(){
@@ -225,7 +225,7 @@ class MonthlyCrudController extends CrudController
 
         },function($value){
 
-            $this->crud->addClause('where', 'id_station', $value);
+            $this->crud->addClause('where', 'station_id', $value);
 
         });
 

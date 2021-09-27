@@ -1,9 +1,9 @@
 
 
 
-INSERT INTO `meteobridge` (`fecha_hora`, `temperatura_interna`, `humedad_externa`, `id_station`) VALUES ( '[YYYY]-[MM]-[DD] [hh]:[mm]:[ss]', '[th0temp-act]', '[th0hum-act]', 1)
+INSERT INTO `meteobridge` (`fecha_hora`, `temperatura_interna`, `humedad_externa`, `station_id`) VALUES ( '[YYYY]-[MM]-[DD] [hh]:[mm]:[ss]', '[th0temp-act]', '[th0hum-act]', 1)
 
-INSERT INTO `meteobridge` (`fecha_hora`, `temperatura_interna`,` humedad_externa`, `id_station`)
+INSERT INTO `meteobridge` (`fecha_hora`, `temperatura_interna`,` humedad_externa`, `station_id`)
 VALUES ( '[YYYY]-[MM]-[DD] [hh]:[mm]:[ss]',' [th0temp-act]', '[th0hum-act]', '[mbsystem-stationnum]')
 
 # final queries

@@ -12,9 +12,9 @@ class DataExport implements WithHeadings, FromQuery
 
     use Exportable;
 
-    public function __construct(Array $id_stations)
+    public function __construct(Array $station_ids)
     {
-    	$this->id_stations = $id_stations;
+    	$this->station_ids = $station_ids;
     }
 
     public function headings() : array{
@@ -70,7 +70,7 @@ class DataExport implements WithHeadings, FromQuery
             'Wind_Samp',
             'Wind_Tx',
             'ISS_Recept',
-            'id_station',
+            'station_id',
             'Id Type Station',
             'Type Station'
 
@@ -82,7 +82,7 @@ class DataExport implements WithHeadings, FromQuery
     public function query()
 
     {
-    	return MetData::whereIn('id_station',$this->id_stations)->orderBy('fecha_hora')->join('stations','id_station','=','stations.id');
+    	return MetData::whereIn('station_id',$this->station_ids)->orderBy('fecha_hora')->join('stations','station_id','=','stations.id');
     }
 
 

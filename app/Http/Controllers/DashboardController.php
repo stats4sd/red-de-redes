@@ -39,13 +39,13 @@ class DashboardController extends Controller
         $year = $request->year;
         $month = $request->month;
         if($aggr === 'daily'){
-            $data = Daily::whereYear('fecha','=',$year)->whereMonth('fecha', $month)->where('id_station', $id)->orderBy('fecha')->get();
+            $data = Daily::whereYear('fecha','=',$year)->whereMonth('fecha', $month)->where('station_id', $id)->orderBy('fecha')->get();
         }elseif ($aggr === 'ten_days') {
-            $data = TenDays::whereYear('min_fecha','=',$year)->where('id_station', $id)->orderBy('min_fecha')->get(['min_fecha AS fecha', 'tendays_data.*']);
+            $data = TenDays::whereYear('min_fecha','=',$year)->where('station_id', $id)->orderBy('min_fecha')->get(['min_fecha AS fecha', 'tendays_data.*']);
         }elseif ($aggr === 'monthly') {
-            $data = Monthly::where('year','=',$year)->orderBy('month')->where('id_station', $id)->get();
+            $data = Monthly::where('year','=',$year)->orderBy('month')->where('station_id', $id)->get();
         }elseif ($aggr === 'yearly') {
-            $data = Yearly::where('id_station', $id)->orderBy('fecha')->get();
+            $data = Yearly::where('station_id', $id)->orderBy('fecha')->get();
         }
 
 

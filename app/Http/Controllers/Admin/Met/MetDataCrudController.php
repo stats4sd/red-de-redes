@@ -71,7 +71,7 @@ class MetDataCrudController extends CrudController
             [
                 'label' => 'Station',
                 'type' => 'select',
-                'name' => 'id_station',
+                'name' => 'station_id',
                 'entity' => 'station',
                 'attribute' => 'label',
                 'model' => 'App\Models\Met\Station',
@@ -90,7 +90,7 @@ class MetDataCrudController extends CrudController
         });
         //Filter
         $this->crud->addFilter([
-            'name' => 'id_station',
+            'name' => 'station_id',
             'type' => 'select2',
             'label' => 'Station',
         ],function(){
@@ -102,7 +102,7 @@ class MetDataCrudController extends CrudController
 
             $station_id_value = $value;
 
-            $this->crud->addClause('where', 'id_station', $value);
+            $this->crud->addClause('where', 'station_id', $value);
 
         });
 
@@ -161,26 +161,26 @@ class MetDataCrudController extends CrudController
         $query = Session('query');
         $bindings = Session('params');
 
-        $id_station_pos = strpos($query, 'id_station');
+        $station_id_pos = strpos($query, 'station_id');
         $date_pos = strpos($query, 'fecha_hora');
-        if(!empty($id_station_pos) and !empty($date_pos))
+        if(!empty($station_id_pos) and !empty($date_pos))
         {
-            if($id_station_pos < $date_pos)
+            if($station_id_pos < $date_pos)
             {
-                $response = MetData::where('id_station', $bindings[0])->whereBetween('fecha_hora', [$bindings[1], $bindings[2]])->delete();
+                $response = MetData::where('station_id', $bindings[0])->whereBetween('fecha_hora', [$bindings[1], $bindings[2]])->delete();
 
 
-            }else if($id_station_pos > $date_pos)
+            }else if($station_id_pos > $date_pos)
             {
-                $response = MetData::where('id_station', $bindings[2])->whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
+                $response = MetData::where('station_id', $bindings[2])->whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
             }
             \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
 
-        }else if (!empty($id_station_pos) and empty($date_pos))
+        }else if (!empty($station_id_pos) and empty($date_pos))
         {
-            $response = MetData::where('id_station', $bindings[0])->delete();
+            $response = MetData::where('station_id', $bindings[0])->delete();
             \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();
-        } else if (!empty($date_pos) and empty($id_station_pos))
+        } else if (!empty($date_pos) and empty($station_id_pos))
         {
             $response = MetData::whereBetween('fecha_hora', [$bindings[0], $bindings[1]])->delete();
             \Alert::success('<h4>El archivo ha sido subido exitosamente</h4>')->flash();

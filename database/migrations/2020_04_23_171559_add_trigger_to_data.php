@@ -16,8 +16,8 @@ class AddTriggerToData extends Migration
             CREATE TRIGGER get_station_id  BEFORE INSERT ON data
                 FOR EACH ROW
                 BEGIN
-                IF NEW.id_station IS NULL THEN
-                    SET NEW.id_station = (
+                IF NEW.station_id IS NULL THEN
+                    SET NEW.station_id = (
                         SELECT id FROM stations WHERE hardware_id = NEW.hardware_id  AND
                         longitude = NEW.meteobridge_longitude AND
                         latitude = NEW.meteobridge_latitude

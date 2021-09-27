@@ -14,7 +14,7 @@ class DefaultValueNullIdStationToData extends Migration
     public function up()
     {
         Schema::table('data', function (Blueprint $table) {
-            $table->integer('id_station')->nullable()->default('NULL')->change();
+            $table->integer('station_id')->nullable()->default('NULL')->change();
         });
     }
 

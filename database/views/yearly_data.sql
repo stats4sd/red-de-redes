@@ -1,7 +1,7 @@
 
 SELECT
     LEFT(met_data.`fecha_hora`,4) as `fecha`,
-    met_data.`id_station` AS `id_station`,
+    met_data.`station_id` AS `station_id`,
     `stations`.`label` AS `station`,
 
     MAX(met_data.`temperatura_interna`) AS `max_temperatura_interna`,
@@ -38,5 +38,7 @@ SELECT
 
     MAX(met_data.`lluvia_24_horas`) AS `lluvia_24_horas_total`
 
-    FROM met_data
-    LEFT JOIN `stations` ON `stations`.`id` = met_data.`id_station` GROUP BY `fecha`,met_data.`id_station`;
+FROM met_data
+    LEFT JOIN `stations` ON `stations`.`id` = met_data.`station_id`
+WHERE met_data.station_id is not null
+GROUP BY `fecha`,met_data.`station_id`;

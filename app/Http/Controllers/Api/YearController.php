@@ -17,7 +17,7 @@ class YearController extends Controller
 
     {
         //all data in this model
-        $years = Yearly::select('fecha', 'id_station')->get();
+        $years = Yearly::select('fecha', 'station_id')->get();
 
         return $years->toJson();
     }

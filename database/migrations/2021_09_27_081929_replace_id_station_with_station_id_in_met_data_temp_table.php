@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateStationIdInDataTable extends Migration
+class ReplaceIdStationWithStationIdInMetDataTempTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class UpdateStationIdInDataTable extends Migration
      */
     public function up()
     {
-        Schema::table('data', function (Blueprint $table) {
-            $table->renameColumn('station_id', 'station_id');
+        Schema::table('met_data_temp', function (Blueprint $table) {
+            $table->renameColumn('id_station', 'station_id');
         });
     }
 
@@ -25,8 +25,8 @@ class UpdateStationIdInDataTable extends Migration
      */
     public function down()
     {
-        Schema::table('data', function (Blueprint $table) {
-            $table->renameColumn('station_id', 'station_id');
+        Schema::table('met_data_temp', function (Blueprint $table) {
+            $table->renameColumn('station_id', 'id_station');
         });
     }
 }

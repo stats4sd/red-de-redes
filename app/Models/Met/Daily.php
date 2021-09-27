@@ -17,12 +17,9 @@ class Daily extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'daily_data';
+    protected $table = 'met_summary_daily';
 
     protected $guarded = ['id'];
-    protected $casts = [
-        'id_station',
-    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -31,7 +28,7 @@ class Daily extends Model
     */
     public function station()
     {
-        return $this->belongsTo(Station::class, 'id_station');
+        return $this->belongsTo(Station::class, 'station_id');
     }
 
     // public function getIdStationAttribute($value)

@@ -68,19 +68,19 @@ class DataController extends Controller
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
                 if($request->aggregationSelected=='daily_data'){
-                    $weather = DB::table('daily_data')->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(100);
+                    $weather = DB::table('daily_data')->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('station_id', $request->stationsSelected)->paginate(100);
 
                 }else if($request->aggregationSelected=='tendays_data'){
-                    $weather = DB::table($request->aggregationSelected)->where('max_fecha','>=',$request->startDate)->where('min_fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+                    $weather = DB::table($request->aggregationSelected)->where('max_fecha','>=',$request->startDate)->where('min_fecha','<=',$request->endDate)->whereIn('station_id', $request->stationsSelected)->paginate(5);
 
                 }else if($request->aggregationSelected=="monthly_data"){
-                    $weather = DB::table($request->aggregationSelected)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+                    $weather = DB::table($request->aggregationSelected)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('station_id', $request->stationsSelected)->paginate(5);
 
                 }else if($request->aggregationSelected=="yearly_data"){
-                    $weather = DB::table($request->aggregationSelected)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
+                    $weather = DB::table($request->aggregationSelected)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('station_id', $request->stationsSelected)->paginate(5);
 
                 }else if($request->aggregationSelected=="senamhi_daily"){
-                    $senamhi = DB::table('daily_data')->whereYear('fecha',$request->yearSelected)->select(DB::raw('MONTH(fecha) month, DAY(fecha) day'),$request->meteoParameterSelected)->where('id_station', $request->stationsSelected)->orderBy('day', 'asc')->get();
+                    $senamhi = DB::table('daily_data')->whereYear('fecha',$request->yearSelected)->select(DB::raw('MONTH(fecha) month, DAY(fecha) day'),$request->meteoParameterSelected)->where('station_id', $request->stationsSelected)->orderBy('day', 'asc')->get();
 
                     foreach ($senamhi as $month) {
                         $month_name = date('F', mktime(0, 0, 0, $month->month, 10));
@@ -109,7 +109,7 @@ class DataController extends Controller
 
 
                 } else {
-                    $senamhi = DB::table('monthly_data')->where('id_station', $request->stationsSelected)->whereBetween('year',[$request->yearInitialSelected, $request->yearFinalSelected])->whereBetween('month',[$request->monthInitialSelected, $request->monthFinalSelected])->select('year', 'month', $request->meteoParameterSelected)->orderBy('year', 'asc')->get();
+                    $senamhi = DB::table('monthly_data')->where('station_id', $request->stationsSelected)->whereBetween('year',[$request->yearInitialSelected, $request->yearFinalSelected])->whereBetween('month',[$request->monthInitialSelected, $request->monthFinalSelected])->select('year', 'month', $request->meteoParameterSelected)->orderBy('year', 'asc')->get();
 
                     foreach ($senamhi as $month) {
                         $month_name = date('F', mktime(0, 0, 0, $month->month, 10));
@@ -199,12 +199,12 @@ class DataController extends Controller
         foreach ($request->modulesSelected as $module) {
             if($module=='daily_data'){
                 if($request->aggregationSelected=='tendays_data'){
-                    $query = "select * from ". $request->aggregationSelected . " where max_fecha >= '".$request->startDate."' and max_fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
+                    $query = "select * from ". $request->aggregationSelected . " where max_fecha >= '".$request->startDate."' and max_fecha <= '".$request->endDate."' and station_id in (". implode(",",$request->stationsSelected).");";
                 }
 
                 else{
 
-                    $query = "select * from ". $request->aggregationSelected . " where fecha >= '".$request->startDate."' and fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
+                    $query = "select * from ". $request->aggregationSelected . " where fecha >= '".$request->startDate."' and fecha <= '".$request->endDate."' and station_id in (". implode(",",$request->stationsSelected).");";
                 }
 
 
@@ -323,7 +323,7 @@ class DataController extends Controller
         }
 
         #Create Zip Archive for observation files.
-        $weather_observation = MetData::whereHas('observation')->with('observation')->where('id_station', $request->stationsSelected)->whereBetween('fecha_hora',[$request->startDate, $request->endDate])->get();
+        $weather_observation = MetData::whereHas('observation')->with('observation')->where('station_id', $request->stationsSelected)->whereBetween('fecha_hora',[$request->startDate, $request->endDate])->get();
 
         $list_files = array();
         foreach ($weather_observation as $observation) {

@@ -3,7 +3,7 @@ SELECT
 
     min(LEFT(met_data.`fecha_hora`, 10)) AS `min_fecha`,
     max(LEFT(met_data.`fecha_hora`,10)) AS `max_fecha`,
-    met_data.`id_station` AS `id_station`,
+    met_data.`station_id` AS `station_id`,
     `stations`.`label` AS `station`,
 
     MAX(met_data.`temperatura_interna`) AS `max_temperatura_interna`,
@@ -42,6 +42,7 @@ SELECT
 
     ceil((to_days(met_data.`fecha_hora`) / 10))  as `group_by`
 
-    FROM met_data
-
-    LEFT JOIN `stations` ON `stations`.`id` = met_data.`id_station` GROUP BY `group_by`, met_data.`id_station`;
+FROM met_data
+LEFT JOIN `stations` ON `stations`.`id` = met_data.`station_id`
+WHERE met_data.station_id is not null
+GROUP BY `group_by`, met_data.`station_id`;

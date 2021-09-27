@@ -27,7 +27,7 @@ class Station extends Model
 
     public function data()
     {
-        return $this->hasMany(MetData::class, 'id_station');
+        return $this->hasMany(MetData::class, 'station_id');
     }
 
 }

@@ -21,7 +21,7 @@ class YearlyDataView extends Migration
                 -- ## Grouped by weather-station
                 max(`data`.`id`) AS `id`,
                 LEFT(fecha_hora,4) as fecha,
-                id_station as id_station,
+                station_id as station_id,
 
                 -- #########################################
                 -- #########################################
@@ -78,7 +78,7 @@ class YearlyDataView extends Migration
                 MAX(lluvia_24_horas) as lluvia_24_horas_total
 
                 FROM data
-                GROUP BY fecha, id_station;
+                GROUP BY fecha, station_id;
         ");
     }
 

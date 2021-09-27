@@ -16,7 +16,7 @@ class AddUniqueKeyTable extends Migration
             DROP PRIMARY KEY,
             ADD COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT AFTER `fecha_hora`,
             ADD PRIMARY KEY (`id`),
-            ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `id_station`);
+            ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `station_id`);
 
         ");
         DB::statement("
@@ -24,7 +24,7 @@ class AddUniqueKeyTable extends Migration
             DROP PRIMARY KEY,
             ADD COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT AFTER `fecha_hora`,
             ADD PRIMARY KEY (`id`),
-            ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `id_station`);
+            ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `station_id`);
 
         ");
         DB::statement("
@@ -32,7 +32,7 @@ class AddUniqueKeyTable extends Migration
             DROP PRIMARY KEY,
             ADD COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT AFTER `fecha_hora`,
             ADD PRIMARY KEY (`id`),
-            ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `id_station`);
+            ADD UNIQUE INDEX `fecha_hora` (`fecha_hora`, `station_id`);
 
         ");
 

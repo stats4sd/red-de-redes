@@ -84,7 +84,7 @@ namespace App\Models{
  *
  * @property int|null $id
  * @property string $fecha
- * @property int|null $id_station
+ * @property int|null $station_id
  * @property \App\Models\Met\Station|null $station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -153,7 +153,7 @@ namespace App\Models{
  *
  * @property int|null $id
  * @property string $fecha
- * @property int $id_station
+ * @property int $station_id
  * @property string $uploader_id
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -275,7 +275,7 @@ namespace App\Models{
  * @property string|null $wind_samp
  * @property string|null $wind_tx
  * @property string|null $iss_recept
- * @property int|null $id_station
+ * @property int|null $station_id
  * @property int|null $observation_id
  * @property string $meteobridge_latitude
  * @property string $meteobridge_longitude
@@ -632,7 +632,7 @@ namespace App\Models{
  * App\Models\Monthly
  *
  * @property string $fecha
- * @property int|null $id_station
+ * @property int|null $station_id
  * @property \App\Models\Met\Station|null $station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -1024,7 +1024,7 @@ namespace App\Models{
  *
  * @property string|null $min_fecha
  * @property string|null $max_fecha
- * @property int|null $id_station
+ * @property int|null $station_id
  * @property \App\Models\Met\Station|null $station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
@@ -1182,7 +1182,7 @@ namespace App\Models{
  * @property string|null $wind_samp
  * @property string|null $wind_tx
  * @property string|null $iss_recept
- * @property int $id_station
+ * @property int $station_id
  * @property int|null $observation_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -1320,7 +1320,7 @@ namespace App\Models{
  * App\Models\Met\Yearly
  *
  * @property string $fecha
- * @property int|null $id_station
+ * @property int|null $station_id
  * @property \App\Models\Met\Station|null $station
  * @property string|null $max_temperatura_interna
  * @property string|null $min_temperatura_interna
