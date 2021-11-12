@@ -4,11 +4,14 @@ import mysql.connector as mysql
 # import database connection configuration from file "dbConfig.py", call it as "config"
 import dbConfig as config
 
-# import column names settings from file "listColumnsName.ph", call it as "columns_name"
+# import column names settings from file "listColumnsName.py", call it as "columns_name"
 import listColumnsName as columns_name
 
-# import popular Python-based data analysis toolkit "pandas", call it as "pd"
+# import popular Python-based data analysis library "pandas", call it as "pd"
 import pandas as pd
+
+# import numpy library, call it as "np"
+import numpy as np
 
 # import unit conversion custom library from file "convertorUnits.py", call it as "convertor"
 import convertorUnits as convertor
@@ -34,7 +37,7 @@ uploader_id = sys.argv[7]
 newObservation_id = sys.argv[8]
 
 
-# function to process data file
+# function to process the uploaded data file
 def openFile():
 
 
@@ -49,10 +52,14 @@ def openFile():
         # read a comma-separated values (csv) file into data frame
         # specify na_values for additional strings to recognize as NA/NaN, including --.-, --, ---, ------
         # specify separater as Tab key
-        # specify row 0 and row 1 to use as column names
+        # specify row 0 and row 1 to as column headers
         # do not specify low_memory = False, internally process the file in chunks, 
         # resulting in lower memory use while parsing, but possibly mixed type inference
         df = pd.read_csv(path, na_values=['--.-', '--', '---', '------'], sep="\t", header=[0,1])
+
+
+        # option to print out all columns in a data frame
+        # pd.set_option('display.max_columns', None)
 
 
         # define new_column_names as an empty array
@@ -74,6 +81,10 @@ def openFile():
                 #
                 # SUGGESTION: same as below, to replace all spaces to underscore character _ in new_column_name
                 new_column_name = i[1].strip()
+
+
+                # replace all spaces to underscore character _ in new_column_name
+                new_column_name = new_column_name.replace(' ', '_')
 
 
             # if row 0 column name is not empty
@@ -108,23 +119,23 @@ def openFile():
         df.columns = new_columns_names
  
 
-        # rename the column name for davis station into column name for the database
+        # rename the column name for davis into column name for the database
         #
         # ISSUE: column names are defined with UPPERCASE and lowercase, what if column name in data file not exactly matched 
         # with defined column name?
         #
         # SUGGESTION: to eliminate case difference for renaming column
         # to define column names in UPPERCASE, to change column name to UPPERCASE before calling .rename()
+        # 
+        # UPDATE: Bolivia team agreed not to change column headers
         df = df.rename(columns=columns_name.list_columns_davis_text)
        
-       
-        # create the timestamp for uploading into database
-        # define date_time as a new array
+
+        # define date_time as a new array for processing measurement date time
         date_time = []
 
 
-        # handle all fecha_hora, time data in data frame, by 3 lines with indentation
-        # TODO: it seems Python use code indentation to define "scope" (TBC)
+        # handle all fecha_hora, time data in data frame
         for fecha_hora, time in zip(df.fecha_hora, df.time):
 
 
@@ -163,20 +174,18 @@ def openFile():
             date_time.append(str(datetime(int('20' + date[2]), int(date[1]), int(date[0]), int(hour[0]), int(hour[1]))))
 
 
-        # pass the right datestamp into fecha_hora
-        # ISSUE: it is a date time with hour portion without leading zero, and without second portion
-        # how will MySQL handle this incomplete date time data?
+        # pass the standard format datestamp into fecha_hora
         df.fecha_hora = date_time
 
 
-        # drop columns that are not into the database
+        # drop columns that are not matched with any pre-defined column header
         # to keep columns defined in list_columns_name (database columns), remove all other columns in data frame
         df = df[df.columns.intersection(columns_name.list_columns_name)]
 
 
-        # drop rows with missing value / NaN in any column
-        # ISSUE: it is too common to have missing value in some columns, e.g. wind direction, it is --- when there is no wind
+        # drop rows with missing value / NaN in all columns
         # For recording purpose, it is recommended to keep the record even it has date and time only
+        # So that we know the met station has performed measurement for this date time
         df = df.dropna(how='all', subset=columns_name.list_columns_davis_to_drop)
 
 
@@ -237,10 +246,15 @@ def openFile():
         # do not specify which row is header, default row 0 as column names
         # specify low_memory = False, to ensure no mixed types, the entire file is read into a single DataFrame
         data = pd.read_csv(path, na_values=['--.-',' --.-', '--',' --', '---',' ---', '------', ' ------'], sep=",", low_memory=False)
-       
+
+
+        # option to print out all columns in a data frame
+        # pd.set_option('display.max_columns', None)
+
 
         # set data into a data frame
         df = pd.DataFrame(data)
+
 
         # remove extra space in columns name
         # trim spaces at the beginning and at the end of all column names
@@ -277,13 +291,13 @@ def openFile():
         #
         # SUGGESTION: to eliminate case difference for renaming column
         # to define column names in UPPERCASE, to change column name to UPPERCASE before calling .rename()
+        #
+        # UPDATE: Bolivia team agreed not to change column headers
         df = df.rename(columns=columns_name.list_columns_chinas_csv)
- 
 
-        # create the timestamp for uploading into database
+
+        # define date_time as a new array for processing measurement date time
         # Chinas can have the time in 12 hours (am, pm) or 24 hours
-
-        # define date_time as a new array
         date_time = []
 
 
@@ -341,17 +355,18 @@ def openFile():
             date_time.append(str(datetime(int(date_splited[2]), int(date_splited[1]), int(date_splited[0]), int(hours[0]), int(hours[1]), int(hours[2]))))
 
 
-        # pass the right datestamp into fecha_hora
+        # pass the standard format datestamp into fecha_hora
         df.fecha_hora = date_time
 
 
-        # drop rows with missing value / NaN in any column
-        # ISSUE: it is too common to have missing value in some columns, e.g. wind direction, it is --- when there is no wind
+        # drop rows with missing value / NaN in all columns
         # For recording purpose, it is recommended to keep the record even it has date and time only
+        # So that we know the met station has performed measurement for this date time
         df = df.dropna(how='all', subset=columns_name.list_columns_chinas_to_drop)
 
 
         # convert data
+        # unit conversion
         if selected_unit_pres != "hpa":
             print('converting data presion in inhg or mmhg to hpa')
             df = convertor.convertDataInhgOrMmhgToHpa(df, selected_unit_pres, 0)
@@ -371,6 +386,20 @@ def openFile():
 
         # change non-missing values NaN to None before adding to MySQL database, because MySQL does not recognize NaN
         df = df.where((pd.notnull(df)), None)
+
+
+    #####
+    # replace all Nan values to '999' temporary
+    # TODO: replace all Nan values to null value for MySQL
+    # P.S. Linux works fine but Windows needs this to avoid MySQL error
+    df = df.replace(np.nan, '999', regex=True)
+    #####
+
+
+    # add system date time to created_at, updated_at
+    systemDateTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    df['created_at'] = systemDateTime
+    df['updated_at'] = systemDateTime
 
 
     # return data frame after data processing
@@ -418,17 +447,11 @@ try:#
 
 
         # append INSERT SQL statement to data_value array for later execution
+        # prepare INSERT SQL statement VALUES clause with data of multiple records
         data_value.append(tuple(row))
 
 
-    # execute multiple INSERT SQL statement at once
-    # ISSUE: what is the behaviour if error occured for some SQL statements? 
-    # e.g. unique constraint violated due to same station id and same data time?
-    #
-    # this can happen when 
-    # 1. user selected incorrect station
-    # 2. station is configured to use 12 hour format, same time used for AM and PM. 
-    #    e.g. 01:05 and 13:05 are both presented as 01:05 without AM and PM
+    # no error handling if SQL excption occured (e.g. unique constraint violated due to two records with same date time)
     cursor.executemany(sql, data_value)
 
 

@@ -8,6 +8,7 @@ use App\File;
 use App\Models\Daily;
 use \GuzzleHttp\Client;
 use App\Models\Observation;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\DailyDataPreview;
 use App\Models\WeatherDataPreview;
@@ -82,7 +83,9 @@ class FileController extends Controller
                 $newObservation_id = "null";
             }
 
-            $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $newObservation_id]);
+            //$process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $newObservation_id]);
+            $process = new Process(['python', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $newObservation_id]);
+            
 
             $process->run();
 
@@ -96,8 +99,60 @@ class FileController extends Controller
             
             // $error_data = $this->checkValues($uploader_id);
 
+
+            // check number of uploaded records
+            $sqlUploadedRecords = " SELECT COUNT(*) as number_of_records FROM data_template WHERE uploader_id = '" . $uploader_id . "';";
+
+            // execute custom SELECT SQL
+            $uploadedRecordsResults = DB::select($sqlUploadedRecords);
+            $numberUploadedRecords = $uploadedRecordsResults[0]->number_of_records;
+
+            
+            // check number of records already existed in database
+            $sqlExistedRecords  = " SELECT COUNT(*) as number_of_records";
+            $sqlExistedRecords .= " FROM data ta, data_template tb";
+            $sqlExistedRecords .= " WHERE tb.uploader_id = '" . $uploader_id . "'";
+            $sqlExistedRecords .= " AND ta.fecha_hora = tb.fecha_hora";
+            $sqlExistedRecords .= " AND ta.id_station = tb.id_station;";
+
+            // execute custom SELECT SQL
+            $existedRecordsResults = DB::select($sqlExistedRecords);
+            $numberExistedRecords = $existedRecordsResults[0]->number_of_records;
+
+            
+            // number of not existed records = number of uploaded records - number of existed records
+            $numberNotExistedRecords = $numberUploadedRecords - $numberExistedRecords;
+
+
+            logger($numberUploadedRecords);
+            logger($numberExistedRecords);
+            logger($numberNotExistedRecords);
+
+
+
+            // prepare advice message
+            $adviceMessage = "";
+            $flagUploadable = 0;
+
+            if ($numberNotExistedRecords == $numberUploadedRecords) {
+                $adviceMessage = "All " . $numberUploadedRecords . " record(s) are new records. Please kindly confirm to upload this data file.";
+                $flagUploadable = 1;
+            } else if ($numberExistedRecords == $numberUploadedRecords) {
+                $adviceMessage = "All " . $numberExistedRecords .  " record(s) are already existed in system. Please kindly cancel this upload.";
+                $flagUploadable = 0;
+            } else {
+                $adviceMessage = $numberExistedRecords . " out of " . $numberUploadedRecords . " records are already existed in system. Please kindly cancel this upload and further check data file correctness.";
+                $flagUploadable = 0;
+            }
+
+
             return response()->json([
                 'data_template' => $data_template,
+                'number_uploaded_records' => $numberUploadedRecords,
+                'number_existed_records' => $numberExistedRecords,
+                'number_not_existed_records' => $numberNotExistedRecords,
+                'adviceMessage' => $adviceMessage,
+                'flagUploadable' => $flagUploadable,
                 'error_data' => null
 
             ]);
@@ -214,12 +269,22 @@ class FileController extends Controller
 
     }
 
+
+    // enhancement: add datetime string YYYYMMDDHHMISS as prefix, make it as a unique string
     public function generateRandomString($length = 10) 
     { 
+        // get current date time
+        $currentTime = Carbon::now();
+
+        // generate random string
         $random_string = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
-        return $random_string;
+        
+        // concatenate current date time and random string, it should be good enough to be a unique string
+        return $currentTime->format('YmdHis') . $random_string;
     }
 
+
+    // when user click "Cancel" button, remove staging records in table data_template
     public function cleanTable($uploader_id)
     {
         DB::table('data_template')->where('uploader_id', '=', $uploader_id)->delete();
@@ -228,12 +293,16 @@ class FileController extends Controller
 
     }
 
+
+    // when user click "Confirm" button, run Python program to "move" staging records from 
+    // data_template table to data table
     public function storeFile($uploader_id)
     {
 
         $scriptPath = base_path() . '/scripts/storeData.py';
 
-        $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $uploader_id]);
+        //$process = new Process(['pipenv', 'run', 'python3', $scriptPath, $uploader_id]);
+        $process = new Process(['python', $scriptPath, $uploader_id]);
 
         $process->run();
 

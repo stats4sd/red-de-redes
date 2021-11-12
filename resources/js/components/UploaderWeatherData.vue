@@ -36,6 +36,21 @@
                                         <p class="my-4"><b>Longitud:</b> {{selectedStation.longitude}}</p>
                                         <p class="my-4"><b>Altitud:</b> {{selectedStation.altitude}}</p>
                                         <p class="my-4"><b>Tipo:</b> {{selectedStation.type}}</p>
+
+                                        <!-- add small map, met station photo, nearby village photo for visual identification -->
+                                        <table border="1" width="100%">
+                                            <tr>
+                                                <td width="33%"><b>Map</b></td>
+                                                <td width="33%"><b>Met Station</b></td>
+                                                <td width="34%"><b>Nearby Village</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="images/met_station/12_map.jpg" width="150" height="84"></td>
+                                                <td><img src="images/met_station/12_met_station.jpg" width="150" height="84"></td>
+                                                <td><img src="images/met_station/12_nearby_village.jpg" width="150" height="84"></td>
+                                            </tr>
+                                        </table>
+                                        
                                         <p class="my-4"><b>¿Está seguro de que {{selectedStation.label}} es la estación correcta?</b></p>
                                     </b-modal>
                             </div>
@@ -206,6 +221,9 @@
                                     <template v-if="error_wind" v-slot:cell(hi_speed)="data">
                                         <b :style="tempIntBackColor">{{ data.value }}</b>
                                     </template>
+                                    <template v-if="error_wind" v-slot:cell(hi_dir)="data">
+                                        <b :style="tempIntBackColor">{{ data.value }}</b>
+                                    </template>
                                     <template v-if="error_rain" v-slot:cell(lluvia_hora)="data">
                                         <b :style="tempIntBackColor">{{ data.value }}</b>
                                     </template>
@@ -325,13 +343,20 @@ const rootUrl = process.env.MIX_APP_URL
                 {key: "direccion_del_viento", label:'Wind Dir', thStyle: { width: '100px'}},
                 {key: "wind_run", label:'Wind Run', thStyle: { width: '200px'}},
                 {key: "hi_speed", label:'Hi Speed', thStyle: { width: '100px'}},
+                {key: "hi_dir", label:'hi_dir', thStyle: { width: '100px'}},
                 {key: "wind_chill", label:'Wind Chill', thStyle: { width: '200px'}},
                 {key: "index_heat", label:'Heat Index', thStyle: { width: '100px'}},
                 {key: "index_thw", label:'THW Index', thStyle: { width: '100px'}},
                 {key: "index_thsw", label:'THSW Index', thStyle: { width: '100px'}},
-                {key: "presion_relativa", label:'Bar', thStyle: { width: '100px'}},
+                {key: "presion_relativa", label:'presion_relativa', thStyle: { width: '100px'}},
+                {key: "presion_absoluta", label:'presion_absoluta', thStyle: { width: '100px'}},
+                {key: "rafaga", label:'rafaga', thStyle: { width: '100px'}},
                 {key: "rain", label:'Rain', thStyle: { width: '100px'}},
                 {key: "lluvia_hora", label:'Rain Rate', thStyle: { width: '100px'}},
+                {key: "lluvia_24_horas", label:'lluvia_24_horas', thStyle: { width: '100px'}},
+                {key: "lluvia_semana", label:'lluvia_semana', thStyle: { width: '100px'}},
+                {key: "lluvia_mes", label:'lluvia_mes', thStyle: { width: '100px'}},
+                {key: "lluvia_total", label:'lluvia_total', thStyle: { width: '100px'}},
                 {key: "solar_rad", label:'Solar Rad.', thStyle: { width: '100px'}},
                 {key: "solar_energy", label:'Solar Energy', thStyle: { width: '100px'}},
                 {key: "radsolar_max", label:'Hi Solar Rad.', thStyle: { width: '100px'}},
@@ -355,6 +380,7 @@ const rootUrl = process.env.MIX_APP_URL
                 {key: "leaf_wet1", label:'Leaf Wet 1', thStyle: { width: '100px'}},
                 {key: "leaf_wet2", label:'Leaf Wet 2', thStyle: { width: '100px'}},
                 {key: "leaf_wet3", label:'Leaf Wet 3', thStyle: { width: '100px'}},
+                {key: "leaf_temp_1", label:'leaf_temp_1', thStyle: { width: '100px'}},
                 {key: "wind_samp", label:'Wind Samp', thStyle: { width: '100px'}},
                 {key: "wind_tx", label:'Wind Tx', thStyle: { width: '100px'}},
                 {key: "iss_recept", label:'ISS Recept', thStyle: { width: '100px'}},
@@ -427,6 +453,13 @@ const rootUrl = process.env.MIX_APP_URL
                     this.total_rows = result.data.data_template.total;
                     this.previewData = result.data.data_template.data;
                     this.uploader_id = (this.previewData[0]['uploader_id']);
+
+                    // show advice message
+                    if (result.data.flagUploadable == 1) {
+                        this.success = result.data.adviceMessage;
+                    } else {
+                        this.error = result.data.adviceMessage;
+                    }
 
 
                     // this.error_data = result.data.error_data.original.error_data;
