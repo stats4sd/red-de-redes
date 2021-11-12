@@ -124,11 +124,6 @@ class FileController extends Controller
             $numberNotExistedRecords = $numberUploadedRecords - $numberExistedRecords;
 
 
-            logger($numberUploadedRecords);
-            logger($numberExistedRecords);
-            logger($numberNotExistedRecords);
-
-
 
             // prepare advice message
             $adviceMessage = "";
