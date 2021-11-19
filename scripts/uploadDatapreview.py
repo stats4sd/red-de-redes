@@ -34,7 +34,9 @@ selected_unit_pres = sys.argv[4]
 selected_unit_wind = sys.argv[5]
 selected_unit_rain = sys.argv[6]
 uploader_id = sys.argv[7]
-newObservation_id = sys.argv[8]
+is_windows = sys.argv[8]
+newObservation_id = sys.argv[9]
+
 
 
 # function to process the uploaded data file
@@ -388,12 +390,10 @@ def openFile():
         df = df.where((pd.notnull(df)), None)
 
 
-    #####
-    # replace all Nan values to '999' temporary
-    # TODO: replace all Nan values to null value for MySQL
-    # P.S. Linux works fine but Windows needs this to avoid MySQL error
-    df = df.replace(np.nan, '999', regex=True)
-    #####
+    # replace all Nan values to '999' temporary to avoid MySQL error (for Windows only)
+    # P.S. Linux does not need this, but Windows needs this to avoid MySQL error
+    if is_windows == "1":
+        df = df.replace(np.nan, '999', regex=True)
 
 
     # add system date time to created_at, updated_at
@@ -415,7 +415,7 @@ cursor = conn.cursor()
 
 
 # try block to test a block of code for errors
-try:#
+try:
 
 
     # call openFile() to get and handle data from uploaded data file

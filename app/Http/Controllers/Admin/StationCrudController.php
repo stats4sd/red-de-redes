@@ -118,21 +118,6 @@ class StationCrudController extends CrudController
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
             ],
-            [
-                'name' => 'filename_map',
-                'label' => 'Map Image Filename',
-                'type' => 'text',
-            ],
-            [
-                'name' => 'filename_met_station',
-                'label' => 'Met Station Photo Filename',
-                'type' => 'text',
-            ],
-            [
-                'name' => 'filename_nearby_village',
-                'label' => 'Nearby Village Filename',
-                'type' => 'text',
-            ],
             
         ]);
         // add asterisk for fields that are required in StationRequest

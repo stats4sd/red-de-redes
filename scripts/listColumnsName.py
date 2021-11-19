@@ -59,6 +59,7 @@ list_columns_chinas_to_drop = [
                                ]
 
 
+# Note: It is not being used in any program file
 # dictionary of columns name for converting the original csv file columns name into database columns name 
 # why there are two rows for "radsolar_max"? one for "Hi_Solar_Rad." and other one for "Hi Solar_Rad."
 columns_db = {

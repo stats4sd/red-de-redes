@@ -48,11 +48,9 @@
                                             <td width="34%"><b>Nearby Village</b></td>
                                         </tr>
                                         <tr>
-                                            <td><img src="images/met_station/12_map.jpg" width="150" height="84"></td>
-                                            <td><img src="images/met_station/12_met_station.jpg" width="150"
-                                                     height="84"></td>
-                                            <td><img src="images/met_station/12_nearby_village.jpg" width="150"
-                                                     height="84"></td>
+                                            <td><img :src="'images/met_station/'+selectedStation.id+'_map.jpg'" width="150" height="100"></td>
+                                            <td><img :src="'images/met_station/'+selectedStation.id+'_met_station.jpg'" width="150" height="100"></td>
+                                            <td><img :src="'images/met_station/'+selectedStation.id+'_nearby_village.jpg'" width="150" height="100"></td>
                                         </tr>
                                     </table>
 
@@ -276,6 +274,7 @@
                                 <b-alert show variant="danger" v-if="error!=null">{{ error }}</b-alert>
                                 <b-alert show variant="success" v-if="success!=null">{{ success }}</b-alert>
 
+                                <b-alert show variant="warning" v-if="scenario3"><input type="checkbox" v-on:click="clickScenario3Checkbox($event)"><b><font color="red"> I confirm that I understand the potential risk of uploading this data file with existing records.</font></b></b-alert>
 
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
                                         aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable"
@@ -284,9 +283,9 @@
                                     Cancelar
                                 </button>
                                 <button type="submit" class="site-btn my-4" data-toggle="collapse"
-                                        href="#collapseThree"
+                                        href="#collapseThree" id="btnConfirm"
                                         aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile"
-                                        :disabled="error || busy">
+                                        :disabled="error || busy || scenario3">
                                     <b-spinner small v-if="busy" label="Spinning"></b-spinner>
                                     Guardar en la base de datos
                                 </button>
@@ -356,6 +355,7 @@ export default {
             error_rain: false,
             uploadError: null,
             uploader_id: null,
+            scenario3: false,
             showUploadFile: false,
             modalShow: false,
             fields: [
@@ -494,10 +494,15 @@ export default {
                 this.uploader_id = (this.previewData[0]['uploader_id']);
 
                 // show advice message
-                if (result.data.flagUploadable == 1) {
+                if (result.data.scenario == 1) {
                     this.success = result.data.adviceMessage;
-                } else {
+                    this.scenario3 = false;
+                } else if (result.data.scenario == 2) {
                     this.error = result.data.adviceMessage;
+                    this.scenario3 = false;
+                } else if (result.data.scenario == 3) {
+                    this.success = result.data.adviceMessage;
+                    this.scenario3 = true;
                 }
 
 
@@ -538,7 +543,9 @@ export default {
                     this.error = result.data.error
                     this.busy = false;
 
-                    window.location.assign('redirect')
+                    // after moving staging records from table "data_preview" to table "data"
+                    // redirect to a upload success static page
+                    window.location.assign('/uploadsuccess')
 
                 }, (error) => {
                     console.log(error);
@@ -564,9 +571,22 @@ export default {
                 });
 
         },
+
         handleOk: function () {
             this.showUploadFile = true
+        },
+
+        clickScenario3Checkbox: function (evt) {
+            if (evt.currentTarget.checked) {
+                // checkbox ticked, user confirmed, enable "Confirm" button
+                document.getElementById("btnConfirm").disabled = false;
+            } else {
+                // checkbox unticked, user not confirmed yet, disable "Confirm" button
+                document.getElementById("btnConfirm").disabled = true;
+                
+            }
         }
+
     }
 }
 

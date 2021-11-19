@@ -85,9 +85,11 @@ class FileController extends Controller
             }
 
             if (config('app.pipenv')) {
-                $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $newObservation_id]);
+                $isWindows = 0;
+                $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $isWindows, $newObservation_id]);
             } else {
-                $process = new Process(['python', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $newObservation_id]);
+                $isWindows = 1;
+                $process = new Process(['python', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $isWindows, $newObservation_id]);
             }
 
             $process->run();
@@ -128,18 +130,18 @@ class FileController extends Controller
 
 
             // prepare advice message
+            $scenario = 0;
             $adviceMessage = "";
-            $flagUploadable = 0;
 
             if ($numberNotExistedRecords == $numberUploadedRecords) {
+                $scenario = 1;
                 $adviceMessage = "All " . $numberUploadedRecords . " record(s) are new records. Please kindly confirm to upload this data file.";
-                $flagUploadable = 1;
             } else if ($numberExistedRecords == $numberUploadedRecords) {
+                $scenario = 2;
                 $adviceMessage = "All " . $numberExistedRecords . " record(s) are already existed in system. Please kindly cancel this upload.";
-                $flagUploadable = 0;
             } else {
+                $scenario = 3;
                 $adviceMessage = $numberExistedRecords . " out of " . $numberUploadedRecords . " records are already existed in system. Please kindly cancel this upload and further check data file correctness.";
-                $flagUploadable = 0;
             }
 
 
@@ -148,8 +150,8 @@ class FileController extends Controller
                 'number_uploaded_records' => $numberUploadedRecords,
                 'number_existed_records' => $numberExistedRecords,
                 'number_not_existed_records' => $numberNotExistedRecords,
+                'scenario' => $scenario,
                 'adviceMessage' => $adviceMessage,
-                'flagUploadable' => $flagUploadable,
                 'error_data' => null
 
             ]);
@@ -306,6 +308,9 @@ class FileController extends Controller
         }
 
         $process->run();
+
+        // write Python log message to Laravel log file
+        Log::info($process->getOutput());
 
 
         if (!$process->isSuccessful()) {
