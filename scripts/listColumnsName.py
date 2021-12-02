@@ -3,7 +3,7 @@
 # TODO: it is recommended to do a verification for data file header names and database column names
 
 
-# list of columns name for Davis station to drop if the all the value are null
+# list of columns name for Davis station to drop if the all values are null
 # if all measurement results are null, should we keep or drop this record?
 # it is also a record to show that there is a measurement take place on a particular date time
 # we may need to check with UMSA
@@ -37,7 +37,7 @@ list_columns_davis_to_drop = [
                               ]
 
 
-# list of columns name for Chinas station to drop if the all the value are null
+# list of columns name for Chinas station to drop if the all values are null
 # same as davis above
 list_columns_chinas_to_drop = [
                                 'temperatura_interna', 
@@ -134,7 +134,8 @@ columns_db = {
               }
 
 
-# all columns name into database for database for uploading the data 
+# In upload program, after uploading data file, when user confirmed the data upload is correct,
+# column names for records to be "moved" from data_template data to data table
 list_columns_name = [
                       'fecha_hora', 
                       'hi_temp', 
@@ -197,11 +198,13 @@ list_columns_name = [
                       'soil_temp_1', 
                       'soil_temp_2', 
                       'soil_temp_3', 
-                      'soil_temp_4'
+                      'soil_temp_4',
+                      'created_at',
+                      'updated_at'
                     ]
 
 
-# dictionary of columns name for converting the original text file columns name into database columns name
+# dictionary of columns name for converting the davis text file columns name into database columns name
 # there is no database column called "time"
 list_columns_davis_text = {
                             'Date':'fecha_hora', 
