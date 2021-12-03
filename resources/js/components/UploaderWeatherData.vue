@@ -362,6 +362,7 @@ export default {
                 {key: "fecha", stickyColumn: true, label: 'Date', thStyle: {width: '200px'}},
                 {key: "time", label: 'Time', thStyle: {width: '200px'}},
                 {key: "temperatura_externa", label: 'Temp Out', thStyle: {width: '100px'}},
+                {key: "sensacion_termica", label: 'sensacion_termica', thStyle: {width: '100px'}},
                 {key: "hi_temp", label: 'Hi Temp', thStyle: {width: '200px'}},
                 {key: "low_temp", label: 'Low Temp', thStyle: {width: '100px'}},
                 {key: "humedad_externa", label: 'Out Hum', thStyle: {width: '200px'}},
