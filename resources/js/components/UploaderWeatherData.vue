@@ -273,8 +273,7 @@
                             <div style="text-align: center;">
                                 <b-alert show variant="danger" v-if="error!=null">{{ error }}</b-alert>
                                 <b-alert show variant="success" v-if="success!=null">{{ success }}</b-alert>
-
-                                <b-alert show variant="warning" v-if="scenario3"><input type="checkbox" v-on:click="clickScenario3Checkbox($event)"><b><font color="red"> I confirm that I understand the potential risk of uploading this data file with existing records.</font></b></b-alert>
+                                <b-alert show variant="warning" v-if="scenario3"><input type="checkbox" v-model="scenario3Confirmed"><b><font color="red"> I confirm that I understand the potential risk of uploading this data file with existing records.</font></b></b-alert>
 
                                 <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
                                         aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable"
@@ -285,7 +284,7 @@
                                 <button type="submit" class="site-btn my-4" data-toggle="collapse"
                                         href="#collapseThree" id="btnConfirm"
                                         aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile"
-                                        :disabled="error || busy || scenario3">
+                                        :disabled="error || busy || (scenario3 && !scenario3Confirmed)">
                                     <b-spinner small v-if="busy" label="Spinning"></b-spinner>
                                     Guardar en la base de datos
                                 </button>
@@ -356,6 +355,7 @@ export default {
             uploadError: null,
             uploader_id: null,
             scenario3: false,
+            scenario3Confirmed: false,
             showUploadFile: false,
             modalShow: false,
             fields: [
@@ -575,17 +575,6 @@ export default {
 
         handleOk: function () {
             this.showUploadFile = true
-        },
-
-        clickScenario3Checkbox: function (evt) {
-            if (evt.currentTarget.checked) {
-                // checkbox ticked, user confirmed, enable "Confirm" button
-                document.getElementById("btnConfirm").disabled = false;
-            } else {
-                // checkbox unticked, user not confirmed yet, disable "Confirm" button
-                document.getElementById("btnConfirm").disabled = true;
-                
-            }
         }
 
     }
