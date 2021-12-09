@@ -141,7 +141,7 @@ class FileController extends Controller
                 $adviceMessage = "All " . $numberExistedRecords . " record(s) are already existed in system. Please kindly cancel this upload.";
             } else {
                 $scenario = 3;
-                $adviceMessage = $numberExistedRecords . " out of " . $numberUploadedRecords . " records are already existed in system. Please kindly cancel this upload and further check data file correctness.";
+                $adviceMessage = $numberExistedRecords . " out of " . $numberUploadedRecords . " records are already existed in system. Please kindly tick below checkbox to confirm uploading non existed records or cancel this upload to further check data file correctness";
             }
 
 
