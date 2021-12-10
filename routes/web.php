@@ -26,6 +26,15 @@ Auth::routes();
 Route::resource('home', 'DataController')->middleware('auth');
 Route::post('download', [DataController::class,'download']);
 
+Route::get('weatherstations', function () {
+    return view('weatherstations');
+})->middleware('auth');
+
+Route::get('uploadsuccess', function () {
+    return view('uploadsuccess');
+})->middleware('auth');
+
+Route::resource('stations', 'StationController');
 
 Route::post('show', [DataController::class,'show']);
 

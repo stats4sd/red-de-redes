@@ -75,6 +75,7 @@ class StationCrudController extends CrudController
                 'label' => 'Altitud',
                 'type' => 'decimal',
             ],
+
         ]);
 
         $this->crud->addFields([
@@ -116,6 +117,7 @@ class StationCrudController extends CrudController
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
             ],
+            
         ]);
         // add asterisk for fields that are required in StationRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
