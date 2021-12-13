@@ -4,16 +4,11 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\File;
-
 use App\Models\Met\Daily;
 use App\Models\Met\Observation;
 use Illuminate\Http\JsonResponse;
-
-use App\Models\Daily;
 use \GuzzleHttp\Client;
-use App\Models\Observation;
 use Carbon\Carbon;
-
 use Illuminate\Http\Request;
 use App\Models\Met\MetDataPreview;
 use Illuminate\Support\Facades\Log;
@@ -141,7 +136,7 @@ class FileController extends Controller
 
 
             return response()->json([
-                'data_template' => $data_template,
+                'data_template' => $metDataPreview,
                 'number_uploaded_records' => $numberUploadedRecords,
                 'number_existed_records' => $numberExistedRecords,
                 'number_not_existed_records' => $numberNotExistedRecords,
