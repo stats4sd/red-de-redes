@@ -13,7 +13,7 @@
               <button type="button" class="btn btn-secondary" onclick="window.location.assign('/home')";><b>Go Back To Home Page</b></button>
 						</div>
             <div class="col-sm-2 offset-2">
-              <button type="button" class="btn btn-secondary" onclick="window.location.assign('/weatherstations')"><b>Upload Another Data File</b></button>
+              <button type="button" class="btn btn-secondary" onclick="window.location.assign('/data-upload')"><b>Upload Another Data File</b></button>
             </div>
 				</div>
 
