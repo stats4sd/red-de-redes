@@ -28,7 +28,7 @@ try:
     print("data is inserting")
 
     for row in resultSelect:
-        sqlInsert = f"INSERT INTO `data` (`{cols}`) SELECT `{cols}` FROM `met_data_preview` WHERE `uploader_id`='{uploader_id}' AND `id` = {row[0]};"
+        sqlInsert = f"INSERT INTO `met_data` (`{cols}`) SELECT `{cols}` FROM `met_data_preview` WHERE `uploader_id`='{uploader_id}' AND `id` = {row[0]};"
 
         try:
             cursor.execute(sqlInsert)
