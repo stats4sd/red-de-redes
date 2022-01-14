@@ -34,6 +34,11 @@ Route::resource('stations', 'StationController');
 
 Route::post('show', [DataController::class,'show']);
 
+Route::get('/data-download', function () {
+    return view('data_download');
+});
+
+
 
 //NEW Upload page
 Route::view('data-upload', 'dataupload')->middleware('auth');
