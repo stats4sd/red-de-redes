@@ -97,7 +97,7 @@
                 </td>
                 <td>
                     <select v-model="municipioSelected" @change="municipioChanged">
-                        <option v-for="municipio in municipios" :value="municipio.id">{{ municipio.name }}</option>
+                        <option v-for="municipio in municipiosFiltered" :value="municipio.id">{{ municipio.name }}</option>
                     </select>
                 </td>
             </tr>
@@ -105,10 +105,11 @@
             <tr>
                 <td>
                     Comunidad *
+                    <br/><br/><p>(Press [Cntl] for multiple selection)</p>
                 </td>
                 <td>
-                    <select v-model="comunidadSelected">
-                        <option v-for="comunidad in comunidads" :value="comunidad.id">{{ comunidad.name }}</option>
+                    <select v-model="comunidadSelected" multiple>
+                        <option v-for="comunidad in comunidadsFiltered" :value="comunidad.id">{{ comunidad.name }}</option>
                     </select>
                 </td>
             </tr>
@@ -184,6 +185,9 @@ export default {
             municipios: [],
             comunidads: [],
 
+            // array for filtered option list
+            municipiosFiltered: [],
+            comunidadsFiltered: [],
 
             // pre-defined options for corresponding selection box
             // added "Raw Data" for illustration temporary
@@ -258,15 +262,38 @@ export default {
         // to be called when departmento value changed
         departamentoChanged() {
             //alert("departamentoChanged");
+
+            // reset municipio and comunidad
             this.municipioSelected = ''
             this.comunidadSelected = ''
+
+            // filter municipios that belong to selected departamento
+            this.municipiosFiltered = this.municipios.filter(this.checkMunicipio);
+
+            // reset comunidadsFiltered as municipios is not selected yet
+            this.comunidadsFiltered = [];
+        },
+
+        // to determine each municipio whether belongs to the selected departamento
+        checkMunicipio(municipio) {
+            return (municipio.departamento_id == this.departamentoSelected);
         },
 
         // to reset comunidad when municipio is changed
         // to be called when municipio value changed
         municipioChanged() {
             //alert("municipioChanged");
+
+            // reset comunidad
             this.comunidadSelected = ''
+
+            // filter municipios that belong to selected municipio
+            this.comunidadsFiltered = this.comunidads.filter(this.checkComunidad);
+        },
+
+        // to determine each comunidad item whether belongs to the selected municipio
+        checkComunidad(comunidad) {
+            return (comunidad.municipio_id == this.municipioSelected);
         },
 
         // to show selected values for checking
@@ -399,7 +426,7 @@ export default {
 
             this.departamentoSelected = '1';
             this.municipioSelected = '1';
-            this.comunidadSelected = '1';
+            this.comunidadSelected = '1,2,3';
             this.plotLevelSuelosSelected = 'true';
             this.plotLevelManejoDeLaParcelaSelected = 'false';
             this.cropLevelFenologiaSelected = 'true';
