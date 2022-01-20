@@ -1,0 +1,1 @@
+<a href="{{ url($crud->route.'/export') }}" class="btn btn-primary" data-button-type="export"><i class="la la-download"></i> Export {{ $crud->entity_name_plural }}</a>

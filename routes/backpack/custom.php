@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\LkpVariedadCrudController;
 use App\Http\Controllers\Admin\Met\DailyCrudController;
 use App\Http\Controllers\Admin\Met\DailyDataPreviewCrudController;
 use App\Http\Controllers\Admin\Met\MetDataCrudController;
+use App\Http\Controllers\Admin\Met\MetRawDataCrudController;
 use App\Http\Controllers\Admin\Met\MonthlyCrudController;
 use App\Http\Controllers\Admin\Met\ObservationCrudController;
 use App\Http\Controllers\Admin\Met\TenDaysCrudController;
@@ -58,6 +59,8 @@ Route::group([
 
 
     Route::crud('station', StationCrudController::class);
+
+    Route::crud('met_raw_data', MetRawDataCrudController::class);
 
 
 

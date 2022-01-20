@@ -19,7 +19,7 @@ class MetData extends Model
 
     # use HasCompositePrimaryKey;
     protected $primaryKey = 'id';
-    protected $table = 'data';
+    protected $table = 'met_data';
     protected $guarded = ['id'];
 
 
