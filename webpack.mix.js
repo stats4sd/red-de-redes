@@ -18,6 +18,6 @@ mix.js('resources/js/app.js', 'public/js')
 
 mix.js('resources/js/app.js', 'public/js')
    .js('resources/js/data_download.js', 'public/js')
-   //.vue()
+   .vue()
    .sourceMaps()
    .sass('resources/sass/app.scss', 'public/css');
