@@ -4,7 +4,7 @@
 
 <h4 class='nav-item nav-link text-white mt-3'>Datos Meteorlógicos</h4>
 <li class='nav-item'><a class='nav-link' href="{{ backpack_url('station') }}"><i class="nav-icon fas fa-broadcast-tower"></i> Estaciones</a></li>
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('weather_data') }}'><i class='nav-icon fas fa-cloud-sun-rain'></i> Datos Meteorlógicos</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('met_raw_data') }}'><i class='nav-icon fas fa-cloud-sun-rain'></i> Datos Meteorlógicos</a></li>
 
 <li class='nav-item nav-dropdown'>
     <a class='nav-link nav-dropdown-toggle' href="#"><i class="nav-icon fa fa-newspaper-o"></i>Resúmenes</a>
