@@ -22,12 +22,14 @@ class MetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNul
     // constructor to set HTTP request object to private variable
     public function __construct(Request $request = null)
     {
+        logger("MetDataExport.construct() starts...");
+
         $this->request = $request;
 
         $this->fields = [
             'station_id',
             'fecha_hora',
-            'id',
+            //'id',
             'intervalo',
             'temperatura_interna',
             'humedad_interna',
@@ -110,7 +112,7 @@ class MetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNul
         return [
             $metData->station_id,
             $metData->fecha_hora,
-            $metData->id,
+            //$metData->id,
             $metData->intervalo,
             $metData->temperatura_interna,
             $metData->humedad_interna,
@@ -205,11 +207,10 @@ class MetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNul
         // prepare from date as first day of From Year, Month
         $strFromDate = $fromYear . '-' . $fromMonth . '-01 00:00:00';
 
-        // prepare to date as last day of To Year, Month
+        // prepare to date as first day of next month of To Year, Month
         $tempToDate = $toYear . '-' . $toMonth . '-01';
         $toDate = strtotime($tempToDate);
-        $toDateLastDate = strtotime(date("Y-m-t", $toDate));
-        $strToDate = date("Y-m-t", $toDateLastDate) . ' 23:59:59';
+        $strToDate = date("Y-m-d", strtotime("+1 month", $toDate)) . ' 00:00:00';
 
         // whereIn for station Ids
         // whereBetween used for From Date and To Date, date time is inclusive
