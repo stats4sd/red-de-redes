@@ -105,10 +105,9 @@
             <tr>
                 <td>
                     Comunidad *
-                    <br/><br/><p>(Press [Cntl] for multiple selection)</p>
                 </td>
                 <td>
-                    <select v-model="comunidadSelected" multiple>
+                    <select v-model="comunidadSelected">
                         <option v-for="comunidad in comunidadsFiltered" :value="comunidad.id">{{ comunidad.name }}</option>
                     </select>
                 </td>
@@ -417,16 +416,16 @@ export default {
         assignValues() {
             //alert("assignValues");
 
-            this.stationsSelected = '1,2';
+            this.stationsSelected = ['1','2','3','6'];
             this.aggregationSelected = 'raw_data';
-            this.fromMonthSelected = '01';
-            this.fromYearSelected = '2021';
-            this.toMonthSelected = '01';
-            this.toYearSelected = '2022';
+            this.fromMonthSelected = '08';
+            this.fromYearSelected = '2020';
+            this.toMonthSelected = '08';
+            this.toYearSelected = '2020';
 
             this.departamentoSelected = '1';
             this.municipioSelected = '1';
-            this.comunidadSelected = '1,2,3';
+            this.comunidadSelected = '1';
             this.plotLevelSuelosSelected = 'true';
             this.plotLevelManejoDeLaParcelaSelected = 'false';
             this.cropLevelFenologiaSelected = 'true';
@@ -452,7 +451,7 @@ export default {
 
             // construct URL with parameter values
             var $reportUrl = 'admin/met_raw_data/export?' + 
-                        'stations=' + this.stationsSelected + 
+                        'stations=' + this.stationsSelected +
                         '&aggregation=' + this.aggregationSelected +
                         '&fromYear=' + this.fromYearSelected + 
                         '&fromMonth=' + this.fromMonthSelected +

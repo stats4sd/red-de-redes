@@ -4,6 +4,7 @@ namespace App\Exports\Download;
 
 use Illuminate\Http\Request;
 use App\Exports\Download\Met\MetDataExport;
+use App\Exports\Download\Met\DailyMetDataExport;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class DownloadWorkbookExport implements WithMultipleSheets
@@ -14,6 +15,7 @@ class DownloadWorkbookExport implements WithMultipleSheets
     // constructor to set HTTP request object to private variable
     public function __construct(Request $request = null)
     {
+        logger("DownloadWorkbookExport.construct() starts...");
         $this->request = $request;
     }
 
@@ -37,7 +39,8 @@ class DownloadWorkbookExport implements WithMultipleSheets
         } else if ($aggregation == 'senamhi_monthly') {
             // TODO
         } else if ($aggregation == 'daily_data') {
-            // TODO
+            $sheets[] = new DailyMetDataExport($this->request);
+            
         } else if ($aggregation == 'tendays_data') {
             // TODO
         } else if ($aggregation == 'monthly_data') {
