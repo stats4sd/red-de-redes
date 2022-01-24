@@ -20,7 +20,7 @@ class GenerateDailyMetData extends Migration
 "
 DROP PROCEDURE IF EXISTS `generate_daily_met_data`;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_daily_met_data`(IN id_aggregation_date VARCHAR(10), IN iv_station_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_daily_met_data`(IN id_date VARCHAR(10), IN iv_station_id INT)
 BEGIN
 
 /*
@@ -35,7 +35,7 @@ BEGIN
 
 	-- delete daily_met_data record for a specfic date and a specific station
 	DELETE FROM daily_met_data
-	WHERE fecha = id_aggregation_date
+	WHERE fecha = id_date
 	AND station_id = iv_station_id;
 	
 	-- generate daily_met_data record by summarizing all records for a specific date and a specific station
@@ -67,7 +67,7 @@ BEGIN
 	NOW(), NOW()
 	FROM met_data
 	WHERE fecha_hora BETWEEN 
-	id_aggregation_date AND DATE_ADD(DATE_ADD(id_aggregation_date, INTERVAL 1 DAY), INTERVAL -1 SECOND)
+	id_date AND DATE_ADD(DATE_ADD(id_date, INTERVAL 1 DAY), INTERVAL -1 SECOND)
 	AND station_id = iv_station_id
 	GROUP BY DATE_FORMAT(fecha_hora, '%Y-%m-%d'), station_id;
 	

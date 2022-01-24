@@ -17,8 +17,8 @@ class CreateMonthlyMetDataTable extends Migration
             // primray key
             $table->id();
 
-            // date and station id, requried fields
-            $table->integer('year_month');
+            // year month and station id, requried fields
+            $table->integer('year_and_month');
             $table->integer('station_id')->default('0');
 
             // aggregated fields, they can be null
@@ -63,7 +63,7 @@ class CreateMonthlyMetDataTable extends Migration
             $table->timestamps();
 
             // add index to speed up query
-            $table->index(array('year_month', 'station_id'), 'monthly_met_data_index');
+            $table->index(array('year_and_month', 'station_id'), 'monthly_met_data_index');
         });
     }
 

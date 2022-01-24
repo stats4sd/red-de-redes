@@ -20,7 +20,7 @@ class GenerateDailyMetDataByDate extends Migration
 "
 DROP PROCEDURE IF EXISTS `generate_daily_met_data_by_date`;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_daily_met_data_by_date`(IN id_aggregation_date VARCHAR(10))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_daily_met_data_by_date`(IN id_date VARCHAR(10))
 BEGIN
 
 /*
@@ -55,7 +55,7 @@ BEGIN
 	    END IF;
 	    
 	    -- call stored procedure to calculate daily_met_data for a specific date for a specific station
-	    CALL generate_daily_met_data(id_aggregation_date, station_id);
+	    CALL generate_daily_met_data(id_date, station_id);
     
     -- end loop
   	END LOOP read_loop;

@@ -40,7 +40,7 @@ BEGIN
 	SET v_from_month_first_day = CONCAT(ii_year, '-', ii_month, '-01 00:00:00');
 	
 	-- prepare first day of next month of To year To month
-	SET v_to_month_first_day = DATE_ADD(v_from_month_first_day, INTERVAL 1 MONTH);	
+	SET v_to_month_first_day = DATE_ADD(DATE_ADD(v_from_month_first_day, INTERVAL 1 MONTH), INTERVAL -1 SECOND);	
 	
 	-- prepare year month
 	SET i_year_month = ii_year * 100 + ii_month;
@@ -69,7 +69,7 @@ BEGIN
 	-- OPTION 1 - generate from met raw data
 	
 	-- generate monthly_met_data record by summarizing all met raw data records 
-	-- for a specific date and a specific station
+	-- for a specific month and a specific station
 	INSERT INTO monthly_met_data 
 	(year_and_month, station_id, 
 	max_temperatura_interna, min_temperatura_interna, avg_temperatura_interna,
@@ -109,7 +109,7 @@ BEGIN
 	-- OPTION 2 - generate from daily met data
 	
 	-- generate monthly_met_data record by summarizing all daily met data records 
-	-- for a specific date and a specific station
+	-- for a specific month and a specific station
 	INSERT INTO monthly_met_data 
 	(year_and_month, station_id, 
 	max_temperatura_interna, min_temperatura_interna, avg_temperatura_interna,

@@ -20,7 +20,7 @@ class GenerateDailyMetDataByDateRange extends Migration
 "
 DROP PROCEDURE IF EXISTS `generate_daily_met_data_by_date_range`;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_daily_met_data_by_date_range`(IN id_aggregation_from_date VARCHAR(10), IN id_aggregation_to_date VARCHAR(10))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_daily_met_data_by_date_range`(IN id_from_date VARCHAR(10), IN id_to_date VARCHAR(10))
 BEGIN
 
 /*
@@ -38,7 +38,7 @@ BEGIN
 	
 	
 	-- calculate date difference between to_date and from_date
-	SELECT DATEDIFF(id_aggregation_to_date, id_aggregation_from_date) INTO diff;
+	SELECT DATEDIFF(id_to_date, id_from_date) INTO diff;
 	
 	-- to_date must greater than or equal to from_date
 	-- do nothing if to_date is less than from_date
@@ -56,7 +56,7 @@ BEGIN
 			END IF;
 			
 			-- calculate a date
-			SELECT DATE_ADD(id_aggregation_from_date, INTERVAL counter DAY) INTO d_date;
+			SELECT DATE_ADD(id_from_date, INTERVAL counter DAY) INTO d_date;
 			
 			-- generate daily summary for all stations for a calculated date
 			CALL generate_daily_met_data_by_date(d_date);

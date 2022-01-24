@@ -71,7 +71,7 @@ BEGIN
 			SET i_year = DATE_FORMAT(d_date, '%Y');
 			SET i_month = DATE_FORMAT(d_date, '%m');
 
-			-- generate daily summary for all stations for a calculated date
+			-- generate monthly summary for all stations for a calculated date
 			CALL generate_monthly_met_data_by_month(i_year, i_month);
 			
 			-- increment counter
