@@ -6,7 +6,7 @@ use App\Models\Met\Station;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
-class DailyMetData extends Model
+class YearlyMetData extends Model
 {
     use CrudTrait;
 
@@ -18,7 +18,7 @@ class DailyMetData extends Model
 
     # use HasCompositePrimaryKey;
     protected $primaryKey = 'id';
-    protected $table = 'daily_met_data';
+    protected $table = 'yearly_met_data';
     protected $guarded = ['id'];
 
 

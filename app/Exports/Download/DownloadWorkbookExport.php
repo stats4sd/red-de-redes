@@ -5,6 +5,8 @@ namespace App\Exports\Download;
 use Illuminate\Http\Request;
 use App\Exports\Download\Met\MetDataExport;
 use App\Exports\Download\Met\DailyMetDataExport;
+use App\Exports\Download\Met\MonthlyMetDataExport;
+use App\Exports\Download\Met\YearlyMetDataExport;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class DownloadWorkbookExport implements WithMultipleSheets
@@ -44,9 +46,11 @@ class DownloadWorkbookExport implements WithMultipleSheets
         } else if ($aggregation == 'tendays_data') {
             // TODO
         } else if ($aggregation == 'monthly_data') {
-            // TODO
+            $sheets[] = new MonthlyMetDataExport($this->request);
+            
         } else if ($aggregation == 'yearly_data') {
-            // TODO
+            $sheets[] = new YearlyMetDataExport($this->request);
+
         }
 
 

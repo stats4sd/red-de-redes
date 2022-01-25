@@ -3,14 +3,14 @@
 namespace App\Exports\Download\Met;
 
 use Illuminate\Http\Request;
-use App\Models\Met\DailyMetData;
+use App\Models\Met\MonthlyMetData;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNullComparison, WithMapping
+class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNullComparison, WithMapping
 {
 
     // HTTP request
@@ -22,11 +22,13 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
     // constructor to set HTTP request object to private variable
     public function __construct(Request $request = null)
     {
+        logger("MonthlyMetDataExport.construct() starts...");
+
         $this->request = $request;
 
         $this->fields = [
             'station_id',
-            'fecha',
+            'year_and_month',
             //'id',
             'max_temperatura_interna',
             'min_temperatura_interna',
@@ -57,6 +59,7 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
             'expected_no_of_records',
             'created_at',
             'updated_at',
+
         ];
     }
 
@@ -64,44 +67,43 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
     * By using WithMapping, maps the data that needs to be added as a row.
     * That means you can "construct" the data for a row
     */
-    public function map($dailyMetData): array
+    public function map($monthlyMetData): array
     {
         return [
-            $dailyMetData->station_id,
-            $dailyMetData->fecha,
-            //$dailyMetData->id,
-            $dailyMetData->max_temperatura_interna,
-            $dailyMetData->min_temperatura_interna,
-            $dailyMetData->avg_temperatura_interna,
-            $dailyMetData->max_humedad_interna,
-            $dailyMetData->min_humedad_interna,
-            $dailyMetData->avg_humedad_interna,
-            $dailyMetData->max_temperatura_externa,
-            $dailyMetData->min_temperatura_externa,
-            $dailyMetData->avg_temperatura_externa,
-            $dailyMetData->max_humedad_externa,
-            $dailyMetData->min_humedad_externa,
-            $dailyMetData->avg_humedad_externa,
-            $dailyMetData->max_presion_relativa,
-            $dailyMetData->min_presion_relativa,
-            $dailyMetData->avg_presion_relativa,
-            $dailyMetData->max_presion_absoluta,
-            $dailyMetData->min_presion_absoluta,
-            $dailyMetData->avg_presion_absoluta,
-            $dailyMetData->max_velocidad_viento,
-            $dailyMetData->min_velocidad_viento,
-            $dailyMetData->avg_velocidad_viento,
-            $dailyMetData->max_sensacion_termica,
-            $dailyMetData->min_sensacion_termica,
-            $dailyMetData->avg_sensacion_termica,
-            $dailyMetData->lluvia_24_horas_total,
-            $dailyMetData->actual_no_of_records,
-            $dailyMetData->expected_no_of_records,
-            $dailyMetData->created_at,
-            $dailyMetData->updated_at,
+            $monthlyMetData->station_id,
+            $monthlyMetData->year_and_month,
+            //$monthlyMetData->id,
+            $monthlyMetData->max_temperatura_interna,
+            $monthlyMetData->min_temperatura_interna,
+            $monthlyMetData->avg_temperatura_interna,
+            $monthlyMetData->max_humedad_interna,
+            $monthlyMetData->min_humedad_interna,
+            $monthlyMetData->avg_humedad_interna,
+            $monthlyMetData->min_temperatura_externa,
+            $monthlyMetData->avg_temperatura_externa,
+            $monthlyMetData->max_humedad_externa,
+            $monthlyMetData->min_humedad_externa,
+            $monthlyMetData->avg_humedad_externa,
+            $monthlyMetData->max_presion_relativa,
+            $monthlyMetData->min_presion_relativa,
+            $monthlyMetData->avg_presion_relativa,
+            $monthlyMetData->max_presion_absoluta,
+            $monthlyMetData->min_presion_absoluta,
+            $monthlyMetData->avg_presion_absoluta,
+            $monthlyMetData->max_velocidad_viento,
+            $monthlyMetData->min_velocidad_viento,
+            $monthlyMetData->avg_velocidad_viento,
+            $monthlyMetData->max_sensacion_termica,
+            $monthlyMetData->min_sensacion_termica,
+            $monthlyMetData->avg_sensacion_termica,
+            $monthlyMetData->lluvia_24_horas_total,
+            $monthlyMetData->actual_no_of_records,
+            $monthlyMetData->expected_no_of_records,
+            $monthlyMetData->created_at,
+            $monthlyMetData->updated_at,
 
             // add additional field here
-            $dailyMetData->station->label,
+            $monthlyMetData->station->label,
         ];
     }
 
@@ -121,29 +123,27 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
         // convert station Ids from CSV format to an array
         $stationArray = str_getcsv($stationIds);
 
-        // prepare from date as first day of From Year, Month
-        $strFromDate = $fromYear . '-' . $fromMonth . '-01 00:00:00';
+        // prepare From Year and Month
+        $strFromYearAndMonth = $fromYear . $fromMonth;
 
-        // prepare to date as last day of To Year, Month
-        $tempToDate = $toYear . '-' . $toMonth . '-01';
-        $lastDateOfToMonth = date("Y-m-t", strtotime($tempToDate));
-        $strToDate =  $lastDateOfToMonth . ' 23:59:59';
+        // prepare To Year and Month
+        $strToYearAndMonth = $toYear . $toMonth;
 
         // whereIn for station Ids
-        // whereBetween used for From Date and To Date, date time is inclusive
-        // records are order by station Id and date time
-        $query = DailyMetData::select($this->fields)
+        // whereBetween used for From Year and Month and To Year and Month
+        // records are order by station Id and Year and Month
+        $query = MonthlyMetData::select($this->fields)
                  ->whereIn('station_id', $stationArray)
-                 ->whereBetween('fecha', [$strFromDate, $strToDate])
+                 ->whereBetween('year_and_month', [$strFromYearAndMonth, $strToYearAndMonth])
                  ->orderBy('station_id')
-                 ->orderBy('fecha');
+                 ->orderBy('year_and_month');
 
         return $query;
     }
 
     public function title(): string
     {
-        return 'Daily Met Data';
+        return 'Monthly Met Data';
     }
 
     public function headings(): array
