@@ -31,7 +31,7 @@
                     Aggregation *
                 </td>
                 <td>
-                    <select v-model="aggregationSelected">
+                    <select v-model="aggregationSelected" @change="aggregationChange">
                         <option v-for="aggregation in aggregations" :value="aggregation.value">{{ aggregation.label }}</option>
                     </select>
                 </td>
@@ -62,6 +62,32 @@
                     </select>
                     <select v-model="toYearSelected">
                         <option v-for="year in years" :value="year">{{ year }}</option>
+                    </select>
+                </td>
+            </tr>
+
+            <!-- meteo individual variables for Senamhi Daily, Senamhi Monthly, heatmap -->
+            <!-- TODO: show this selection box when aggreation is Senamhi Daily / Senamhi Monthly / heatmap -->
+            <tr>
+                <td>
+                    Individual Variable
+                </td>
+                <td>
+                    <select v-model="meteoIndividualVariableSelected">
+                        <option v-for="meteoIndividualVariable in meteoIndividualVariables" :value="meteoIndividualVariable.value">{{ meteoIndividualVariable.label }}</option>
+                    </select>
+                </td>
+            </tr>
+
+            <!-- meteo individual variables for time series, boxplot -->
+            <!-- TODO: show this selection box when aggreation is time series / boxplot -->
+            <tr>
+                <td>
+                    Variable Type
+                </td>
+                <td>
+                    <select v-model="meteoVariableTypeSelected">
+                        <option v-for="meteoVariableType in meteoVariableTypes" :value="meteoVariableType.value">{{ meteoVariableType.label }}</option>
                     </select>
                 </td>
             </tr>
@@ -197,7 +223,10 @@ export default {
                 {label: 'Diario', value:'daily_data'}, 
                 {label: 'Diez días', value:'tendays_data'}, 
                 {label: 'Mensual', value:'monthly_data'}, 
-                {label: 'Anual', value:'yearly_data'}
+                {label: 'Anual', value:'yearly_data'},
+                {label: 'Gráfico del inventario', value:'heatmap'},
+                {label: 'Gráfico de series temporales', value:'time_series'},
+                {label: 'Gráfico de caja (boxplot)', value:'boxplot'}
             ],
 
             months: [
@@ -227,6 +256,47 @@ export default {
                 2090,2091,2092,2093,2094,2095,2096,2097,2098,2099,
             ],
 
+            // meteo individual variables for Senamhi Daily, Senamhi Monthly, heatmap
+            meteoIndividualVariables: [
+                {label: 'Temperatura Máxima Interna (°C)', value:'max_temperatura_interna'}, 
+				{label: 'Temperatura Mínima Interna (°C)', value:'min_temperatura_interna'}, 
+				{label: 'Temperatura Media Interna (°C)', value:'avg_temperatura_interna'},
+                {label: 'Temperatura Máxima Externa (°C)', value:'max_temperatura_externa'}, 
+				{label: 'Temperatura Mínima Externa (°C)', value:'min_temperatura_externa'}, 
+				{label: 'Temperatura Media Externa (°C)', value:'avg_temperatura_externa'}, 
+                {label: 'Humedad Máxima Interna %', value:'max_humedad_interna'}, 
+				{label: 'Humedad Mínima Interna %', value:'min_humedad_interna'}, 
+				{label: 'Humedad Media Interna %', value:'avg_humedad_interna'},
+                {label: 'Humedad Máxima Externa %', value:'max_humedad_externa'}, 
+				{label: 'Humedad Mínima Externa %', value:'min_humedad_externa'}, 
+				{label: 'Humedad Media Externa %', value:'avg_humedad_externa'}, 
+                {label: 'Presion Relativa Máxima (hPa)', value:'max_presion_relativa'}, 
+				{label: 'Presion Relativa Mínima (hPa)', value:'min_presion_relativa'}, 
+				{label: 'Presion Relativa Media (hPa)', value:'avg_presion_relativa'}, 
+                {label: 'Presion Absoluta Máxima (hPa)', value:'max_presion_absoluta'}, 
+				{label: 'Presion Absoluta Mínima (hPa)', value:'min_presion_absoluta'}, 
+				{label: 'Presion Absoluta Media (hPa)', value:'avg_presion_absoluta'},
+                {label: 'Velocidad Viento Máxima (m/s)', value:'max_velocidad_viento'}, 
+				{label: 'Velocidad Viento Mínima (m/s)', value:'min_velocidad_viento'}, 
+				{label: 'Velocidad Viento Media (m/s)', value:'avg_velocidad_viento'},
+                {label: 'Sensacion Termica Máxima (°C)', value:'max_sensacion_termica'}, 
+				{label: 'Sensacion Termica Mínima (°C)', value:'min_sensacion_termica'}, 
+				{label: 'Sensacion Termica Media (°C)', value:'avg_sensacion_termica'}, 
+                {label: 'Precipitación Diaria (mm)', value:'lluvia_24_hors_total'} 
+            ],
+
+            // meteo variable types for time series, boxplot
+            meteoVariableTypes: [
+                {label: 'Temperatura Interna (°C)', value:'temperatura_interna'}, 
+                {label: 'Temperatura Externa (°C)', value:'temperatura_externa'}, 
+                {label: 'Humedad Interna %', value:'humedad_interna'}, 
+                {label: 'Humedad Externa %', value:'humedad_externa'}, 
+                {label: 'Presion Relativa (hPa)', value:'presion_relativa'}, 
+                {label: 'Presion Absoluta (hPa)', value:'presion_absoluta'}, 
+                {label: 'Velocidad Viento (m/s)', value:'velocidad_viento'}, 
+                {label: 'Sensacion Termica (°C)', value:'sensacion_termica'}, 
+                {label: 'Precipitación Diaria (mm)', value:'lluvia_24_hors_total'} 
+            ],
 
             // variables for storing the selected value(s) of corresponding selection box
 
@@ -239,9 +309,12 @@ export default {
             fromYearSelected: '',
             toMonthSelected: '',
             toYearSelected: '',
+            meteoIndividualVariableSelected: '',
+            meteoVariableTypeSelected: '',
             departamentoSelected: '',
             municipioSelected: '',
             comunidadSelected: '',
+
 
             // variable for storing checkbox value
             plotLevelSuelosSelected: false,
@@ -256,6 +329,10 @@ export default {
 
     // custom methods section
     methods: {
+        // TODO: to set corresponding flag to show related form element
+        aggregationChange() {
+            //alert("aggregationChange");
+        },
 
         // to reset municipio and comunidad when departmento is changed
         // to be called when departmento value changed
@@ -306,6 +383,8 @@ export default {
             result += 'Aggregation: ' + this.aggregationSelected + '\n'
             result += 'From : ' + this.fromMonthSelected + ' ' + this.fromYearSelected + '\n'
             result += 'To : ' + this.toMonthSelected + ' ' + this.toYearSelected + '\n'
+            result += 'Individual Variable: ' + this.meteoIndividualVariableSelected + '\n'
+            result += 'Variable Type: ' + this.meteoVariableTypeSelected + '\n'
             result += 'Departamento : ' + this.departamentoSelected  + '\n'
             result += 'Municipio  : ' + this.municipioSelected + '\n'
             result += 'Comunidad  : ' + this.comunidadSelected + '\n'
@@ -367,6 +446,23 @@ export default {
                 return;
             }
 
+            if (this.aggregationSelected == 'senamhi_daily' || this.aggregationSelected == 'senamhi_monthly' || 
+                this.aggregationSelected == 'heatmap') {
+                    if (this.meteoIndividualVariableSelected == '') {
+                        result = false;
+                        alert("Please select an individual variable");
+                        return;
+                    }
+            }
+
+            if (this.aggregationSelected == 'time_series' || this.aggregationSelected == 'boxplot') {
+                    if (this.meteoVariableTypeSelected == '') {
+                        result = false;
+                        alert("Please select a variable type");
+                        return;
+                    }
+            }
+
             if (this.departamentoSelected == '') {
                 result = false;
                 alert("Please select a departamento");
@@ -422,6 +518,8 @@ export default {
             this.fromYearSelected = '2020';
             this.toMonthSelected = '08';
             this.toYearSelected = '2020';
+            this.meteoIndividualVariableSelected = 'max_temperatura_interna';
+            this.meteoVariableTypeSelected = 'temperatura_interna';
 
             this.departamentoSelected = '1';
             this.municipioSelected = '1';
@@ -457,6 +555,8 @@ export default {
                         '&fromMonth=' + this.fromMonthSelected +
                         '&toYear=' + this.toYearSelected + 
                         '&toMonth=' + this.toMonthSelected + 
+                        '&meteoIndividualVariable=' + this.meteoIndividualVariableSelected +
+                        '&meteoVariableType=' + this.meteoVariableTypeSelected +
                         '&comunidad=' + this.comunidadSelected + 
                         '&plotLevelSuelos=' + this.plotLevelSuelosSelected + 
                         '&plotLevelManejoDeLaParcela=' + this.plotLevelManejoDeLaParcelaSelected + 
