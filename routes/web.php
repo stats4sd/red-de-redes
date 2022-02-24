@@ -26,10 +26,6 @@ Auth::routes();
 Route::resource('home', 'DataController')->middleware('auth');
 Route::post('download', [DataController::class,'download']);
 
-Route::get('weatherstations', function () {
-    return view('weatherstations');
-})->middleware('auth');
-
 Route::get('uploadsuccess', function () {
     return view('uploadsuccess');
 })->middleware('auth');
@@ -40,7 +36,7 @@ Route::post('show', [DataController::class,'show']);
 
 
 //NEW Upload page
-Route::view('data-upload', 'data-upload')->middleware('auth');
+Route::view('data-upload', 'dataupload')->middleware('auth');
 Route::post('files', [FileController::class,'store']);
 Route::post('storeFile/{uploader_id}', [FileController::class,'storeFile']);
 Route::post('cleanTable/{uploader_id}', [FileController::class,'cleanTable']);

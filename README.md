@@ -43,5 +43,9 @@ Projects are interested in using the data to generate information relevant to lo
 -  ERD available [here](https://lucid.app/documents#/documents?folder_id=215458044)
 -  Planner board for tasks / issues is [here](https://tasks.office.com/stats4sd.org/en-GB/Home/Planner#/plantaskboard?groupId=40f5e822-b9db-496e-bf81-cf9ccd17e172&planId=aAa-Za9xIkuJhU1D8sRg_ZYABS24)
 
+## Local Setup + Testing
+
+**Note**: If you bring in any of the live met data records to your local environment, you will likely need to set your MySQL timezone to Bolivia time (GMT -5) to avoid getting unique constraint errors at the daylight-savings points for your local timezone e.g. if your local db is set to default (and your computer is set to UK time), then the timestamps in met_data will resolve to show 2 x records for station id = 4 on 2011-10-30 01:00:00. Timezones are weird... 
+
 
 

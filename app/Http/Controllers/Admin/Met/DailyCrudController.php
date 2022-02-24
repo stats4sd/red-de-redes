@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use App\Models\Met\Daily;
 
 /**
  * Class DailyCrudController
@@ -30,7 +31,7 @@ class DailyCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        CRUD::setModel('App\Models\Met\Daily');
+        CRUD::setModel(Daily::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/daily');
         CRUD::setEntityNameStrings('diario', 'diario');
 

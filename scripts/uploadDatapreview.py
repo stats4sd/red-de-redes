@@ -24,7 +24,7 @@ import sys
 
 
 # get parameter values from command line arguments
-# including data file full path, user selected station id, 
+# including data file full path, user selected station id,
 # user selected unit for temperature, pressure, wind, rainfall,
 # uploader id, observeration id
 path = sys.argv[1]
@@ -55,7 +55,7 @@ def openFile():
         # specify na_values for additional strings to recognize as NA/NaN, including --.-, --, ---, ------
         # specify separater as Tab key
         # specify row 0 and row 1 to as column headers
-        # do not specify low_memory = False, internally process the file in chunks, 
+        # do not specify low_memory = False, internally process the file in chunks,
         # resulting in lower memory use while parsing, but possibly mixed type inference
         df = pd.read_csv(path, na_values=['--.-', '--', '---', '------'], sep="\t", header=[0,1])
 
@@ -119,19 +119,19 @@ def openFile():
 
         # pass the new columns_name to the dataframe
         df.columns = new_columns_names
- 
+
 
         # rename the column name for davis into column name for the database
         #
-        # ISSUE: column names are defined with UPPERCASE and lowercase, what if column name in data file not exactly matched 
+        # ISSUE: column names are defined with UPPERCASE and lowercase, what if column name in data file not exactly matched
         # with defined column name?
         #
         # SUGGESTION: to eliminate case difference for renaming column
         # to define column names in UPPERCASE, to change column name to UPPERCASE before calling .rename()
-        # 
+        #
         # UPDATE: Bolivia team agreed not to change column headers
         df = df.rename(columns=columns_name.list_columns_davis_text)
-       
+
 
         # define date_time as a new array for processing measurement date time
         date_time = []
@@ -166,7 +166,7 @@ def openFile():
             # e.g. 03/02/21 0:15  => 20210203015
             # e.g. 03/02/21 10:15 => 202102031015
             #
-            # SUGGESTION: 
+            # SUGGESTION:
             # 1. ensure each portion is 2 digits by adding leading zero
             # 2. add hour portion as "00", to form a complete date time format with fixed length
             # e.g. 03/02/21 0:15  => 20210203001500
@@ -192,7 +192,7 @@ def openFile():
 
 
         # add the station_id column
-        df['id_station'] = station_id
+        df['station_id'] = station_id
 
 
         # add the uploader_id column
@@ -265,8 +265,8 @@ def openFile():
         df.columns = df.columns.str.rstrip()
 
 
-        # add id_station column
-        df['id_station'] = station_id
+        # add station_id column
+        df['station_id'] = station_id
 
 
         # add the uploader_id column
@@ -288,7 +288,7 @@ def openFile():
         # replace columns name
         # rename the column name for chinas station into column name for the database
         #
-        # ISSUE: column names are defined with UPPERCASE and lowercase, what if column name in data file not exactly matched 
+        # ISSUE: column names are defined with UPPERCASE and lowercase, what if column name in data file not exactly matched
         # with defined column name?
         #
         # SUGGESTION: to eliminate case difference for renaming column
@@ -321,7 +321,7 @@ def openFile():
                 hours = date[1]+" "+date[2]
 
                 # convert time from 12 hour format to 24 hour format
-                hours = convertor.convert24(hours) 
+                hours = convertor.convert24(hours)
 
             # if there are not 3 portions in date array
             # i.e. only 2 portions in date array
@@ -348,7 +348,7 @@ def openFile():
             # e.g. 03/02/2021 0:15:00  => 2021020301500
             # e.g. 03/02/2021 10:15:00 => 20210203101500
             #
-            # SUGGESTION: 
+            # SUGGESTION:
             # 1. ensure each portion is 2 digits by adding leading zero
             # 2. add hour portion as "00", to form a complete date time format with fixed length
             # e.g. 03/02/2021 0:15:00  => 20210203001500
@@ -444,7 +444,7 @@ try:
 
 
         # construct INSERT SQL statement
-        sql = f"INSERT INTO `data_template` (`{cols}`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
+        sql = f"INSERT INTO `met_data_preview` (`{cols}`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
 
 
         # append INSERT SQL statement to data_value array for later execution

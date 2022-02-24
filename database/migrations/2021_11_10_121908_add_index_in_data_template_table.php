@@ -13,8 +13,8 @@ class AddIndexInDataTemplateTable extends Migration
      */
     public function up()
     {
-        Schema::table('data_template', function (Blueprint $table) {
-            $table->index(array('uploader_id', 'fecha_hora', 'id_station'), 'data_template_summary_index');
+        Schema::table('met_data_preview', function (Blueprint $table) {
+            $table->index(array('uploader_id', 'fecha_hora', 'station_id'), 'met_data_preview_summary_index');
         });
     }
 
@@ -25,8 +25,8 @@ class AddIndexInDataTemplateTable extends Migration
      */
     public function down()
     {
-        Schema::table('data_template', function (Blueprint $table) {
-            $table->dropIndex('data_template_summary_index');
+        Schema::table('met_data_preview', function (Blueprint $table) {
+            $table->dropIndex('met_data_preview_summary_index');
         });
     }
 }

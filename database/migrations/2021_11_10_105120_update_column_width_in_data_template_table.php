@@ -13,7 +13,7 @@ class UpdateColumnWidthInDataTemplateTable extends Migration
      */
     public function up()
     {
-        Schema::table('data_template', function (Blueprint $table) {
+        Schema::table('met_data_preview', function (Blueprint $table) {
             // change heat_days_d from 2 d.p. to 3 d.p.
             $table->decimal('heat_days_d', 9, 3)->nullable()->change();
 
@@ -29,7 +29,7 @@ class UpdateColumnWidthInDataTemplateTable extends Migration
      */
     public function down()
     {
-        Schema::table('data_template', function (Blueprint $table) {
+        Schema::table('met_data_preview', function (Blueprint $table) {
             // decimal is 2 d.p. by default
             $table->decimal('heat_days_d')->nullable()->change();
             $table->decimal('in_air_density')->nullable()->change();

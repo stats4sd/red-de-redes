@@ -490,8 +490,8 @@ export default {
             axios.post(rootUrl + '/files', formData, {}).then((result) => {
 
                 console.log(result)
-                this.total_rows = result.data.data_template.total;
-                this.previewData = result.data.data_template.data;
+                this.total_rows = result.data.met_data_preview.total;
+                this.previewData = result.data.met_data_preview.data;
                 this.uploader_id = (this.previewData[0]['uploader_id']);
 
                 // show advice message

@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Met\File;
 use DB;
-use App\File;
-
 use App\Models\Met\Daily;
 use App\Models\Met\Observation;
 use Illuminate\Http\JsonResponse;
-
-use App\Models\Daily;
 use \GuzzleHttp\Client;
-use App\Models\Observation;
 use Carbon\Carbon;
-
 use Illuminate\Http\Request;
 use App\Models\Met\MetDataPreview;
 use Illuminate\Support\Facades\Log;
@@ -87,6 +82,8 @@ class FileController extends Controller
                 $process = new Process(['python', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $isWindows, $newObservation_id]);
             }
 
+            $process->setWorkingDirectory(base_path());
+
             $process->run();
 
             Log::info($process->getOutput());
@@ -101,7 +98,7 @@ class FileController extends Controller
 
 
             // check number of uploaded records
-            $sqlUploadedRecords = " SELECT COUNT(*) as number_of_records FROM data_template WHERE uploader_id = '" . $uploader_id . "';";
+            $sqlUploadedRecords = " SELECT COUNT(*) as number_of_records FROM met_data_preview WHERE uploader_id = '" . $uploader_id . "';";
 
             // execute custom SELECT SQL
             $uploadedRecordsResults = DB::select($sqlUploadedRecords);
@@ -110,10 +107,10 @@ class FileController extends Controller
 
             // check number of records already existed in database
             $sqlExistedRecords = " SELECT COUNT(*) as number_of_records";
-            $sqlExistedRecords .= " FROM data ta, data_template tb";
+            $sqlExistedRecords .= " FROM met_data ta, met_data_preview tb";
             $sqlExistedRecords .= " WHERE tb.uploader_id = '" . $uploader_id . "'";
             $sqlExistedRecords .= " AND ta.fecha_hora = tb.fecha_hora";
-            $sqlExistedRecords .= " AND ta.id_station = tb.id_station;";
+            $sqlExistedRecords .= " AND ta.station_id = tb.station_id;";
 
             // execute custom SELECT SQL
             $existedRecordsResults = DB::select($sqlExistedRecords);
@@ -141,7 +138,7 @@ class FileController extends Controller
 
 
             return response()->json([
-                'data_template' => $data_template,
+                'met_data_preview' => $metDataPreview,
                 'number_uploaded_records' => $numberUploadedRecords,
                 'number_existed_records' => $numberExistedRecords,
                 'number_not_existed_records' => $numberNotExistedRecords,
@@ -279,10 +276,10 @@ class FileController extends Controller
     }
 
 
-    // when user click "Cancel" button, remove staging records in table data_template
+    // when user click "Cancel" button, remove staging records in table met_data_preview
     public function cleanTable($uploader_id)
     {
-        DB::table('data_template')->where('uploader_id', '=', $uploader_id)->delete();
+        DB::table('met_data_preview')->where('uploader_id', '=', $uploader_id)->delete();
 
         return Redirect::back();
 
@@ -290,7 +287,7 @@ class FileController extends Controller
 
 
     // when user click "Confirm" button, run Python program to "move" staging records from
-    // data_template table to data table
+    // met_data_preview table to data table
     public function storeFile($uploader_id)
     {
 

@@ -13,7 +13,7 @@ class ReplaceIdStationWithStationIdInMetDataTempTable extends Migration
      */
     public function up()
     {
-        Schema::table('met_data_temp', function (Blueprint $table) {
+        Schema::table('met_data_preview', function (Blueprint $table) {
             $table->renameColumn('id_station', 'station_id');
         });
     }
@@ -25,7 +25,7 @@ class ReplaceIdStationWithStationIdInMetDataTempTable extends Migration
      */
     public function down()
     {
-        Schema::table('met_data_temp', function (Blueprint $table) {
+        Schema::table('met_data_preview', function (Blueprint $table) {
             $table->renameColumn('station_id', 'id_station');
         });
     }

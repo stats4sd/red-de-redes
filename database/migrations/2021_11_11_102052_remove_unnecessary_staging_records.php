@@ -24,11 +24,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_unnecessary_staging_records`
 BEGIN
         
     /*
-        Stored procedure for removing accumulated unnecessary staging records in table data_template
+        Stored procedure for removing accumulated unnecessary staging records in table met_data_preview
     */
         
-    -- remove data_template records created 3 days before
-    DELETE FROM data_template 
+    -- remove met_data_preview records created 3 days before
+    DELETE FROM met_data_preview 
     WHERE created_at < DATE_SUB(NOW(), INTERVAL 3 DAY);
         
 END
