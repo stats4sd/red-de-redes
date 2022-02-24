@@ -12,19 +12,17 @@ use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
 class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNullComparison, WithMapping
 {
-
-    // HTTP request
-    protected $request;
+    protected array $query;
 
     // fields to be extracted
     protected $fields = [];
 
     // constructor to set HTTP request object to private variable
-    public function __construct(Request $request = null)
+    public function __construct(array $query = null)
     {
         logger("MonthlyMetDataExport.construct() starts...");
 
-        $this->request = $request;
+        $this->query = $query;
 
         $this->fields = [
             'station_id',
@@ -112,16 +110,15 @@ class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
     */
     public function query()
     {
-        // get station Ids, from month, from year, to month, to year from request
+        // get station Ids, from month, from year, to month, to year from request query
         // Vue component should have validated all of them, each of them should have value
-        $stationIds = $this->request->query('stations');
-        $fromMonth = $this->request->query('fromMonth');
-        $fromYear = $this->request->query('fromYear');
-        $toMonth = $this->request->query('toMonth');
-        $toYear = $this->request->query('toYear');
+        $stationIds = $this->query['stations'];
+        $fromMonth = $this->query['fromMonth'];
+        $fromYear = $this->query['fromYear'];
+        $toMonth = $this->query['toMonth'];
+        $toYear = $this->query['toYear'];
 
-        // convert station Ids from CSV format to an array
-        $stationArray = str_getcsv($stationIds);
+
 
         // prepare From Year and Month
         $strFromYearAndMonth = $fromYear . $fromMonth;
@@ -133,7 +130,7 @@ class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
         // whereBetween used for From Year and Month and To Year and Month
         // records are order by station Id and Year and Month
         $query = MonthlyMetData::select($this->fields)
-                 ->whereIn('station_id', $stationArray)
+                 ->whereIn('station_id', $stationIds)
                  ->whereBetween('year_and_month', [$strFromYearAndMonth, $strToYearAndMonth])
                  ->orderBy('station_id')
                  ->orderBy('year_and_month');
@@ -150,11 +147,10 @@ class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
     {
         // add extra column urban
         $headers = $this->fields;
-        
+
         // add additional header here
         array_push($headers, 'met_station');
 
         return $headers;
     }
-
 }

@@ -4,6 +4,7 @@ namespace App\Exports\Download\Met;
 
 use Illuminate\Http\Request;
 use App\Models\Met\DailyMetData;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -12,17 +13,18 @@ use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
 class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNullComparison, WithMapping
 {
+    use Exportable;
 
     // HTTP request
-    protected $request;
+    protected $query;
 
     // fields to be extracted
     protected $fields = [];
 
     // constructor to set HTTP request object to private variable
-    public function __construct(Request $request = null)
+    public function __construct(array $query = null)
     {
-        $this->request = $request;
+        $this->query = $query;
 
         $this->fields = [
             'station_id',
@@ -112,14 +114,12 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
     {
         // get station Ids, from month, from year, to month, to year from request
         // Vue component should have validated all of them, each of them should have value
-        $stationIds = $this->request->query('stations');
-        $fromMonth = $this->request->query('fromMonth');
-        $fromYear = $this->request->query('fromYear');
-        $toMonth = $this->request->query('toMonth');
-        $toYear = $this->request->query('toYear');
+        $stationIds = $this->query['stations'];
+        $fromMonth = $this->query['fromMonth'];
+        $fromYear = $this->query['fromYear'];
+        $toMonth = $this->query['toMonth'];
+        $toYear = $this->query['toYear'];
 
-        // convert station Ids from CSV format to an array
-        $stationArray = str_getcsv($stationIds);
 
         // prepare from date as first day of From Year, Month
         $strFromDate = $fromYear . '-' . $fromMonth . '-01 00:00:00';
@@ -132,11 +132,7 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
         // whereIn for station Ids
         // whereBetween used for From Date and To Date, date time is inclusive
         // records are order by station Id and date time
-        $query = DailyMetData::select($this->fields)
-                 ->whereIn('station_id', $stationArray)
-                 ->whereBetween('fecha', [$strFromDate, $strToDate])
-                 ->orderBy('station_id')
-                 ->orderBy('fecha');
+        $query = DailyMetData::select($fields)->whereIn('station_id', $stationIds)->whereBetween('fecha', [$strFromDate, $strToDate])->orderBy('station_id')->orderBy('fecha');
 
         return $query;
     }
@@ -150,11 +146,10 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
     {
         // add extra column urban
         $headers = $this->fields;
-        
+
         // add additional header here
         array_push($headers, 'met_station');
 
         return $headers;
     }
-
 }

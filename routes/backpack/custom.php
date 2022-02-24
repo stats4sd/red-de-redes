@@ -60,11 +60,6 @@ Route::group([
 
     Route::crud('station', StationCrudController::class);
 
-    Route::crud('met_raw_data', MetRawDataCrudController::class);
-
-
-
-
     Route::crud('region', RegionCrudController::class);
     Route::crud('departamento', DepartamentoCrudController::class);
     Route::crud('municipio', MunicipioCrudController::class);
@@ -91,6 +86,4 @@ Route::group([
     Route::crud('lkpcultivo', LkpCultivoCrudController::class);
     Route::crud('lkpvariedad', LkpVariedadCrudController::class);
     Route::crud('muestrasuelo', MuestraSueloCrudController::class);
-
-
 }); // this should be the absolute last line of this file

@@ -12,10 +12,12 @@
 */
 
 
-use App\Http\Controllers\Admin\Met\MetDataCrudController;
+use App\Http\Controllers\QrController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\FileController;
-use App\Http\Controllers\QrController;
+use App\Http\Controllers\MetDataController;
+use App\Http\Controllers\Admin\Met\MetDataCrudController;
+use App\Http\Controllers\DataProductController;
 
 Route::get('', function () {
     return redirect('/home');
@@ -37,7 +39,7 @@ Route::post('show', [DataController::class,'show']);
 Route::get('/data-download', function () {
     return view('data_download');
 });
-
+Route::post('/data-download/download', [DataProductController::class, 'index']);
 
 
 //NEW Upload page

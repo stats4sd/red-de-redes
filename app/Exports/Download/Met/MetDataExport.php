@@ -12,19 +12,17 @@ use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
 class MetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNullComparison, WithMapping
 {
-
-    // HTTP request
-    protected $request;
+    protected array $query;
 
     // fields to be extracted
-    protected $fields = [];
+    protected array $fields = [];
 
     // constructor to set HTTP request object to private variable
-    public function __construct(Request $request = null)
+    public function __construct(array $query = null)
     {
         logger("MetDataExport.construct() starts...");
 
-        $this->request = $request;
+        $this->query = $query;
 
         $this->fields = [
             'station_id',
@@ -80,7 +78,7 @@ class MetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNul
             'leaf_wet4',
             'wind_samp',
             'wind_tx',
-            'iss_recept',            
+            'iss_recept',
             'observation_id',
             'meteobridge_latitude',
             'meteobridge_longitude',
@@ -163,7 +161,7 @@ class MetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNul
             $metData->leaf_wet4,
             $metData->wind_samp,
             $metData->wind_tx,
-            $metData->iss_recept,            
+            $metData->iss_recept,
             $metData->observation_id,
             $metData->meteobridge_latitude,
             $metData->meteobridge_longitude,
@@ -195,14 +193,12 @@ class MetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNul
     {
         // get station Ids, from month, from year, to month, to year from request
         // Vue component should have validated all of them, each of them should have value
-        $stationIds = $this->request->query('stations');
-        $fromMonth = $this->request->query('fromMonth');
-        $fromYear = $this->request->query('fromYear');
-        $toMonth = $this->request->query('toMonth');
-        $toYear = $this->request->query('toYear');
+        $stationIds = $this->query['stations'];
+        $fromMonth = $this->query['fromMonth'];
+        $fromYear = $this->query['fromYear'];
+        $toMonth = $this->query['toMonth'];
+        $toYear = $this->query['toYear'];
 
-        // convert station Ids from CSV format to an array
-        $stationArray = str_getcsv($stationIds);
 
         // prepare from date as first day of From Year, Month
         $strFromDate = $fromYear . '-' . $fromMonth . '-01 00:00:00';
@@ -216,7 +212,7 @@ class MetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNul
         // whereBetween used for From Date and To Date, date time is inclusive
         // records are order by station Id and date time
         $query = MetData::select($this->fields)
-                 ->whereIn('station_id', $stationArray)
+                 ->whereIn('station_id', $stationIds)
                  ->whereBetween('fecha_hora', [$strFromDate, $strToDate])
                  ->orderBy('station_id')
                  ->orderBy('fecha_hora');
@@ -233,11 +229,10 @@ class MetDataExport implements FromQuery, WithTitle, WithHeadings, WithStrictNul
     {
         // add extra column urban
         $headers = $this->fields;
-        
+
         // TODO: add additional header here
         //array_push($headers, 'urban');
 
         return $headers;
     }
-
 }
