@@ -785,7 +785,7 @@
 
                         link.href = window.URL.createObjectURL(blob);
 
-                        //TODO - check this works!
+
                         var aggregationLabel = this.aggregations.filter((item) => item.value === this.form.aggregation)[0].label;
 
                         // prepare filename with current date and time
