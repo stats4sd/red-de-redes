@@ -20,7 +20,7 @@
                 </td>
                 <td>
                     <select v-model="form.stations" multiple>
-                        <option v-for="station in stations" :value="station.id">
+                        <option :key="station.id" v-for="station in stations" :value="station.id">
                             {{ station.id }}. {{ station.label }}
                         </option>
                     </select>
@@ -36,6 +36,7 @@
                     >
                         <option
                             v-for="aggregation in aggregations"
+                            :key="aggregation.value"
                             :value="aggregation.value"
                         >
                             {{ aggregation.label }}
@@ -48,13 +49,13 @@
                 <td>From *</td>
                 <td>
                     <select v-model="form.fromMonth">
-                        <option v-for="month in months" :value="month.value">
+                        <option v-for="month in months" :value="month.value" :key="month.value">
                             {{ month.label }}
                         </option>
                     </select>
 
                     <select v-model="form.fromYear">
-                        <option v-for="year in years" :value="year">
+                        <option v-for="year in years" :value="year" :key="year">
                             {{ year }}
                         </option>
                     </select>
@@ -65,12 +66,12 @@
                 <td>To *</td>
                 <td>
                     <select v-model="form.toMonth">
-                        <option v-for="month in months" :value="month.value">
+                        <option v-for="month in months" :value="month.value" :key="month.value">
                             {{ month.label }}
                         </option>
                     </select>
                     <select v-model="form.toYear">
-                        <option v-for="year in years" :value="year">
+                         <option v-for="year in years" :value="year" :key="year">
                             {{ year }}
                         </option>
                     </select>
@@ -86,6 +87,7 @@
                         <option
                             v-for="meteoIndividualVariable in meteoIndividualVariables"
                             :value="meteoIndividualVariable.value"
+                            :key="meteoIndividualVariable.value"
                         >
                             {{ meteoIndividualVariable.label }}
                         </option>
@@ -102,6 +104,7 @@
                         <option
                             v-for="meteoVariableType in meteoVariableTypes"
                             :value="meteoVariableType.value"
+                            :key="meteoVariableType"
                         >
                             {{ meteoVariableType.label }}
                         </option>
@@ -130,6 +133,7 @@
                         <option
                             v-for="departamento in departamentos"
                             :value="departamento.id"
+                            :key="departamento.id"
                         >
                             {{ departamento.name }}
                         </option>
@@ -147,6 +151,7 @@
                         <option
                             v-for="municipio in municipiosFiltered"
                             :value="municipio.id"
+                            :key="municipio.id"
                         >
                             {{ municipio.name }}
                         </option>
@@ -161,6 +166,7 @@
                         <option
                             v-for="comunidad in comunidadsFiltered"
                             :value="comunidad.id"
+                            :key="comunidad.id"
                         >
                             {{ comunidad.name }}
                         </option>

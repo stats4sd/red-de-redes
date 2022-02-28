@@ -22,7 +22,7 @@ class DataProductController extends Controller
         $aggregation = $query['aggregation'];
         // There are 3 seperate things that might happen here:
 
-        // 1. Generate an Excel file with Laravel Excel + return the resulting file path for download
+        // 1. Generate an Excel file with Laravel Excel + return the resulting file for download
         if ($aggregation === 'raw_data') {
             $filename = "Raw Met Data - ".Carbon::now()->format('Ymd_His').".xlsx";
             return Excel::download(new MetDataExport($query), $filename);

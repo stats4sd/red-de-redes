@@ -132,7 +132,7 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
         // whereIn for station Ids
         // whereBetween used for From Date and To Date, date time is inclusive
         // records are order by station Id and date time
-        $query = DailyMetData::select($fields)->whereIn('station_id', $stationIds)->whereBetween('fecha', [$strFromDate, $strToDate])->orderBy('station_id')->orderBy('fecha');
+        $query = DailyMetData::select($this->fields)->whereIn('station_id', $stationIds)->whereBetween('fecha', [$strFromDate, $strToDate])->orderBy('station_id')->orderBy('fecha');
 
         return $query;
     }
