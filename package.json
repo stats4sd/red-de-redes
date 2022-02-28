@@ -35,9 +35,7 @@
         "popper": "^1.0.1",
         "pusher-js": "^5.1.1",
         "sweetalert": "^2.1.2",
-        "vue-select": "^3.10.3",
         "vue-select2": "^0.2.6",
-        "vue2-leaflet": "^2.5.2",
         "vue": "^3.2.26",
         "vue-template-compiler": "^2.6.11"
     }
