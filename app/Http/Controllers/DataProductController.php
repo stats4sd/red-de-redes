@@ -70,7 +70,7 @@ class DataProductController extends Controller
             }
 
             // return file;
-            return base_path('scripts/R/senamhi_daily.csv');
+            return file_get_contents(base_path('scripts/R/senamhi_daily.csv'));
         }
 
         if ($aggregation === 'senamhi_monthly') {
@@ -88,7 +88,7 @@ class DataProductController extends Controller
             }
 
             // return file;
-            return base_path('scripts/R/senamhi_monthly.csv');
+            return file_get_contents(base_path('scripts/R/senamhi_monthly.csv'));
         }
 
 
