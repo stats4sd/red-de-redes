@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exports\TendaysExport;
 use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Storage;
 use App\Exports\Download\Met\MetDataExport;
 use App\Exports\Download\Met\DailyMetDataExport;
+use App\Exports\Download\Met\YearlyMetDataExport;
 use App\Exports\Download\Met\MonthlyMetDataExport;
 use App\Exports\Download\Met\TendaysMetDataExport;
-use App\Exports\Download\Met\YearlyMetDataExport;
-use App\Exports\TendaysExport;
-use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class DataProductController extends Controller
 {
@@ -57,18 +59,36 @@ class DataProductController extends Controller
 
             // TODO: setup + run Rscript process;
 
-            // get filename of Rscript output (+ move it to correct storage path if needed)
+            // senamhi_daily arguments: stations[0], fromYear, meteoIndividualVariable;
+            $process = new Process(["Rscript", base_path('scripts/R/senamhi_daily.R'), $query['stations'][0], $query['fromYear'], $query['meteoIndividualVariable']]);
+
+            $process->setWorkingDirectory(base_path('scripts/R'));
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
 
             // return file;
+            return base_path('scripts/R/senamhi_daily.csv');
         }
 
         if ($aggregation === 'senamhi_monthly') {
 
             // TODO: setup + run Rscript process;
 
-            // get filename of Rscript output (+ move it to correct storage path if needed)
+            // senamhi_monthly arguments: stations[0], fromYear, toYear meteoIndividualVariable;
+            $process = new Process(["Rscript", base_path('scripts/R/senamhi_monthly.R'), $query['stations'][0], $query['fromYear'], $query['toYear'], $query['meteoIndividualVariable']]);
+
+            $process->setWorkingDirectory(base_path('scripts/R'));
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
 
             // return file;
+            return base_path('scripts/R/senamhi_monthly.csv');
         }
 
 
