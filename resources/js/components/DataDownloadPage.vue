@@ -770,16 +770,28 @@
                     .then(response => {
                         console.log(response.data);
 
+                        var fileExt = "xlsx";
+                        var fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+
+                        if(this.form.aggregation === "senamhi_monthly" || this.form.aggregation === "senamhi_daily") {
+                            fileExt = "csv"
+                            fileType = "text/csv"
+                        }
+
                         // This code segment can trigger "Save As" dialog with a pre-defined file name
                         const blob = new Blob([response.data],
-                                        { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }),
+                                        { type: fileType }),
                                         link = document.createElement('a');
 
                         link.href = window.URL.createObjectURL(blob);
 
+
+                        var aggregationLabel = this.aggregations.filter((item) => item.value === this.form.aggregation)[0].label;
+
                         // prepare filename with current date and time
                         var today = new Date();
-                        var filename = "data_download - " +
+                        var filename = "Met Data - " +
+                                       aggregationLabel + " - " +
                                        today.getFullYear() +
                                        this.addLeadingZero(today.getMonth()+1) +
                                        this.addLeadingZero(today.getDate()+1) +
@@ -787,7 +799,8 @@
                                        this.addLeadingZero(today.getHours()) +
                                        this.addLeadingZero(today.getMinutes()) +
                                        this.addLeadingZero(today.getSeconds()) +
-                                       ".xlsx";
+                                       "." +
+                                       fileExt;
 
                         link.download = filename;
                         link.click();
