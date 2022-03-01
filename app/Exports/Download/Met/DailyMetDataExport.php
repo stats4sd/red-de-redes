@@ -128,9 +128,6 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
         $lastDateOfToMonth = date("Y-m-t", strtotime($tempToDate));
         $strToDate =  $lastDateOfToMonth . ' 23:59:59';
 
-        logger($strFromDate);
-        logger($strToDate);
-
         // whereIn for station Ids
         // whereBetween used for From Date and To Date, date time is inclusive
         // records are order by station Id and date time
