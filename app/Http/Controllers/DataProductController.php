@@ -8,7 +8,6 @@ use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
-use App\Exports\Download\Met\MetDataExport;
 use App\Exports\Download\Met\DailyMetDataExport;
 use App\Exports\Download\Met\YearlyMetDataExport;
 use App\Exports\Download\Met\MonthlyMetDataExport;
@@ -25,11 +24,6 @@ class DataProductController extends Controller
         // There are 3 seperate things that might happen here:
 
         // 1. Generate an Excel file with Laravel Excel + return the resulting file for download
-        if ($aggregation === 'raw_data') {
-            $filename = "Raw Met Data - ".Carbon::now()->format('Ymd_His').".xlsx";
-            return Excel::download(new MetDataExport($query), $filename);
-        }
-
         if ($aggregation === 'daily_data') {
             $filename = "Daily Met Data - ".Carbon::now()->format('Ymd_His').".xlsx";
             return Excel::download(new DailyMetDataExport($query), $filename);

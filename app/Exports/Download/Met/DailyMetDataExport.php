@@ -115,11 +115,10 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
         // get station Ids, from month, from year, to month, to year from request
         // Vue component should have validated all of them, each of them should have value
         $stationIds = $this->query['stations'];
-        $fromMonth = $this->query['fromMonth'];
+        $fromMonth = "01";
         $fromYear = $this->query['fromYear'];
-        $toMonth = $this->query['toMonth'];
+        $toMonth = "12";
         $toYear = $this->query['toYear'];
-
 
         // prepare from date as first day of From Year, Month
         $strFromDate = $fromYear . '-' . $fromMonth . '-01 00:00:00';
@@ -128,6 +127,9 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
         $tempToDate = $toYear . '-' . $toMonth . '-01';
         $lastDateOfToMonth = date("Y-m-t", strtotime($tempToDate));
         $strToDate =  $lastDateOfToMonth . ' 23:59:59';
+
+        logger($strFromDate);
+        logger($strToDate);
 
         // whereIn for station Ids
         // whereBetween used for From Date and To Date, date time is inclusive

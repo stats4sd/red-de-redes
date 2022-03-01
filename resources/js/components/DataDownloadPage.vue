@@ -8,7 +8,7 @@
         <table width="500" border="1" cellpadding="5" cellspacing="2">
             <tr>
                 <td colspan="2" bgcolor="lightblue">
-                    <b>Criteria for Met Data</b>
+                    <b>Section 1. Met Data</b>
                 </td>
             </tr>
 
@@ -48,12 +48,6 @@
             <tr>
                 <td>From *</td>
                 <td>
-                    <select v-model="form.fromMonth">
-                        <option v-for="month in months" :value="month.value" :key="month.value">
-                            {{ month.label }}
-                        </option>
-                    </select>
-
                     <select v-model="form.fromYear">
                         <option v-for="year in years" :value="year" :key="year">
                             {{ year }}
@@ -65,11 +59,6 @@
             <tr>
                 <td>To *</td>
                 <td>
-                    <select v-model="form.toMonth">
-                        <option v-for="month in months" :value="month.value" :key="month.value">
-                            {{ month.label }}
-                        </option>
-                    </select>
                     <select v-model="form.toYear">
                          <option v-for="year in years" :value="year" :key="year">
                             {{ year }}
@@ -97,6 +86,7 @@
 
             <!-- meteo individual variables for time series, boxplot -->
             <!-- TODO: show this selection box when aggreation is time series / boxplot -->
+            <!--
             <tr>
                 <td>Variable Type</td>
                 <td>
@@ -111,15 +101,18 @@
                     </select>
                 </td>
             </tr>
+            -->
+
         </table>
 
         <br />
 
         <!-- Criteria for agronomic data -->
+        <!--
         <table width="500" border="1" cellpadding="5" cellspacing="2">
             <tr>
                 <td colspan="2" bgcolor="lightgreen">
-                    <b>Criteria for Agronomic Data</b>
+                    <b>Section 3. Agronomic Data</b>
                 </td>
             </tr>
 
@@ -234,6 +227,8 @@
         </table>
 
         <br />
+        -->
+        
 
         <table width="500" border="0" cellpadding="5" cellspacing="2">
             <tr>
@@ -272,6 +267,105 @@
                 </td>
             </tr>
         </table>
+
+        <br/>
+
+
+        <!-- Criteria for additional graph -->
+        <table width="500" border="1" cellpadding="5" cellspacing="2">
+            <tr>
+                <td colspan="2" bgcolor="lightblue">
+                    <b>Section 2. Additional Graphs</b>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Graph Type *</td>
+                <td>
+                    <select v-model="graphForm.graphType">
+                        <option
+                            v-for="graphType in graphTypes"
+                            :value="graphType.value"
+                            :key="graphType"
+                        >
+                            {{ graphType.label }}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td width="200">
+                    Met Station *
+                </td>
+                <td>
+                    <select v-model="graphForm.station">
+                        <option :key="station.id" v-for="station in stations" :value="station.id">
+                            {{ station.id }}. {{ station.label }}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>From *</td>
+                <td>
+                    <select v-model="graphForm.fromYear">
+                        <option v-for="year in years" :value="year" :key="year">
+                            {{ year }}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>To *</td>
+                <td>
+                    <select v-model="graphForm.toYear">
+                         <option v-for="year in years" :value="year" :key="year">
+                            {{ year }}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+
+            <!-- meteo individual variables for time series, boxplot -->
+            <tr>
+                <td>Variable Type</td>
+                <td>
+                    <select v-model="graphForm.meteoVariableType">
+                        <option
+                            v-for="meteoVariableType in meteoVariableTypes"
+                            :value="meteoVariableType.value"
+                            :key="meteoVariableType"
+                        >
+                            {{ meteoVariableType.label }}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+        <br/>
+
+
+        <table width="500" border="0" cellpadding="5" cellspacing="2">
+            <tr>
+                <td align="center">
+                    <input
+                        type="button"
+                        @click="showGraph"
+                        id="btnSubmit"
+                        name="btnSubmit"
+                        value="Submit"
+                    />
+                </td>
+            </tr>
+        </table>
+
+        <br/>
+
+
     </div>
 </template>
 
@@ -297,33 +391,13 @@
                 comunidadsFiltered: [],
 
                 // pre-defined options for corresponding selection box
-                // added "Raw Data" for illustration temporary
                 aggregations: [
-                    { label: "Raw Data", value: "raw_data" },
                     { label: "Senamhi Diario", value: "senamhi_daily" },
                     { label: "Senamhi Mensual", value: "senamhi_monthly" },
                     { label: "Diario", value: "daily_data" },
                     { label: "Diez días", value: "tendays_data" },
                     { label: "Mensual", value: "monthly_data" },
                     { label: "Anual", value: "yearly_data" },
-                    { label: "Gráfico del inventario", value: "heatmap" },
-                    { label: "Gráfico de series temporales", value: "time_series" },
-                    { label: "Gráfico de caja (boxplot)", value: "boxplot" },
-                ],
-
-                months: [
-                    { label: "Jan", value: "01" },
-                    { label: "Feb", value: "02" },
-                    { label: "Mar", value: "03" },
-                    { label: "Apr", value: "04" },
-                    { label: "May", value: "05" },
-                    { label: "Jun", value: "06" },
-                    { label: "Jul", value: "07" },
-                    { label: "Aug", value: "08" },
-                    { label: "Sep", value: "09" },
-                    { label: "Oct", value: "10" },
-                    { label: "Nov", value: "11" },
-                    { label: "Dec", value: "12" },
                 ],
 
                 years: [
@@ -442,6 +516,12 @@
                     },
                 ],
 
+                // graph types
+                graphTypes: [
+                    { label: "Gráfico de series temporales", value: "time_series" },
+                    { label: "Gráfico de caja (boxplot)", value: "boxplot" },
+                ],
+
                 // meteo variable types for time series, boxplot
                 meteoVariableTypes: [
                     {
@@ -472,12 +552,9 @@
 
                     // variable for storing single value selected
                     aggregation: "",
-                    fromMonth: "",
                     fromYear: "",
-                    toMonth: "",
                     toYear: "",
                     meteoIndividualVariable: "",
-                    meteoVariableType: "",
                     departamento: "",
                     municipio: "",
                     comunidad: "",
@@ -491,6 +568,14 @@
                     cropLevelRendimientos: false,
                 },
 
+                graphForm: {
+                    graphType: "",
+                    station: "",
+                    fromYear: "",
+                    toYear: "",
+                    meteoVariableType: "",
+                },
+
             };
         },
 
@@ -501,14 +586,16 @@
                 //alert("aggregationChange");
             },
 
+            // comment temporary when "Agronomic Data" is hidden
+            /*
             // to reset municipio and comunidad when departmento is changed
             // to be called when departmento value changed
             departamentoChanged() {
                 //alert("departamentoChanged");
 
                 // reset municipio and comunidad
-                this.municipioSelected = "";
-                this.comunidadSelected = "";
+                this.form.municipio = "";
+                this.form.comunidad = "";
 
                 // filter municipios that belong to selected departamento
                 this.municipiosFiltered = this.municipios.filter(
@@ -521,7 +608,7 @@
 
             // to determine each municipio whether belongs to the selected departamento
             checkMunicipio(municipio) {
-                return municipio.departamento_id == this.departamentoSelected;
+                return municipio.departamento_id == this.form.departamento;
             },
 
             // to reset comunidad when municipio is changed
@@ -530,7 +617,7 @@
                 //alert("municipioChanged");
 
                 // reset comunidad
-                this.comunidadSelected = "";
+                this.form.comunidad = "";
 
                 // filter municipios that belong to selected municipio
                 this.comunidadsFiltered = this.comunidads.filter(
@@ -540,8 +627,9 @@
 
             // to determine each comunidad item whether belongs to the selected municipio
             checkComunidad(comunidad) {
-                return comunidad.municipio_id == this.municipioSelected;
+                return comunidad.municipio_id == this.form.municipio;
             },
+            */
 
             // to show selected values for checking
             // to be called when "Show Values" button is clicked
@@ -550,39 +638,38 @@
 
                 var result = "";
 
-                result += "Met station: " + this.stationsSelected + "\n";
-                result += "Aggregation: " + this.aggregationSelected + "\n";
+                result += "Met station: " + this.form.stations + "\n";
+                result += "Aggregation: " + this.form.aggregation + "\n";
                 result +=
-                    "From : " +
-                    this.fromMonthSelected +
-                    " " +
-                    this.fromYearSelected +
+                    "From: " +
+                    this.form.fromYear +
                     "\n";
                 result +=
-                    "To : " +
-                    this.toMonthSelected +
-                    " " +
-                    this.toYearSelected +
+                    "To: " +
+                    this.form.toYear +
                     "\n";
                 result +=
                     "Individual Variable: " +
-                    this.meteoIndividualVariableSelected +
+                    this.form.meteoIndividualVariable +
                     "\n";
-                result += "Variable Type: " + this.meteoVariableTypeSelected + "\n";
-                result += "Departamento : " + this.departamentoSelected + "\n";
-                result += "Municipio  : " + this.municipioSelected + "\n";
-                result += "Comunidad  : " + this.comunidadSelected + "\n";
-                result += "Suelos  : " + this.plotLevelSuelosSelected + "\n";
+                result += "Variable Type: " + this.form.meteoVariableType + "\n";
+
+                /*
+                result += "Departamento: " + this.form.departamento + "\n";
+                result += "Municipio: " + this.form.municipio + "\n";
+                result += "Comunidad: " + this.form.comunidad + "\n";
+                result += "Suelos: " + this.form.plotLevelSuelos + "\n";
                 result +=
-                    "Manejo de la parcela  : " +
-                    this.plotLevelManejoDeLaParcelaSelected +
+                    "Manejo de la parcela: " +
+                    this.form.plotLevelManejoDeLaParcela +
                     "\n";
-                result += "Fenologia  : " + this.cropLevelFenologiaSelected + "\n";
-                result += "Plagas  : " + this.cropLevelPlagasSelected + "\n";
+                result += "Fenologia: " + this.form.cropLevelFenologia + "\n";
+                result += "Plagas: " + this.form.cropLevelPlagas + "\n";
                 result +=
-                    "Enfermedades  : " + this.cropLevelEnfermedadesSelected + "\n";
+                    "Enfermedades: " + this.form.cropLevelEnfermedades + "\n";
                 result +=
-                    "Rendimientos  : " + this.cropLevelRendimientosSelected + "\n";
+                    "Rendimientos: " + this.form.cropLevelRendimientos + "\n";
+                */
 
                 alert(result);
             },
@@ -594,47 +681,34 @@
 
                 // array empty or does not exist
                 if (
-                    this.form.stationsSelected === undefined ||
-                    this.form.stationsSelected.length == 0
+                    this.form.stations === undefined ||
+                    this.form.stations.length == 0
                 ) {
                     result = false;
                     alert("Please select at least one met station");
                     return;
                 }
 
-                if (this.form.aggregationSelected == "") {
+                if (this.form.aggregation == "") {
                     result = false;
                     alert("Please select an aggregation");
                     return;
                 }
 
-                if (this.form.fromMonthSelected == "") {
-                    result = false;
-                    alert("Please select a From Month");
-                    return;
-                }
-
-                if (this.form.fromYearSelected == "") {
+                if (this.form.fromYear == "") {
                     result = false;
                     alert("Please select a From Year");
                     return;
                 }
 
-                if (this.form.toMonthSelected == "") {
-                    result = false;
-                    alert("Please select a To Month");
-                    return;
-                }
-
-                if (this.form.toYearSelected == "") {
+                if (this.form.toYear == "") {
                     result = false;
                     alert("Please select a To Year");
                     return;
                 }
 
                 if (
-                    this.form.fromYearSelected + this.form.fromMonthSelected >
-                    this.form.toYearSelected + this.form.toMonthSelected
+                    this.form.fromYear > this.form.toYear 
                 ) {
                     result = false;
                     alert("Report duration 'From' should be earlier than 'To'");
@@ -642,41 +716,44 @@
                 }
 
                 if (
-                    this.form.aggregationSelected == "senamhi_daily" ||
-                    this.form.aggregationSelected == "senamhi_monthly" ||
-                    this.form.aggregationSelected == "heatmap"
+                    this.form.aggregation == "senamhi_daily" ||
+                    this.form.aggregation == "senamhi_monthly"
+                    // || this.form.aggregation == "heatmap"
                 ) {
-                    if (this.form.meteoIndividualVariableSelected == "") {
+                    if (this.form.meteoIndividualVariable == "") {
                         result = false;
                         alert("Please select an individual variable");
                         return;
                     }
                 }
 
+                /*
                 if (
-                    this.form.aggregationSelected == "time_series" ||
-                    this.form.aggregationSelected == "boxplot"
+                    this.form.aggregation == "time_series" ||
+                    this.form.aggregation == "boxplot"
                 ) {
-                    if (this.form.meteoVariableTypeSelected == "") {
+                    if (this.form.meteoVariableType == "") {
                         result = false;
                         alert("Please select a variable type");
                         return;
                     }
                 }
+                */
 
-                if (this.form.departamentoSelected == "") {
+                /*
+                if (this.form.departamento == "") {
                     result = false;
                     alert("Please select a departamento");
                     return;
                 }
 
-                if (this.form.municipioSelected == "") {
+                if (this.form.municipio == "") {
                     result = false;
                     alert("Please select a municipio");
                     return;
                 }
 
-                if (this.form.comunidadSelected == "") {
+                if (this.form.comunidad == "") {
                     result = false;
                     alert("Please select a comunidad");
                     return;
@@ -685,8 +762,8 @@
                 // question: TBC, is plot level data a compulsory criteria?
                 // plot level data, need to check at least one option
                 if (
-                    !this.form.plotLevelSuelosSelected &&
-                    !this.form.plotLevelManejoDeLaParcelaSelected
+                    !this.form.plotLevelSuelos &&
+                    !this.form.plotLevelManejoDeLaParcela
                 ) {
                     result = false;
                     alert("Please select at least one plot level data");
@@ -696,15 +773,16 @@
                 // question: TBC, is crop level data a compulsory criteria?
                 // crop level data, need to check at least one option
                 if (
-                    !this.form.cropLevelFenologiaSelected &&
-                    !this.form.cropLevelPlagasSelected &&
-                    !this.form.cropLevelEnfermedadesSelected &&
-                    !this.form.cropLevelRendimientosSelected
+                    !this.form.cropLevelFenologia &&
+                    !this.form.cropLevelPlagas &&
+                    !this.form.cropLevelEnfermedades &&
+                    !this.form.cropLevelRendimientos
                 ) {
                     result = false;
                     alert("Please select at least one crop level data");
                     return;
                 }
+                */
 
                 // check validation result
                 if (result) {
@@ -722,24 +800,24 @@
             // to be called when "Assign Values" button is clicked
             assignValues() {
                 this.form = {
-                    stationsSelected: ["1", "2", "3", "6"],
-                    aggregationSelected: "raw_data",
-                    fromMonthSelected: "08",
-                    fromYearSelected: "2020",
-                    toMonthSelected: "08",
-                    toYearSelected: "2020",
-                    meteoIndividualVariableSelected: "max_temperatura_interna",
-                    meteoVariableTypeSelected: "temperatura_interna",
+                    stations: ["1", "2", "3", "6"],
+                    aggregation: "daily_data",
+                    fromYear: "2010",
+                    toYear: "2020",
+                    meteoIndividualVariable: "max_temperatura_interna",
+                    meteoVariableType: "temperatura_interna",
 
-                    departamentoSelected: "1",
-                    municipioSelected: "1",
-                    comunidadSelected: "1",
-                    plotLevelSuelosSelected: "true",
-                    plotLevelManejoDeLaParcelaSelected: "false",
-                    cropLevelFenologiaSelected: "true",
-                    cropLevelPlagasSelected: "true",
-                    cropLevelEnfermedadesSelected: "false",
-                    cropLevelRendimientosSelected: "false",
+                    /*
+                    departamento: "1",
+                    municipio: "1",
+                    comunidad: "1",
+                    plotLevelSuelos: "true",
+                    plotLevelManejoDeLaParcela: "false",
+                    cropLevelFenologia: "true",
+                    cropLevelPlagas: "true",
+                    cropLevelEnfermedades: "false",
+                    cropLevelRendimientos: "false",
+                    */
                 }
             },
 
@@ -806,6 +884,15 @@
                         link.click();
                     })
             },
+
+            // to send request for showing a graph
+            // to be called when "Submit" button in Additional graph section is clicked
+            showGraph() {
+                alert("showGraph");
+
+                // TODO: send HTTP POST request to generate graph
+
+            },
         },
 
         // Vue life cycle event section
@@ -818,18 +905,18 @@
             axios.get("api/stations").then((response) => {
                 this.stations = response.data;
             }),
-                // get all departmentos from table departamento
-                axios.get("api/departamentos").then((response) => {
-                    this.departamentos = response.data;
-                }),
-                // get all municipios from table municipio
-                axios.get("api/municipios").then((response) => {
-                    this.municipios = response.data;
-                }),
-                // get all comunidads from table comunidad
-                axios.get("api/comunidads").then((response) => {
-                    this.comunidads = response.data;
-                });
+            // get all departmentos from table departamento
+            axios.get("api/departamentos").then((response) => {
+                this.departamentos = response.data;
+            }),
+            // get all municipios from table municipio
+            axios.get("api/municipios").then((response) => {
+                this.municipios = response.data;
+            }),
+            // get all comunidads from table comunidad
+            axios.get("api/comunidads").then((response) => {
+                this.comunidads = response.data;
+            });
         },
 
         components: {},

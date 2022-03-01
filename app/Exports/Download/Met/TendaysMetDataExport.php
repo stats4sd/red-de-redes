@@ -118,12 +118,10 @@ class TendaysMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
         // get station Ids, from month, from year, to month, to year from request query
         // Vue component should have validated all of them, each of them should have value
         $stationIds = $this->query['stations'];
-        $fromMonth = $this->query['fromMonth'];
+        $fromMonth = "01";
         $fromYear = $this->query['fromYear'];
-        $toMonth = $this->query['toMonth'];
+        $toMonth = "12";
         $toYear = $this->query['toYear'];
-
-
 
         // prepare From Year and Month
         $strFromYearAndMonth = $fromYear . $fromMonth;
