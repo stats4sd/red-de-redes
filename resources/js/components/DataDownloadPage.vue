@@ -56,10 +56,11 @@
                 </td>
             </tr>
 
+            <!-- disable this criteria when aggregation is Senamhi Daily -->
             <tr>
                 <td>To *</td>
                 <td>
-                    <select v-model="form.toYear">
+                    <select v-model="form.toYear" :disabled="form.aggregation == 'senamhi_daily'">
                          <option v-for="year in years" :value="year" :key="year">
                             {{ year }}
                         </option>
@@ -67,12 +68,11 @@
                 </td>
             </tr>
 
-            <!-- meteo individual variables for Senamhi Daily, Senamhi Monthly, heatmap -->
-            <!-- TODO: show this selection box when aggreation is Senamhi Daily / Senamhi Monthly / heatmap -->
+            <!-- disable this criteria when aggreation is not Senamhi Daily or Senamhi Monthly -->
             <tr>
                 <td>Individual Variable</td>
                 <td>
-                    <select v-model="form.meteoIndividualVariable">
+                    <select v-model="form.meteoIndividualVariable" :disabled="form.aggregation != 'senamhi_daily' && form.aggregation != 'senamhi_monthly'">
                         <option
                             v-for="meteoIndividualVariable in meteoIndividualVariables"
                             :value="meteoIndividualVariable.value"
@@ -84,29 +84,12 @@
                 </td>
             </tr>
 
-            <!-- meteo individual variables for time series, boxplot -->
-            <!-- TODO: show this selection box when aggreation is time series / boxplot -->
-            <!--
-            <tr>
-                <td>Variable Type</td>
-                <td>
-                    <select v-model="form.meteoVariableType">
-                        <option
-                            v-for="meteoVariableType in meteoVariableTypes"
-                            :value="meteoVariableType.value"
-                            :key="meteoVariableType"
-                        >
-                            {{ meteoVariableType.label }}
-                        </option>
-                    </select>
-                </td>
-            </tr>
-            -->
-
         </table>
 
         <br />
 
+
+        <!-- comment temporary when "Agronomic Data" is hidden -->
         <!-- Criteria for agronomic data -->
         <!--
         <table width="500" border="1" cellpadding="5" cellspacing="2">
@@ -228,7 +211,7 @@
 
         <br />
         -->
-        
+
 
         <table width="500" border="0" cellpadding="5" cellspacing="2">
             <tr>
@@ -555,6 +538,7 @@
                     fromYear: "",
                     toYear: "",
                     meteoIndividualVariable: "",
+
                     departamento: "",
                     municipio: "",
                     comunidad: "",
@@ -584,6 +568,7 @@
             // TODO: to set corresponding flag to show related form element
             aggregationChange() {
                 //alert("aggregationChange");
+
             },
 
             // comment temporary when "Agronomic Data" is hidden
@@ -701,44 +686,39 @@
                     return;
                 }
 
-                if (this.form.toYear == "") {
-                    result = false;
-                    alert("Please select a To Year");
-                    return;
-                }
+                // To year is not necessary for senamhi daily
+                if (this.form.aggregation != "senamhi_daily") {
+                    if (this.form.toYear == "") {
+                        result = false;
+                        alert("Please select a To Year");
+                        return;
+                    }
 
-                if (
-                    this.form.fromYear > this.form.toYear 
-                ) {
-                    result = false;
-                    alert("Report duration 'From' should be earlier than 'To'");
-                    return;
+                    if (
+                        this.form.fromYear > this.form.toYear 
+                    ) {
+                        result = false;
+                        alert("Report duration 'From' should be earlier than 'To'");
+                        return;
+                    }
                 }
 
                 if (
                     this.form.aggregation == "senamhi_daily" ||
                     this.form.aggregation == "senamhi_monthly"
-                    // || this.form.aggregation == "heatmap"
                 ) {
+                    if (this.form.stations.length > 1) {
+                        result = false;
+                        alert("For senamhi daily or senamhi monthly, please select one met station only");
+                        return;
+                    }
+
                     if (this.form.meteoIndividualVariable == "") {
                         result = false;
                         alert("Please select an individual variable");
                         return;
                     }
                 }
-
-                /*
-                if (
-                    this.form.aggregation == "time_series" ||
-                    this.form.aggregation == "boxplot"
-                ) {
-                    if (this.form.meteoVariableType == "") {
-                        result = false;
-                        alert("Please select a variable type");
-                        return;
-                    }
-                }
-                */
 
                 /*
                 if (this.form.departamento == "") {
