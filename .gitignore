@@ -18,3 +18,4 @@ yarn-error.log
 .phpunit.result.cache
 /scripts/dbConfig.py
 .Rproj.user
+/scripts/R/.Rhistory
