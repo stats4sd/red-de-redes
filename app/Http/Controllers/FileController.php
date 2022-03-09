@@ -74,8 +74,10 @@ class FileController extends Controller
                 $newObservation_id = "null";
             }
 
+
             if (config('app.pipenv')) {
                 $isWindows = 0;
+                //dd(collect(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $isWindows, $newObservation_id])->join(" "));
                 $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $isWindows, $newObservation_id]);
             } else {
                 $isWindows = 1;

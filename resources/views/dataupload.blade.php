@@ -16,3 +16,14 @@
      
 
 @endsection
+
+
+
+@section('javascript')
+
+    <!-- to include Axios CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+
+    <script src="js/data_upload.js"></script>
+    
+@endsection

@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\LkpVariedadCrudController;
 use App\Http\Controllers\Admin\Met\DailyCrudController;
 use App\Http\Controllers\Admin\Met\DailyDataPreviewCrudController;
 use App\Http\Controllers\Admin\Met\MetDataCrudController;
+use App\Http\Controllers\Admin\Met\MetRawDataCrudController;
 use App\Http\Controllers\Admin\Met\MonthlyCrudController;
 use App\Http\Controllers\Admin\Met\ObservationCrudController;
 use App\Http\Controllers\Admin\Met\TenDaysCrudController;
@@ -59,9 +60,6 @@ Route::group([
 
     Route::crud('station', StationCrudController::class);
 
-
-
-
     Route::crud('region', RegionCrudController::class);
     Route::crud('departamento', DepartamentoCrudController::class);
     Route::crud('municipio', MunicipioCrudController::class);
@@ -88,6 +86,4 @@ Route::group([
     Route::crud('lkpcultivo', LkpCultivoCrudController::class);
     Route::crud('lkpvariedad', LkpVariedadCrudController::class);
     Route::crud('muestrasuelo', MuestraSueloCrudController::class);
-
-
 }); // this should be the absolute last line of this file

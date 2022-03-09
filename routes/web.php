@@ -12,10 +12,13 @@
 */
 
 
-use App\Http\Controllers\Admin\Met\MetDataCrudController;
+use App\Http\Controllers\QrController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\FileController;
-use App\Http\Controllers\QrController;
+use App\Http\Controllers\Admin\Met\MetDataCrudController;
+use App\Http\Controllers\DataProductController;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 Route::get('', function () {
     return redirect('/home');
@@ -34,6 +37,11 @@ Route::resource('stations', 'StationController');
 
 Route::post('show', [DataController::class,'show']);
 
+Route::get('/data-download', function () {
+    return view('data_download');
+});
+Route::post('/data-download/download', [DataProductController::class, 'index']);
+
 
 //NEW Upload page
 Route::view('data-upload', 'dataupload')->middleware('auth');
@@ -50,3 +58,19 @@ Route::view('qr-codes', 'qr_code')->name('qr-codes');
 
 Route::post('qr-newcodes', [QrController::class,'newCodes'])->name('qr-newcodes');
 Route::get('qr-print', [QrController::class,'printView'])->name('qr-print');
+
+
+
+
+Route::get('rtest', function(){
+    $process = new Process(['/Program Files/R/R-3.6.1/bin/Rscript.exe', 'updated_test.R']);
+        $process->setWorkingDirectory(base_path('scripts/R'));
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        ddd('ok');
+});
