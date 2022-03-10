@@ -18,19 +18,29 @@ stations_table <- tbl(con, "stations") %>%
 
 daily_met_data_table <- tbl(con, "daily_met_data")
 
+args <- commandArgs(TRUE)
+selected_station <- args[1]
+selected_start_year <- args[2]
+selected_end_year <- args[3]
+selected_variable <- args[4]
 
-selected_station <- 1
-selected_start_year <- "2016"
-selected_end_year <- "2020"
-selected_variable <- "max_temperatura_interna"
-
-
-data <- daily_met_data_table %>%
+if(selected_variable == "fecha")  {
+    data <- daily_met_data_table %>%
           mutate(month=sql(MONTH(fecha)),
                   year=sql(YEAR(fecha))) %>%
           filter(station_id==selected_station & year>=selected_start_year & year<=selected_end_year) %>%
-          select(station_id, fecha, selected_variable) %>%
+          select(station_id, fecha) %>%
+          mutate(fecha_var = fecha) %>%
           collect()
+}else {
+
+    data <- daily_met_data_table %>%
+            mutate(month=sql(MONTH(fecha)),
+                    year=sql(YEAR(fecha))) %>%
+            filter(station_id==selected_station & year>=selected_start_year & year<=selected_end_year) %>%
+            select(station_id, fecha, selected_variable) %>%
+            collect()
+}
 
 data$station_id <- as.factor(data$station_id)
 data$fecha <- as.Date(data$fecha)
