@@ -82,7 +82,7 @@ class DataProductController extends Controller
 
                 // return file;
                 // question: it maybe a problem when two or more users are generating senamhi daily, user A may get result of user B
-                return file_get_contents(base_path('scripts/R/senamhi_daily.csv'));
+                return file_get_contents(base_path('scripts/R/senamhi_daily.xlsx'));
             }
 
             if ($aggregation === 'senamhi_monthly') {
@@ -101,7 +101,7 @@ class DataProductController extends Controller
 
                 // return file;
                 // question: it maybe a problem when two or more users are generating senamhi daily, user A may get result of user B
-                return file_get_contents(base_path('scripts/R/senamhi_monthly.csv'));
+                return file_get_contents(base_path('scripts/R/senamhi_monthly.xlsx'));
             }
 
         }

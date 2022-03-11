@@ -979,10 +979,12 @@
                         var fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
                         // generated file is in CSV file format for senamhi_monthly, senamhi_daily
+                        /*
                         if (this.form.aggregation === "senamhi_monthly" || this.form.aggregation === "senamhi_daily") {
                             fileExt = "csv";
                             fileType = "text/csv";
                         }
+                        */
 
                         // This code segment can trigger "Save As" dialog with a pre-defined file name
                         const blob = new Blob([response.data],
