@@ -495,7 +495,7 @@
                     },
                     {
                         label: "Precipitación Diaria (mm)",
-                        value: "lluvia_24_hors_total",
+                        value: "lluvia_24_horas_total",
                     },
                 ],
 
@@ -523,7 +523,7 @@
                     { label: "Sensacion Termica (°C)", value: "sensacion_termica" },
                     {
                         label: "Precipitación Diaria (mm)",
-                        value: "lluvia_24_hors_total",
+                        value: "lluvia_24_horas_total",
                     },
                 ],
 
