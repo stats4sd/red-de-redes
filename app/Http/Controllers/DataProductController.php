@@ -114,10 +114,18 @@ class DataProductController extends Controller
             if ($graphType === 'heatmap') {
 
                 // If the user has not specified a variable, we should show the inventory graph for "fecha", as that will show when *any* records exist, regardless of the values that are included in each observation.
-                $variable = $query['meteoIndividualVariable'] ?? "fecha";
+                //$variable = $query['meteoIndividualVariable'] ?? "fecha";
+
+                // variable set to "fecha" by default for heatmap graph generation
+                // use user selected value only for semamhi daily and senamhi monthly
+                $variable = "fecha";
+
+                if ($query['aggregation'] === 'senamhi_daily' || $query['aggregation'] === 'senamhi_monthly') {
+                    $variable = $query['meteoIndividualVariable'];
+                }
 
                 // senamhi_monthly arguments: stations[0], fromYear, toYear meteoIndividualVariable;
-                $process = new Process(["Rscript", base_path('scripts/R/graph_heatmap.R'), $query['stations'][0], $query['fromYear'], $query['toYear'], $variable]);
+                $process = new Process(["Rscript", base_path('scripts/R/graph_heatmap.R'), $query['aggregation'], $query['stations'][0], $query['fromYear'], $query['toYear'], $variable]);
 
                 $process->setWorkingDirectory(base_path('scripts/R'));
                 $process->run();
