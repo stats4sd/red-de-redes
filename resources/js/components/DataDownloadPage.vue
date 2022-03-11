@@ -382,9 +382,10 @@
 
         <td width="500" align="center" bgcolor="lightyellow">
             <div id="graph2">
-                Graph 2
+                <img :src="graphForm.graph2Url" width="500" height="300">
             </div>
         </td>
+
 
         </tr>
 
@@ -616,6 +617,7 @@
                     toYear: "",
                     meteoIndividualVariable: "",
 
+                    /*
                     departamento: "",
                     municipio: "",
                     comunidad: "",
@@ -627,8 +629,17 @@
                     cropLevelPlagas: false,
                     cropLevelEnfermedades: false,
                     cropLevelRendimientos: false,
+                    */
 
-                    graph1Url: '',
+                    // action type can be "show_graph" or "download_file"
+                    actionType: "",
+
+                    // heatmap is the only available graph type in Section 1. Met Data
+                    graphType: "heatmap",
+
+                    // to store the URL of the graph 1 to be showed in front end
+                    graph1Url: "/images/graph/blank5x5.png",
+                    
                 },
 
                 graphForm: {
@@ -637,6 +648,12 @@
                     fromYear: "",
                     toYear: "",
                     meteoVariableType: "",
+
+                    // action type can be "show_graph" or "download_file"
+                    actionType: "",
+
+                    // to store the URL of the graph 2 to be showed in front end
+                    graph2Url: "/images/graph/blank5x5.png",
                 },
 
             };
@@ -749,8 +766,11 @@
                     meteoIndividualVariable: "max_temperatura_interna",
                     meteoVariableType: "temperatura_interna",
                     
+                    // set graph type as "heatmap"
+                    graphType: "heatmap",
+
                     // set to transparent empty image
-                    graph1Url: "",
+                    graph1Url: "/images/graph/blank5x5.png",
 
                     /*
                     departamento: "1",
@@ -888,21 +908,41 @@
             showGraph1() {
                 //alert("Show graph 1");
 
-                // 1. validate all criteria
-                // 2. Send POST request to call R script program to generate graph
-                // 3. Controller returns a URL for the generated graph
-                // 4. Set generated graph URL to Vue prorperty
-                // 5. Update graph1 div to display the generated graph
+                this.showPleaseWaitInGraph1();
+                this.form.graph1Url = "/images/graph/please_wait.png";
 
-                alert("The graph is being generated, please wait...");
+                // construct URL with parameter values
+                var reportUrl = "/data-download/download"
 
-                this.form.graph1Url = 'https://ieltsband7.com/wp-content/uploads/2016/09/image001-2.png';
+                this.form.actionType = "show_graph";
+
+                // show "Please wait..." image
+                this.form.graph1Url = "/images/graph/please_wait.png";
+
+                // axios send request to generate graph to be showed in front end
+                // the primary objective is to show whether there is met data for specified criteria
+                axios
+                    .post(reportUrl, this.form, {
+
+                    })
+                    .then(response => {
+                        //console.log(response.data);
+
+                        // set the URL of generated graph to form variable graph1Url, img src and graph will be updated by Vue automatically
+                        this.form.graph1Url = response.data;
+                    })
+            },
+
+            showPleaseWaitInGraph1() {
+                this.form.graph1Url = "/images/graph/please_wait.png";
             },
 
             // to send request for generate a graph to be showed
             // to be called when "Show Graph" button in 2. Additional Graphs section is clicked
             showGraph2() {
                 alert("Show graph 2");
+
+                this.graphForm.actionType = "show_graph";
 
             },
 
@@ -924,21 +964,24 @@
                 // construct URL with parameter values
                 var reportUrl = "/data-download/download"
 
-                // axios send request to generate excel file for download
-                // TODO: how to keep the original generated file name?
+                this.form.actionType = "download_file";
+
+                // axios send request to generate file for download
                 axios
                     .post(reportUrl, this.form, {
                         responseType: 'arraybuffer'
                     })
                     .then(response => {
-                        console.log(response.data);
+                        //console.log(response.data);
 
+                        // generated file is in Excel file format for daily, tendays, monthly, yearly
                         var fileExt = "xlsx";
                         var fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
-                        if(this.form.aggregation === "senamhi_monthly" || this.form.aggregation === "senamhi_daily") {
-                            fileExt = "csv"
-                            fileType = "text/csv"
+                        // generated file is in CSV file format for senamhi_monthly, senamhi_daily
+                        if (this.form.aggregation === "senamhi_monthly" || this.form.aggregation === "senamhi_daily") {
+                            fileExt = "csv";
+                            fileType = "text/csv";
                         }
 
                         // This code segment can trigger "Save As" dialog with a pre-defined file name
@@ -948,7 +991,7 @@
 
                         link.href = window.URL.createObjectURL(blob);
 
-
+                        // get aggregation from form, use it as a part of the filename
                         var aggregationLabel = this.aggregations.filter((item) => item.value === this.form.aggregation)[0].label;
 
                         // prepare filename with current date and time
