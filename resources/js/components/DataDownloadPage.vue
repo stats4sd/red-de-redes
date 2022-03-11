@@ -4,86 +4,101 @@
             <h2>Data Download Page</h2>
         </div>
 
-        <!-- Criteria for met data -->
-        <table width="500" border="1" cellpadding="5" cellspacing="2">
-            <tr>
-                <td colspan="2" bgcolor="lightblue">
-                    <b>Section 1. Met Data</b>
-                </td>
-            </tr>
+        <table width="100%" border="0">
+        <tr>
+        <td>
 
-            <tr>
-                <td width="200">
-                    Met Station *
-                    <br /><br />
-                    <p>(Press [Cntl] for multiple selection)</p>
-                </td>
-                <td>
-                    <select v-model="form.stations" multiple>
-                        <option :key="station.id" v-for="station in stations" :value="station.id">
-                            {{ station.id }}. {{ station.label }}
-                        </option>
-                    </select>
-                </td>
-            </tr>
+            <!-- Criteria for met data -->
+            <table width="500" border="1" cellpadding="5" cellspacing="2">
+                <tr>
+                    <td colspan="2" bgcolor="lightblue">
+                        <b>Section 1. Met Data</b>
+                    </td>
+                </tr>
 
-            <tr>
-                <td>Aggregation *</td>
-                <td>
-                    <select
-                        v-model="form.aggregation"
-                        @change="aggregationChange"
-                    >
-                        <option
-                            v-for="aggregation in aggregations"
-                            :key="aggregation.value"
-                            :value="aggregation.value"
+                <tr>
+                    <td width="200">
+                        Met Station *
+                        <br /><br />
+                        <p>(Press [Cntl] for multiple selection)</p>
+                    </td>
+                    <td>
+                        <select v-model="form.stations" multiple>
+                            <option :key="station.id" v-for="station in stations" :value="station.id">
+                                {{ station.id }}. {{ station.label }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Aggregation *</td>
+                    <td>
+                        <select
+                            v-model="form.aggregation"
+                            @change="aggregationChange"
                         >
-                            {{ aggregation.label }}
-                        </option>
-                    </select>
-                </td>
-            </tr>
+                            <option
+                                v-for="aggregation in aggregations"
+                                :key="aggregation.value"
+                                :value="aggregation.value"
+                            >
+                                {{ aggregation.label }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
 
-            <tr>
-                <td>From *</td>
-                <td>
-                    <select v-model="form.fromYear">
-                        <option v-for="year in years" :value="year" :key="year">
-                            {{ year }}
-                        </option>
-                    </select>
-                </td>
-            </tr>
+                <tr>
+                    <td>From *</td>
+                    <td>
+                        <select v-model="form.fromYear">
+                            <option v-for="year in years" :value="year" :key="year">
+                                {{ year }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
 
-            <!-- disable this criteria when aggregation is Senamhi Daily -->
-            <tr>
-                <td>To *</td>
-                <td>
-                    <select v-model="form.toYear" :disabled="form.aggregation == 'senamhi_daily'">
-                         <option v-for="year in years" :value="year" :key="year">
-                            {{ year }}
-                        </option>
-                    </select>
-                </td>
-            </tr>
+                <!-- disable this criteria when aggregation is Senamhi Daily -->
+                <tr>
+                    <td>To *</td>
+                    <td>
+                        <select v-model="form.toYear" :disabled="form.aggregation == 'senamhi_daily'">
+                            <option v-for="year in years" :value="year" :key="year">
+                                {{ year }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
 
-            <!-- disable this criteria when aggreation is not Senamhi Daily or Senamhi Monthly -->
-            <tr>
-                <td>Individual Variable</td>
-                <td>
-                    <select v-model="form.meteoIndividualVariable" :disabled="form.aggregation != 'senamhi_daily' && form.aggregation != 'senamhi_monthly'">
-                        <option
-                            v-for="meteoIndividualVariable in meteoIndividualVariables"
-                            :value="meteoIndividualVariable.value"
-                            :key="meteoIndividualVariable.value"
-                        >
-                            {{ meteoIndividualVariable.label }}
-                        </option>
-                    </select>
-                </td>
-            </tr>
+                <!-- disable this criteria when aggreation is not Senamhi Daily or Senamhi Monthly -->
+                <tr>
+                    <td>Individual Variable</td>
+                    <td>
+                        <select v-model="form.meteoIndividualVariable" :disabled="form.aggregation != 'senamhi_daily' && form.aggregation != 'senamhi_monthly'">
+                            <option
+                                v-for="meteoIndividualVariable in meteoIndividualVariables"
+                                :value="meteoIndividualVariable.value"
+                                :key="meteoIndividualVariable.value"
+                            >
+                                {{ meteoIndividualVariable.label }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
 
+            </table>
+
+        </td>
+
+        <td width="500" align="center" bgcolor="lightyellow">
+            <div id="graph1">
+                <img :src="form.graph1Url" width="500" height="300">
+            </div>
+        </td>
+        
+        </tr>
         </table>
 
         <br />
@@ -213,138 +228,200 @@
         -->
 
 
-        <table width="500" border="0" cellpadding="5" cellspacing="2">
-            <tr>
-                <td align="center">
-                    <input
-                        type="button"
-                        @click="showValues"
-                        id="btnShowValues"
-                        name="btnShowValues"
-                        value="Show Values"
-                    />
-                    &nbsp;
-                    <input
-                        type="button"
-                        @click="validateValues"
-                        id="btnValidate"
-                        name="btnValidate"
-                        value="Validate"
-                    />
-                    &nbsp;
-                    <input
-                        type="button"
-                        @click="assignValues"
-                        id="btnAssign"
-                        name="btnAssign"
-                        value="Assign Values"
-                    />
-                    &nbsp;
-                    <input
-                        type="button"
-                        @click="downloadData"
-                        id="btnSubmit"
-                        name="btnSubmit"
-                        value="Submit"
-                    />
-                </td>
-            </tr>
+        <table width="100%" border="0">
+        <tr>
+        <td>
+
+            <table width="500" border="0" cellpadding="5" cellspacing="2">
+                <tr>
+                    <td align="center">
+                        <input
+                            type="button"
+                            @click="showValues"
+                            id="btnShowValues"
+                            name="btnShowValues"
+                            value="Show Values"
+                        />
+                        &nbsp;
+                        <input
+                            type="button"
+                            @click="assignValues"
+                            id="btnAssign"
+                            name="btnAssign"
+                            value="Assign Values"
+                        />
+                        &nbsp;
+                        <input
+                            type="button"
+                            @click="validateValues"
+                            id="btnValidate"
+                            name="btnValidate"
+                            value="Validate"
+                        />
+                        &nbsp;
+                        <input
+                            type="button"
+                            @click="showGraph1"
+                            id="btnShowGraph1"
+                            name="btnShowGraph1"
+                            value="Show Graph"
+                        />
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+
+        <td width="500">
+
+            <table width="500" border="0" cellpadding="5" cellspacing="2">
+                <tr>
+                    <td align="center">
+                        <input
+                            type="button"
+                            @click="downloadData"
+                            id="btnSubmit"
+                            name="btnSubmit"
+                            value="Download File"
+                        />
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+
+        </tr>
+
         </table>
 
         <br/>
 
 
-        <!-- Criteria for additional graph -->
-        <table width="500" border="1" cellpadding="5" cellspacing="2">
-            <tr>
-                <td colspan="2" bgcolor="lightblue">
-                    <b>Section 2. Additional Graphs</b>
-                </td>
-            </tr>
 
-            <tr>
-                <td>Graph Type *</td>
-                <td>
-                    <select v-model="graphForm.graphType">
-                        <option
-                            v-for="graphType in graphTypes"
-                            :value="graphType.value"
-                            :key="graphType"
-                        >
-                            {{ graphType.label }}
-                        </option>
-                    </select>
-                </td>
-            </tr>
+        <table width="100%" border="0">
+        <tr>
+        <td>
 
-            <tr>
-                <td width="200">
-                    Met Station *
-                </td>
-                <td>
-                    <select v-model="graphForm.station">
-                        <option :key="station.id" v-for="station in stations" :value="station.id">
-                            {{ station.id }}. {{ station.label }}
-                        </option>
-                    </select>
-                </td>
-            </tr>
 
-            <tr>
-                <td>From *</td>
-                <td>
-                    <select v-model="graphForm.fromYear">
-                        <option v-for="year in years" :value="year" :key="year">
-                            {{ year }}
-                        </option>
-                    </select>
-                </td>
-            </tr>
+            <!-- Criteria for additional graph -->
+            <table width="500" border="1" cellpadding="5" cellspacing="2">
+                <tr>
+                    <td colspan="2" bgcolor="lightblue">
+                        <b>Section 2. Additional Graphs</b>
+                    </td>
+                </tr>
 
-            <tr>
-                <td>To *</td>
-                <td>
-                    <select v-model="graphForm.toYear">
-                         <option v-for="year in years" :value="year" :key="year">
-                            {{ year }}
-                        </option>
-                    </select>
-                </td>
-            </tr>
+                <tr>
+                    <td>Graph Type *</td>
+                    <td>
+                        <select v-model="graphForm.graphType">
+                            <option
+                                v-for="graphType in graphTypes"
+                                :value="graphType.value"
+                                :key="graphType"
+                            >
+                                {{ graphType.label }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
 
-            <!-- meteo individual variables for time series, boxplot -->
-            <tr>
-                <td>Variable Type</td>
-                <td>
-                    <select v-model="graphForm.meteoVariableType">
-                        <option
-                            v-for="meteoVariableType in meteoVariableTypes"
-                            :value="meteoVariableType.value"
-                            :key="meteoVariableType"
-                        >
-                            {{ meteoVariableType.label }}
-                        </option>
-                    </select>
-                </td>
-            </tr>
+                <tr>
+                    <td width="200">
+                        Met Station *
+                    </td>
+                    <td>
+                        <select v-model="graphForm.station">
+                            <option :key="station.id" v-for="station in stations" :value="station.id">
+                                {{ station.id }}. {{ station.label }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>From *</td>
+                    <td>
+                        <select v-model="graphForm.fromYear">
+                            <option v-for="year in years" :value="year" :key="year">
+                                {{ year }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>To *</td>
+                    <td>
+                        <select v-model="graphForm.toYear">
+                            <option v-for="year in years" :value="year" :key="year">
+                                {{ year }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+
+                <!-- meteo individual variables for time series, boxplot -->
+                <tr>
+                    <td>Variable Type</td>
+                    <td>
+                        <select v-model="graphForm.meteoVariableType">
+                            <option
+                                v-for="meteoVariableType in meteoVariableTypes"
+                                :value="meteoVariableType.value"
+                                :key="meteoVariableType"
+                            >
+                                {{ meteoVariableType.label }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+
+        <td width="500" align="center" bgcolor="lightyellow">
+            <div id="graph2">
+                Graph 2
+            </div>
+        </td>
+
+        </tr>
+
         </table>
+
 
         <br/>
 
 
-        <table width="500" border="0" cellpadding="5" cellspacing="2">
-            <tr>
-                <td align="center">
-                    <input
-                        type="button"
-                        @click="showGraph"
-                        id="btnSubmit"
-                        name="btnSubmit"
-                        value="Submit"
-                    />
-                </td>
-            </tr>
+        <table width="100%" border="0">
+        <tr>
+        <td>
+
+            <table width="500" border="0" cellpadding="5" cellspacing="2">
+                <tr>
+                    <td align="center">
+                        <input
+                            type="button"
+                            @click="showGraph2"
+                            id="btnSubmit"
+                            name="btnSubmit"
+                            value="Show Graph"
+                        />
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+
+        <td width="500">
+            <!-- it is an empty cell -->
+        </td>
+
+        </tr>
+
         </table>
+
 
         <br/>
 
@@ -550,6 +627,8 @@
                     cropLevelPlagas: false,
                     cropLevelEnfermedades: false,
                     cropLevelRendimientos: false,
+
+                    graph1Url: '',
                 },
 
                 graphForm: {
@@ -657,6 +736,34 @@
                 */
 
                 alert(result);
+            },
+
+            // to assign values to criteria to ease testing
+            // to be called when "Assign Values" button is clicked
+            assignValues() {
+                this.form = {
+                    stations: ["1", "2", "3", "6"],
+                    aggregation: "daily_data",
+                    fromYear: "2010",
+                    toYear: "2020",
+                    meteoIndividualVariable: "max_temperatura_interna",
+                    meteoVariableType: "temperatura_interna",
+                    
+                    // set to transparent empty image
+                    graph1Url: "",
+
+                    /*
+                    departamento: "1",
+                    municipio: "1",
+                    comunidad: "1",
+                    plotLevelSuelos: "true",
+                    plotLevelManejoDeLaParcela: "false",
+                    cropLevelFenologia: "true",
+                    cropLevelPlagas: "true",
+                    cropLevelEnfermedades: "false",
+                    cropLevelRendimientos: "false",
+                    */
+                }
             },
 
             validateValues() {
@@ -776,29 +883,27 @@
                 }
             },
 
-            // to assign values to criteria to ease testing
-            // to be called when "Assign Values" button is clicked
-            assignValues() {
-                this.form = {
-                    stations: ["1", "2", "3", "6"],
-                    aggregation: "daily_data",
-                    fromYear: "2010",
-                    toYear: "2020",
-                    meteoIndividualVariable: "max_temperatura_interna",
-                    meteoVariableType: "temperatura_interna",
+            // to send request for generate a graph to be showed
+            // to be called when "Show Graph" button in 1. Met Data section is clicked
+            showGraph1() {
+                //alert("Show graph 1");
 
-                    /*
-                    departamento: "1",
-                    municipio: "1",
-                    comunidad: "1",
-                    plotLevelSuelos: "true",
-                    plotLevelManejoDeLaParcela: "false",
-                    cropLevelFenologia: "true",
-                    cropLevelPlagas: "true",
-                    cropLevelEnfermedades: "false",
-                    cropLevelRendimientos: "false",
-                    */
-                }
+                // 1. validate all criteria
+                // 2. Send POST request to call R script program to generate graph
+                // 3. Controller returns a URL for the generated graph
+                // 4. Set generated graph URL to Vue prorperty
+                // 5. Update graph1 div to display the generated graph
+
+                alert("The graph is being generated, please wait...");
+
+                this.form.graph1Url = 'https://ieltsband7.com/wp-content/uploads/2016/09/image001-2.png';
+            },
+
+            // to send request for generate a graph to be showed
+            // to be called when "Show Graph" button in 2. Additional Graphs section is clicked
+            showGraph2() {
+                alert("Show graph 2");
+
             },
 
             // to adding leading zero for value less than 10
@@ -865,14 +970,6 @@
                     })
             },
 
-            // to send request for showing a graph
-            // to be called when "Submit" button in Additional graph section is clicked
-            showGraph() {
-                alert("showGraph");
-
-                // TODO: send HTTP POST request to generate graph
-
-            },
         },
 
         // Vue life cycle event section
