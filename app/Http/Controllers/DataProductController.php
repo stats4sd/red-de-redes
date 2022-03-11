@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Exports\TendaysExport;
 use Illuminate\Support\Carbon;
@@ -25,24 +26,24 @@ class DataProductController extends Controller
 
         // 1. Generate an Excel file with Laravel Excel + return the resulting file for download
         if ($aggregation === 'daily_data') {
-            $filename = "Daily Met Data - ".Carbon::now()->format('Ymd_His').".xlsx";
+            $filename = "Daily Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
             return Excel::download(new DailyMetDataExport($query), $filename);
         }
 
         if ($aggregation === 'tendays_data') {
-            $filename = "Tendays Met Data - ".Carbon::now()->format('Ymd_His').".xlsx";
+            $filename = "Tendays Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
 
             return Excel::download(new TendaysMetDataExport($query), $filename);
         }
 
         if ($aggregation === 'monthly_data') {
-            $filename = "Monthly Met Data - ".Carbon::now()->format('Ymd_His').".xlsx";
+            $filename = "Monthly Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
 
             return Excel::download(new MonthlyMetDataExport($query), $filename);
         }
 
         if ($aggregation === 'yearly_data') {
-            $filename = "Yearly Met Data - ".Carbon::now()->format('Ymd_His').".xlsx";
+            $filename = "Yearly Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
 
             return Excel::download(new YearlyMetDataExport($query), $filename);
         }
@@ -89,11 +90,27 @@ class DataProductController extends Controller
         // 3. Generate an image file with R + return the result for display on the page.
 
         if ($aggregation === 'heatmap') {
-            // TODO: setup + run Rscript process;
 
-            // get filename of Rscript outout (+ move it to correct storage path if needed)
+            // If the user has not specified a variable, we should show the inventory graph for "fecha", as that will show when *any* records exist, regardless of the values that are included in each observation.
+            $variable = $query['meteoIndividualVariable'] ?? "fecha";
 
-            // return url to file for Vue to present;
+            // senamhi_monthly arguments: stations[0], fromYear, toYear meteoIndividualVariable;
+            $process = new Process(["Rscript", base_path('scripts/R/graph_heatmap.R'), $query['stations'][0], $query['fromYear'], $query['toYear'], $variable]);
+
+            $process->setWorkingDirectory(base_path('scripts/R'));
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new \Exception($process->getErrorOutput());
+            }
+
+            $fileName = "inventario-" . Str::uuid() . ".png";
+
+            // move image into main storage:
+            rename(base_path('scripts/R/inventario.png'), storage_path('app/public/' . $fileName));
+
+            // return url to image;
+            return Storage::url($fileName);
         }
 
         if ($aggregation === 'time_series') {
