@@ -58,5 +58,5 @@ senamhi_daily <- data %>%
                     JUL = `7`, AGO = `8`, SEP = `9`, OCT = `10`, NOV = `11`, DIC = `12`
                 )
 
-# senamhi_details <- paste(selected_station_label, selected_year, selected_variable)
+senamhi_details <- paste(selected_station_label, selected_year, selected_variable)
 write.xlsx(senamhi_daily, "senamhi_daily.xlsx", sheetname = senamhi_details)
