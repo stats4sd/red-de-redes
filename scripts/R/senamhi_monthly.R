@@ -1,7 +1,7 @@
 library(dotenv)
 library(RMySQL)
 library(tidyverse)
-library(writexl)
+library(openxlsx)
 
 args <- commandArgs(TRUE)
 
@@ -19,6 +19,9 @@ con <- dbConnect(RMySQL::MySQL(),
     user = Sys.getenv("DB_USERNAME"),
     password = Sys.getenv("DB_PASSWORD")
 )
+
+dbSendQuery(con, "set character set 'utf8mb4'")
+
 
 stations_table <- tbl(con, "stations") %>%
     select(1,3) %>%
@@ -54,4 +57,5 @@ senamhi_monthly <- data %>%
     )
 
 senamhi_details <- paste(selected_station_label, selected_variable)
-write_xlsx(setNames(list(senamhi_monthly), senamhi_details), "senamhi_monthly.xlsx")
+
+write.xlsx(senamhi_monthly, "senamhi_monthly.xlsx", sheetname = senamhi_details)

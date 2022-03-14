@@ -1,7 +1,7 @@
 library(dotenv)
 library(RMySQL)
 library(tidyverse)
-library(writexl)
+library(openxlsx)
 
 args <- commandArgs(TRUE)
 
@@ -19,6 +19,9 @@ con <- dbConnect(RMySQL::MySQL(),
     password = Sys.getenv("DB_PASSWORD")
 )
 
+dbSendQuery(con, "set character set 'utf8mb4'")
+
+
 stations_table <- tbl(con, "stations") %>%
                     select(1,3) %>%
                     collect()
@@ -30,7 +33,7 @@ selected_station_label <- as.character(
                             filter(id==selected_station) %>%
                             select(2)
                             )
-    
+
 daily_met_data_table <- tbl(con, "daily_met_data")
 
 data <- daily_met_data_table %>%
@@ -55,5 +58,5 @@ senamhi_daily <- data %>%
                     JUL = `7`, AGO = `8`, SEP = `9`, OCT = `10`, NOV = `11`, DIC = `12`
                 )
 
-senamhi_details <- paste(selected_station_label, selected_year, selected_variable)
-write_xlsx(setNames(list(senamhi_daily), senamhi_details), "senamhi_daily.xlsx")
+# senamhi_details <- paste(selected_station_label, selected_year, selected_variable)
+write.xlsx(senamhi_daily, "senamhi_daily.xlsx", sheetname = senamhi_details)
