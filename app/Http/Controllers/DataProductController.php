@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Exports\TendaysExport;
 use Illuminate\Support\Carbon;
@@ -19,99 +20,148 @@ class DataProductController extends Controller
     // receive data requests + pass to correct aggregation method
     public function index(Request $request)
     {
+        // get all parameters from the posted HTTP form
         $query = $request->all();
-        $aggregation = $query['aggregation'];
+
+        // which action to be taken
+        // possible values: show_graph, download_file
+        $actionType = $query['actionType'];
+
+        // which aggregated met data to be generated
+        // possible values: daily, tendays, monthly, yearly, senamhi_daily, senamhi_monthly
+        $aggregation = $query['aggregation'];        
+        
+        // which graph to be generated
+        // possible values: heatmap, time_series, boxplot
+        $graphType = $query['graphType'];
+        
+
         // There are 3 seperate things that might happen here:
 
-        // 1. Generate an Excel file with Laravel Excel + return the resulting file for download
-        if ($aggregation === 'daily_data') {
-            $filename = "Daily Met Data - ".Carbon::now()->format('Ymd_His').".xlsx";
-            return Excel::download(new DailyMetDataExport($query), $filename);
-        }
+        if ($actionType === 'download_file') {
 
-        if ($aggregation === 'tendays_data') {
-            $filename = "Tendays Met Data - ".Carbon::now()->format('Ymd_His').".xlsx";
-
-            return Excel::download(new TendaysMetDataExport($query), $filename);
-        }
-
-        if ($aggregation === 'monthly_data') {
-            $filename = "Monthly Met Data - ".Carbon::now()->format('Ymd_His').".xlsx";
-
-            return Excel::download(new MonthlyMetDataExport($query), $filename);
-        }
-
-        if ($aggregation === 'yearly_data') {
-            $filename = "Yearly Met Data - ".Carbon::now()->format('Ymd_His').".xlsx";
-
-            return Excel::download(new YearlyMetDataExport($query), $filename);
-        }
-
-
-        // 2. Generate an Excel file with R + return the result for download
-        if ($aggregation === 'senamhi_daily') {
-
-            // TODO: setup + run Rscript process;
-
-            // senamhi_daily arguments: stations[0], fromYear, meteoIndividualVariable;
-            $process = new Process(["Rscript", base_path('scripts/R/senamhi_daily.R'), $query['stations'][0], $query['fromYear'], $query['meteoIndividualVariable']]);
-
-            $process->setWorkingDirectory(base_path('scripts/R'));
-            $process->run();
-
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
+            // 1. Generate an Excel file with Laravel Excel + return the resulting file for download
+            if ($aggregation === 'daily_data') {
+                $filename = "Daily Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
+                return Excel::download(new DailyMetDataExport($query), $filename);
             }
 
-            // return file;
-            return file_get_contents(base_path('scripts/R/senamhi_daily.csv'));
-        }
+            if ($aggregation === 'tendays_data') {
+                $filename = "Tendays Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
 
-        if ($aggregation === 'senamhi_monthly') {
-
-            // TODO: setup + run Rscript process;
-
-            // senamhi_monthly arguments: stations[0], fromYear, toYear meteoIndividualVariable;
-            $process = new Process(["Rscript", base_path('scripts/R/senamhi_monthly.R'), $query['stations'][0], $query['fromYear'], $query['toYear'], $query['meteoIndividualVariable']]);
-
-            $process->setWorkingDirectory(base_path('scripts/R'));
-            $process->run();
-
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
+                return Excel::download(new TendaysMetDataExport($query), $filename);
             }
 
-            // return file;
-            return file_get_contents(base_path('scripts/R/senamhi_monthly.csv'));
+            if ($aggregation === 'monthly_data') {
+                $filename = "Monthly Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
+
+                return Excel::download(new MonthlyMetDataExport($query), $filename);
+            }
+
+            if ($aggregation === 'yearly_data') {
+                $filename = "Yearly Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
+
+                return Excel::download(new YearlyMetDataExport($query), $filename);
+            }
+
+
+            // 2. Generate an CSV file with R + return the result for download
+            if ($aggregation === 'senamhi_daily') {
+
+                // TODO: setup + run Rscript process;
+
+                // senamhi_daily arguments: stations[0], fromYear, meteoIndividualVariable;
+                $process = new Process(["Rscript", base_path('scripts/R/senamhi_daily.R'), $query['stations'][0], $query['fromYear'], $query['meteoIndividualVariable']]);
+
+                $process->setWorkingDirectory(base_path('scripts/R'));
+                $process->run();
+
+                if (!$process->isSuccessful()) {
+                    throw new ProcessFailedException($process);
+                }
+
+                // return file;
+                // question: it maybe a problem when two or more users are generating senamhi daily, user A may get result of user B
+                return file_get_contents(base_path('scripts/R/senamhi_daily.xlsx'));
+            }
+
+            if ($aggregation === 'senamhi_monthly') {
+
+                // TODO: setup + run Rscript process;
+
+                // senamhi_monthly arguments: stations[0], fromYear, toYear meteoIndividualVariable;
+                $process = new Process(["Rscript", base_path('scripts/R/senamhi_monthly.R'), $query['stations'][0], $query['fromYear'], $query['toYear'], $query['meteoIndividualVariable']]);
+
+                $process->setWorkingDirectory(base_path('scripts/R'));
+                $process->run();
+
+                if (!$process->isSuccessful()) {
+                    throw new ProcessFailedException($process);
+                }
+
+                // return file;
+                // question: it maybe a problem when two or more users are generating senamhi daily, user A may get result of user B
+                return file_get_contents(base_path('scripts/R/senamhi_monthly.xlsx'));
+            }
+
         }
 
 
-        // 3. Generate an image file with R + return the result for display on the page.
+        if ($actionType === 'show_graph') {
 
-        if ($aggregation === 'heatmap') {
-            // TODO: setup + run Rscript process;
+            // 3. Generate an image file with R + return the result for display on the page.
 
-            // get filename of Rscript outout (+ move it to correct storage path if needed)
+            if ($graphType === 'heatmap') {
 
-            // return url to file for Vue to present;
-        }
+                // If the user has not specified a variable, we should show the inventory graph for "fecha", as that will show when *any* records exist, regardless of the values that are included in each observation.
+                //$variable = $query['meteoIndividualVariable'] ?? "fecha";
 
-        if ($aggregation === 'time_series') {
-            // TODO: setup + run Rscript process;
+                // variable set to "fecha" by default for heatmap graph generation
+                // use user selected value only for semamhi daily and senamhi monthly
+                $variable = "fecha";
 
-            // get filename of Rscript outout (+ move it to correct storage path if needed)
+                if ($query['aggregation'] === 'senamhi_daily' || $query['aggregation'] === 'senamhi_monthly') {
+                    $variable = $query['meteoIndividualVariable'];
+                }
 
-            // return url to file for Vue to present;
-        }
+                // senamhi_monthly arguments: stations[0], fromYear, toYear meteoIndividualVariable;
+                $process = new Process(["Rscript", base_path('scripts/R/graph_heatmap.R'), $query['aggregation'], $query['stations'][0], $query['fromYear'], $query['toYear'], $variable]);
 
-        if ($aggregation === 'boxplot') {
-            // TODO: setup + run Rscript process;
+                $process->setWorkingDirectory(base_path('scripts/R'));
+                $process->run();
 
-            // get filename of Rscript outout (+ move it to correct storage path if needed)
+                if (!$process->isSuccessful()) {
+                    throw new \Exception($process->getErrorOutput());
+                }
 
-            // return url to file for Vue to present;
+                $fileName = "inventario-" . Str::uuid() . ".png";
+
+                // move image into main storage:
+                rename(base_path('scripts/R/inventario.png'), storage_path('app/public/' . $fileName));
+
+                // return url to image;
+                return Storage::url($fileName);
+            }
+
+            if ($graphType === 'time_series') {
+                // TODO: setup + run Rscript process;
+
+                // get filename of Rscript outout (+ move it to correct storage path if needed)
+
+                // return url to file for Vue to present;
+            }
+
+            if ($graphType === 'boxplot') {
+                // TODO: setup + run Rscript process;
+
+                // get filename of Rscript outout (+ move it to correct storage path if needed)
+
+                // return url to file for Vue to present;
+            }
+
         }
 
         return null;
     }
+    
 }

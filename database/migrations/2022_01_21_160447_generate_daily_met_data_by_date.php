@@ -20,7 +20,7 @@ class GenerateDailyMetDataByDate extends Migration
 "
 DROP PROCEDURE IF EXISTS `generate_daily_met_data_by_date`;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_daily_met_data_by_date`(IN id_date VARCHAR(10))
+CREATE PROCEDURE `generate_daily_met_data_by_date`(IN id_date VARCHAR(10))
 BEGIN
 
 /*

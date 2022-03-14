@@ -20,7 +20,7 @@ class GenerateMonthlyMetData extends Migration
 "
 DROP PROCEDURE IF EXISTS `generate_monthly_met_data`;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_monthly_met_data`(IN ii_year INT, IN ii_month INT, IN ii_station_id INT)
+CREATE PROCEDURE `generate_monthly_met_data`(IN ii_year INT, IN ii_month INT, IN ii_station_id INT)
 BEGIN
 
 /*

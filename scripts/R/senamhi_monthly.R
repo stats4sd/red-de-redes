@@ -1,6 +1,14 @@
 library(dotenv)
 library(RMySQL)
 library(tidyverse)
+library(writexl)
+
+args <- commandArgs(TRUE)
+
+selected_station <- args[1]
+selected_start_year <- args[2]
+selected_end_year <- args[3]
+selected_variable <- args[4]
 
 dotenv::load_dot_env("../../.env")
 
@@ -12,19 +20,24 @@ con <- dbConnect(RMySQL::MySQL(),
     password = Sys.getenv("DB_PASSWORD")
 )
 
+stations_table <- tbl(con, "stations") %>%
+    select(1,3) %>%
+    collect()
+
+Encoding(stations_table$label) <- "UTF-8"
+
+selected_station_label <- as.character(
+    stations_table %>%
+        filter(id==selected_station) %>%
+        select(2)
+)
+
 monthly_met_data_table <- tbl(con, "monthly_met_data")
-
-args <- commandArgs(TRUE)
-
-selected_station <- args[1]
-selected_start_year <- args[2]
-selected_end_year <- args[3]
-selected_variable <- args[4]
 
 data <- monthly_met_data_table %>%
     mutate(
-        month = sql(MONTH(fecha)),
-        year = sql(YEAR(fecha))
+        month = substring(as.character(year_and_month), 1, 4),
+        year = substring(as.character(year_and_month), 5, 6)
     ) %>%
     filter(station_id == selected_station & year >= selected_start_year & year <= selected_end_year) %>%
     select(month, year, selected_variable) %>%
@@ -32,6 +45,7 @@ data <- monthly_met_data_table %>%
 
 senamhi_monthly <- data %>%
     arrange(month) %>%
+    mutate(month = as.integer(month)) %>%
     complete(month = 1:12) %>%
     pivot_wider(names_from = "month", values_from = 3) %>%
     rename(
@@ -39,4 +53,5 @@ senamhi_monthly <- data %>%
         JUL = `7`, AGO = `8`, SEP = `9`, OCT = `10`, NOV = `11`, DIC = `12`
     )
 
-write.csv(senamhi_monthly, file = "senamhi_monthly.csv", row.names = FALSE)
+senamhi_details <- paste(selected_station_label, selected_variable)
+write_xlsx(setNames(list(senamhi_monthly), senamhi_details), "senamhi_monthly.xlsx")
