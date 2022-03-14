@@ -20,7 +20,7 @@ class RemoveUnnecessaryStagingRecords extends Migration
 "
 DROP PROCEDURE IF EXISTS `remove_unnecessary_staging_records`;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `remove_unnecessary_staging_records`()
+CREATE PROCEDURE `remove_unnecessary_staging_records`()
 BEGIN
         
     /*

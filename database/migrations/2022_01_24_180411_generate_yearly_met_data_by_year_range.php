@@ -20,7 +20,7 @@ class GenerateYearlyMetDataByYearRange extends Migration
 "
 DROP PROCEDURE IF EXISTS `generate_yearly_met_data_by_year_range`;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `generate_yearly_met_data_by_year_range`(IN ii_from_year INT, IN ii_to_year INT)
+CREATE PROCEDURE `generate_yearly_met_data_by_year_range`(IN ii_from_year INT, IN ii_to_year INT)
 BEGIN
 
 /*
