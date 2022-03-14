@@ -36,8 +36,8 @@ monthly_met_data_table <- tbl(con, "monthly_met_data")
 
 data <- monthly_met_data_table %>%
     mutate(
-        month = sql(MONTH(fecha)),
-        year = sql(YEAR(fecha))
+        month = substring(as.character(year_and_month), 1, 4),
+        year = substring(as.character(year_and_month), 5, 6)
     ) %>%
     filter(station_id == selected_station & year >= selected_start_year & year <= selected_end_year) %>%
     select(month, year, selected_variable) %>%
@@ -45,6 +45,7 @@ data <- monthly_met_data_table %>%
 
 senamhi_monthly <- data %>%
     arrange(month) %>%
+    mutate(month = as.integer(month)) %>%
     complete(month = 1:12) %>%
     pivot_wider(names_from = "month", values_from = 3) %>%
     rename(
