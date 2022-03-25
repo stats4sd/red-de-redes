@@ -29,12 +29,12 @@ class DataProductController extends Controller
 
         // which aggregated met data to be generated
         // possible values: daily, tendays, monthly, yearly, senamhi_daily, senamhi_monthly
-        $aggregation = $query['aggregation'];        
-        
+        $aggregation = $query['aggregation'];
+
         // which graph to be generated
         // possible values: heatmap, time_series, boxplot
         $graphType = $query['graphType'];
-        
+
 
         // There are 3 seperate things that might happen here:
 
@@ -103,7 +103,6 @@ class DataProductController extends Controller
                 // question: it maybe a problem when two or more users are generating senamhi daily, user A may get result of user B
                 return file_get_contents(base_path('scripts/R/senamhi_monthly.xlsx'));
             }
-
         }
 
 
@@ -125,7 +124,7 @@ class DataProductController extends Controller
                 }
 
                 // senamhi_monthly arguments: stations[0], fromYear, toYear meteoIndividualVariable;
-                $process = new Process(["Rscript", base_path('scripts/R/graph_heatmap.R'), $query['aggregation'], $query['stations'][0], $query['fromYear'], $query['toYear'], $variable]);
+                $process = new Process(["Rscript", base_path('scripts/R/graph_heatmap.R'), $query['aggregation'], join(",", $query['stations']), $query['fromYear'], $query['toYear'], $variable]);
 
                 $process->setWorkingDirectory(base_path('scripts/R'));
                 $process->run();
@@ -158,10 +157,8 @@ class DataProductController extends Controller
 
                 // return url to file for Vue to present;
             }
-
         }
 
         return null;
     }
-    
 }
