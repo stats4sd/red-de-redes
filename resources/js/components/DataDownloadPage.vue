@@ -941,10 +941,35 @@
             // to send request for generate a graph to be showed
             // to be called when "Show Graph" button in 2. Additional Graphs section is clicked
             showGraph2() {
-                alert("Show graph 2");
+                //alert("Show graph 2");
+
+                this.showPleaseWaitInGraph2();
+                this.graphForm.graph2Url = "/images/graph/please_wait.png";
+
+                // construct URL with parameter values
+                var reportUrl = "/data-download/download"
 
                 this.graphForm.actionType = "show_graph";
 
+                // show "Please wait..." image
+                this.graphForm.graph2Url = "/images/graph/please_wait.png";
+
+                // axios send request to generate graph to be showed in front end
+                // the primary objective is to show whether there is met data for specified criteria
+                axios
+                    .post(reportUrl, this.graphForm, {
+
+                    })
+                    .then(response => {
+                        //console.log(response.data);
+
+                        // set the URL of generated graph to graphForm variable graph2Url, img src and graph will be updated by Vue automatically
+                        this.graphForm.graph2Url = response.data;
+                    })
+            },
+
+            showPleaseWaitInGraph2() {
+                this.graphForm.graph2Url = "/images/graph/please_wait.png";
             },
 
             // to adding leading zero for value less than 10

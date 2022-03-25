@@ -29,7 +29,11 @@ class DataProductController extends Controller
 
         // which aggregated met data to be generated
         // possible values: daily, tendays, monthly, yearly, senamhi_daily, senamhi_monthly
-        $aggregation = $query['aggregation'];        
+
+        // do existence check because aggregation is available for data download only
+        if (array_key_exists('aggregation', $query)) {
+            $aggregation = $query['aggregation'];
+        }
         
         // which graph to be generated
         // possible values: heatmap, time_series, boxplot
@@ -124,8 +128,8 @@ class DataProductController extends Controller
                     $variable = $query['meteoIndividualVariable'];
                 }
 
-                // senamhi_monthly arguments: stations[0], fromYear, toYear meteoIndividualVariable;
-                $process = new Process(["Rscript", base_path('scripts/R/graph_heatmap.R'), $query['aggregation'], $query['stations'][0], $query['fromYear'], $query['toYear'], $variable]);
+                // senamhi_monthly arguments: stations[0], fromYear, toYear, meteoIndividualVariable;
+                $process = new Process(["Rscript", base_path('scripts/R/graph_heatmap.R'), $query['aggregation'], join(",", $query['stations']), $query['fromYear'], $query['toYear'], $variable]);
 
                 $process->setWorkingDirectory(base_path('scripts/R'));
                 $process->run();
@@ -144,11 +148,25 @@ class DataProductController extends Controller
             }
 
             if ($graphType === 'time_series') {
-                // TODO: setup + run Rscript process;
 
-                // get filename of Rscript outout (+ move it to correct storage path if needed)
+                // time series graph arguments: stations[0], fromYear, toYear, meteoVariableType;
+                $process = new Process(["Rscript", base_path('scripts/R/graph_timeseries.R'), $query['station'], $query['fromYear'], $query['toYear'], $query['meteoVariableType']]);
 
-                // return url to file for Vue to present;
+                $process->setWorkingDirectory(base_path('scripts/R'));
+                $process->run();
+
+                if (!$process->isSuccessful()) {
+                    throw new \Exception($process->getErrorOutput());
+                }
+
+                $fileName = "grafico_series_temporales-" . Str::uuid() . ".png";
+
+                // move image into main storage:
+                rename(base_path('scripts/R/grafico_series_temporales.png'), storage_path('app/public/' . $fileName));
+
+                // return url to image;
+                return Storage::url($fileName);
+
             }
 
             if ($graphType === 'boxplot') {
