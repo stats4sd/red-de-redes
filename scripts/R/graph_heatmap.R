@@ -10,8 +10,8 @@ selected_start_year <- args[3]
 selected_end_year <- ifelse(selected_aggregation=="senamhi_daily", selected_start_year, args[4])
 selected_variable <- args[5]
 
-min <- as.Date(paste0(selected_start_year,"-1-1"))
-max <- as.Date(paste0(selected_end_year,"-12-1"))
+date_start <- as.Date(paste0(selected_start_year,"-1-1"))
+date_end <- as.Date(paste0(selected_end_year,"-12-1"))
 
 dotenv::load_dot_env("../../.env")
 
@@ -102,10 +102,10 @@ if(selected_aggregation=="senamhi_daily"){
         ggplot(aes(x = fecha, y = station, fill = variable_na)) +
         geom_raster(alpha = 0.9) +
         scale_fill_manual(name = "", values = c("#556FBF", "darkgray"), labels = c("Presente", "Faltante")) +
-        scale_x_date(date_breaks = "1 month", date_labels = "%m", limits = c(min,max)) +
-        labs(x = "Mes", y = "Estaciones", title = paste0("Inventario de datos: ", selected_variable_label, "\nA\U00f1o: ", selected_start_year)) +
+        scale_x_date(date_breaks = "1 month", date_labels = "%m", limits = c(date_start,date_end)) +
+        labs(x = "Mes", y = "Estaciones", title = paste("Inventario de Datos \nPar\U00E1metro Meteorol\U00F3gico:", selected_variable_label, "\nA\U00f1o:", selected_start_year)) +
         theme_minimal() +
-        theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle=0)) +
+        theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 12), axis.title = element_text(size = 12), legend.text=element_text(size = 12)) +
         theme(legend.position = "bottom")
 
 } else if (selected_aggregation=="senamhi_monthly" && selected_start_year==selected_end_year){
@@ -114,10 +114,10 @@ if(selected_aggregation=="senamhi_daily"){
         ggplot(aes(x = fecha, y = station, fill = variable_na)) +
         geom_raster(alpha = 0.9) +
         scale_fill_manual(name = "", values = c("#556FBF", "darkgray"), labels = c("Presente", "Faltante")) +
-        scale_x_date(date_breaks = "1 month", date_labels = "%m", limits = c(min,max)) +
-        labs(x = "Mes", y = "Estaciones", title = paste0("Inventario de datos: ", selected_variable_label, "\nA\U00f1o: ", selected_start_year)) +
+        scale_x_date(date_breaks = "1 month", date_labels = "%m", limits = c(date_start,date_end)) +
+        labs(x = "Mes", y = "Estaciones", title = paste("Inventario de Datos \nPar\U00E1metro Meteorol\U00F3gico:", selected_variable_label, "\nA\U00f1o:", selected_start_year)) +
         theme_minimal() +
-        theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle=0)) +
+        theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 12), axis.title = element_text(size = 12), legend.text=element_text(size = 12)) +
         theme(legend.position = "bottom")
 
 } else if (selected_aggregation=="senamhi_monthly" && selected_start_year!=selected_end_year){
@@ -126,34 +126,34 @@ if(selected_aggregation=="senamhi_daily"){
       ggplot(aes(x = fecha, y = station, fill = variable_na)) +
       geom_raster(alpha = 0.9) +
       scale_fill_manual(name = "", values = c("#556FBF", "darkgray"), labels = c("Presente", "Faltante")) +
-      scale_x_date(date_breaks = "1 year", date_labels = "%Y", limits = c(min,max)) +
-      labs(x = "A\U00f1o", y = "Estaciones", title = paste0("Inventario de datos: ", selected_variable_label)) +
+      scale_x_date(date_breaks = "1 year", date_labels = "%Y", limits = c(date_start,date_end)) +
+      labs(x = "A\U00f1o", y = "Estaciones", title = paste("Inventario de Datos \nPar\U00E1metro Meteorol\U00F3gico:", selected_variable_label)) +
       theme_minimal() +
-      theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle=0)) +
+      theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 12), axis.title = element_text(size = 12), legend.text=element_text(size = 12)) +
       theme(legend.position = "bottom")
   
 } else if (selected_aggregation%in%c("daily_data", "tendays_data", "monthly_data", "yearly_data") && selected_start_year==selected_end_year){
   
   data %>%
-    ggplot(aes(x = fecha, y = station, fill = data_na)) +
+    ggplot(aes(x = fecha, y = factor(station, levels = rev(levels(factor(station)))), fill = data_na)) +
     geom_raster(alpha = 0.9) +
     scale_fill_manual(name = "", values = c("#556FBF", "darkgray"), labels = c("Presente", "Faltante")) +
-    scale_x_date(date_breaks = "1 month", date_labels = "%m", limits = c(min,max)) +
-    labs(x = "Mes", y = "Estaciones", title = paste("Inventario de datos\nA\U00f1oL: ", selected_start_year)) +
+    scale_x_date(date_breaks = "1 month", date_labels = "%m", limits = c(date_start,date_end)) +
+    labs(x = "Mes", y = "Estaciones", title = paste("Inventario de Datos\nA\U00f1o:", selected_start_year)) +
     theme_minimal() +
-    theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle=0)) +
+    theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 12), axis.title = element_text(size = 12), legend.text=element_text(size = 12)) +
     theme(legend.position = "bottom")
   
 } else {
 
     data %>%
-        ggplot(aes(x = fecha, y = station, fill = data_na)) +
+        ggplot(aes(x = fecha, y = factor(station, levels = rev(levels(factor(station)))), fill = data_na)) +
         geom_raster(alpha = 0.9) +
         scale_fill_manual(name = "", values = c("#556FBF", "darkgray"), labels = c("Presente", "Faltante")) +
-        scale_x_date(date_breaks = "1 year", date_labels = "%Y", limits = c(min,max)) +
-        labs(x = "A\U00f1o", y = "Estaciones", title = "Inventario de datos") +
+        scale_x_date(date_breaks = "1 year", date_labels = "%Y", limits = c(date_start,date_end)) +
+        labs(x = "A\U00f1o", y = "Estaciones", title = "Inventario de Datos") +
         theme_minimal() +
-        theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle=0)) +
+        theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(angle=0)) +
         theme(legend.position = "bottom")
 
 }
