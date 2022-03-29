@@ -145,6 +145,7 @@ class DataProductController extends Controller
 
                 // return url to image;
                 return Storage::url($fileName);
+
             }
 
             if ($graphType === 'time_series') {
@@ -170,11 +171,25 @@ class DataProductController extends Controller
             }
 
             if ($graphType === 'boxplot') {
-                // TODO: setup + run Rscript process;
 
-                // get filename of Rscript outout (+ move it to correct storage path if needed)
+                // boxplot graph arguments: stations[0], fromYear, toYear, meteoVariableType;
+                $process = new Process(["Rscript", base_path('scripts/R/graph_boxplot.R'), $query['station'], $query['fromYear'], $query['toYear'], $query['meteoVariableType']]);
 
-                // return url to file for Vue to present;
+                $process->setWorkingDirectory(base_path('scripts/R'));
+                $process->run();
+
+                if (!$process->isSuccessful()) {
+                    throw new \Exception($process->getErrorOutput());
+                }
+
+                $fileName = "grafico_boxplot-" . Str::uuid() . ".png";
+
+                // move image into main storage:
+                rename(base_path('scripts/R/grafico_boxplot.png'), storage_path('app/public/' . $fileName));
+
+                // return url to image;
+                return Storage::url($fileName);
+
             }
 
         }
