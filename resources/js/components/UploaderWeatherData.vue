@@ -19,7 +19,7 @@
                                 <div class="row mx-4 justify-content-center">
                                     <label class="control-label col-sm-6" style="color: black"><h5>Seleccione la
                                         estación</h5>
-                                        <v-select @change="modalShow = !modalShow" :options="stations" label="label"
+                                        <v-select @change="modalShow = !modalShow" :options="stations" label="label_with_id"
                                                 v-model="selectedStation"></v-select>
                                     </label>
                                 </div>
@@ -99,6 +99,7 @@
                                         antes de continuar.
                                     </b-alert>
                                     <b-alert show variant="danger" v-if="uploadError!=null">{{ uploadError }}</b-alert>
+                                    <br/>
                                     <button class="site-btn my-4" v-on:click="submit();" :disabled="busy">
                                         <b-spinner small v-if="busy" label="Spinning"></b-spinner>
                                         Subir
@@ -109,7 +110,7 @@
                     </vue-collapsible-panel>
                     <vue-collapsible-panel :expanded="false">
                         <template #title>
-                            <span ref="panel1">Paso 2: {{ steps[1].title }}</span>
+                            <span ref="panel2">Paso 2: {{ steps[1].title }}</span>
                         </template>
 
                         <template #content >
@@ -239,13 +240,14 @@
                                     <b-alert show variant="danger" v-if="error!=null">{{ error }}</b-alert>
                                     <b-alert show variant="success" v-if="success!=null">{{ success }}</b-alert>
                                     <b-alert show variant="warning" v-if="scenario3"><input type="checkbox" v-model="scenario3Confirmed"><b><font color="red"> I confirm that I understand the potential risk of uploading this data file with existing records.</font></b></b-alert>
-
+                                    <br/>
                                     <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
                                             aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable"
                                             style="background: red;">
                                         <b-spinner small v-if="busy" label="Spinning"></b-spinner>
                                         Cancelar
                                     </button>
+                                    &nbsp;
                                     <button type="submit" class="site-btn my-4" data-toggle="collapse"
                                             href="#collapseThree" id="btnConfirm"
                                             aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile"
