@@ -9,7 +9,7 @@ selected_end_year <- args[3]
 selected_variable_type <- args[4]
 
 date_start <- as.Date(paste0(selected_start_year,"-1-1"))
-date_end <- as.Date(paste0(selected_end_year,"-12-1"))
+date_end <- as.Date(paste0(selected_end_year,"-12-31"))
 
 selected_variables <- ifelse(selected_variable_type=="temperatura_interna", "max_temperatura_interna,min_temperatura_interna,avg_temperatura_interna",
                         ifelse(selected_variable_type=="temperatura_externa", "max_temperatura_externa,min_temperatura_externa,avg_temperatura_externa",
@@ -78,7 +78,9 @@ data <- daily_met_data_table %>%
           collect()
 
 data <- data %>%
-          mutate(fecha=as.Date(data$fecha))
+          mutate(fecha=as.Date(data$fecha)) %>%
+          complete(fecha = seq.Date(date_start, date_end, by="day"))
+          
 
 if(selected_variable_type!="lluvia_24_horas_total"){
   
