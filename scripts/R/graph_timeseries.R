@@ -89,7 +89,7 @@ if(selected_variable_type!="lluvia_24_horas_total"){
   colnames(data)[5] <- "variable_avg"
 
 }
-  
+
 png (filename = "grafico_series_temporales.png ", width = 1000 , height = 400 , units = "px")
 
 if(selected_variable_type=="lluvia_24_horas_total"  && selected_start_year==selected_end_year){
@@ -99,7 +99,7 @@ if(selected_variable_type=="lluvia_24_horas_total"  && selected_start_year==sele
     geom_line(aes(y = lluvia_24_horas_total) , color ="#00AFBB", size = 1.2) +
     labs(x ="Mes", y = unit, title = paste(title_text, "\nA\U00f1o:", selected_start_year)) +
     theme_minimal() +
-    scale_x_date(date_breaks = "1 month", date_labels = "%m", limits = c(date_start,date_end)) +
+    scale_x_date(date_breaks = "1 month", minor_breaks = "1 month", date_labels = "%m", expand = c(0,1)) +
     theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 12), axis.title = element_text(size = 12))
 
 } else if (selected_variable_type=="lluvia_24_horas_total" && selected_start_year!=selected_end_year) {
@@ -108,7 +108,7 @@ if(selected_variable_type=="lluvia_24_horas_total"  && selected_start_year==sele
     geom_line(aes(y = lluvia_24_horas_total) , color ="#00AFBB", size = 1.2) +
     labs(x ="A\U00f1o", y = unit, title = title_text) +
     theme_minimal() +
-    scale_x_date(date_breaks = "1 year", date_labels = "%Y", limits = c(date_start,date_end)) +
+    scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
     theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 11), axis.title = element_text(size = 12))
   
 } else if (selected_variable_type!="lluvia_24_horas_total" && selected_start_year==selected_end_year) {
@@ -121,7 +121,7 @@ if(selected_variable_type=="lluvia_24_horas_total"  && selected_start_year==sele
     scale_color_manual(name = "", values = c("m\U00E1xima" = "#FA8275", "media"="#00AFBB", "m\U00EDnima"="#00C32F"))+
     labs(x ="Mes", y = unit, title = paste(title_text,"\nA\U00f1o:", selected_start_year)) +
     theme_minimal() +
-    scale_x_date(date_breaks = "1 month", date_labels = "%m", limits = c(date_start,date_end)) +
+    scale_x_date(date_breaks = "1 month", minor_breaks = "1 month", date_labels = "%m", expand = c(0,0)) +
     theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 12), axis.title = element_text(size = 12), legend.text=element_text(size = 12)) +
     theme(legend.position = "right")
   
@@ -135,7 +135,7 @@ if(selected_variable_type=="lluvia_24_horas_total"  && selected_start_year==sele
     scale_color_manual(name = "", values = c("m\U00E1xima" = "#FA8275", "media"="#00AFBB", "m\U00EDnima"="#00C32F"))+
     labs(x ="A\U00f1o", y = unit, title = title_text) +
     theme_minimal() +
-    scale_x_date(date_breaks = "1 year", date_labels = "%Y", limits = c(date_start,date_end)) +
+    scale_x_date(date_breaks = "1 year", date_labels = "%Y", expand = c(0,1)) +
     theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 11), axis.title = element_text(size = 12), legend.text=element_text(size = 12)) +
     theme(legend.position = "right")
   
