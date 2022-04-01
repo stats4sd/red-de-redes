@@ -38,7 +38,7 @@ class DataProductController extends Controller
         // which graph to be generated
         // possible values: heatmap, time_series, boxplot
         $graphType = $query['graphType'];
-        
+
 
         // There are 3 seperate things that might happen here:
 
@@ -107,7 +107,6 @@ class DataProductController extends Controller
                 // question: it maybe a problem when two or more users are generating senamhi daily, user A may get result of user B
                 return file_get_contents(base_path('scripts/R/senamhi_monthly.xlsx'));
             }
-
         }
 
 
@@ -191,10 +190,8 @@ class DataProductController extends Controller
                 return Storage::url($fileName);
 
             }
-
         }
 
         return null;
     }
-    
 }
