@@ -90,7 +90,7 @@ if(selected_variable_type!="lluvia_24_horas_total"){
 
 }
 
-png (filename = "grafico_series_temporales.png ", width = 1000 , height = 400 , units = "px")
+png (filename = "grafico_series_temporales.png", width = 1000 , height = 400 , units = "px")
 
 if(selected_variable_type=="lluvia_24_horas_total"  && selected_start_year==selected_end_year){
   
