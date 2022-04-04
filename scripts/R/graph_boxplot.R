@@ -102,7 +102,7 @@ if(selected_variable_type!="lluvia_24_horas_total"){
   
   data <- data %>%
             pivot_longer(cols = 3:5, names_to = "variable", values_to = "value") %>%
-            mutate(variable = factor(variable, levels = c("variable_max", "variable_avg", "variable_min"), labels = c("m\U00E1xima", "media", "m\U00EDnima")))
+            mutate(variable = factor(variable, levels = c("variable_max", "variable_avg", "variable_min"), labels = c("maxima", "media", "minima")))
   
 }
 
@@ -131,7 +131,7 @@ if(selected_variable_type=="lluvia_24_horas_total"  && selected_start_year==sele
   data %>%
     ggplot(aes(x = month_name, y = value, fill = variable)) +
     geom_boxplot() +
-    scale_fill_manual(name = "", values = c("m\U00E1xima" = "#FA8275", "media"="#00AFBB", "m\U00EDnima"="#00C32F"))+
+    scale_fill_manual(name = "", values = c("maxima" = "#FA8275", "media"="#00AFBB", "minima"="#00C32F"))+
     labs(x ="Mes", y = unit, title = paste(title_text,"\nA\U00f1o:", selected_start_year)) +
     theme_minimal() +
     theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 12), axis.title = element_text(size = 12), legend.text=element_text(size = 12)) +
@@ -142,7 +142,7 @@ if(selected_variable_type=="lluvia_24_horas_total"  && selected_start_year==sele
   data %>%
     ggplot(aes(x = year, y = value, fill = variable)) +
     geom_boxplot() +
-    scale_fill_manual(name = "", values = c("m\U00E1xima" = "#FA8275", "media"="#00AFBB", "m\U00EDnima"="#00C32F"))+
+    scale_fill_manual(name = "", values = c("maxima" = "#FA8275", "media"="#00AFBB", "minima"="#00C32F"))+
     labs(x ="A\U00f1o", y = unit, title = title_text) +
     theme_minimal() +
     theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 11), axis.title = element_text(size = 12), legend.text=element_text(size = 12)) +

@@ -115,10 +115,10 @@ if(selected_variable_type=="lluvia_24_horas_total"  && selected_start_year==sele
 
   data %>%
     ggplot(aes(x = fecha)) +
-    geom_line(aes(y = variable_max, color="m\U00E1xima"), size = 1.2) +
+    geom_line(aes(y = variable_max, color="maxima"), size = 1.2) +
     geom_line(aes(y = variable_avg, color="media"), size = 1.2) +
-    geom_line(aes(y = variable_min, color="m\U00EDnima"), size = 1.2) +
-    scale_color_manual(name = "", values = c("m\U00E1xima" = "#FA8275", "media"="#00AFBB", "m\U00EDnima"="#00C32F"))+
+    geom_line(aes(y = variable_min, color="minima"), size = 1.2) +
+    scale_color_manual(name = "", values = c("maxima" = "#FA8275", "media"="#00AFBB", "minima"="#00C32F"))+
     labs(x ="Mes", y = unit, title = paste(title_text,"\nA\U00f1o:", selected_start_year)) +
     theme_minimal() +
     scale_x_date(date_breaks = "1 month", minor_breaks = "1 month", date_labels = "%m", expand = c(0,0)) +
@@ -129,10 +129,10 @@ if(selected_variable_type=="lluvia_24_horas_total"  && selected_start_year==sele
   
   data %>%
     ggplot(aes(x = fecha)) +
-    geom_line(aes(y = variable_max, color="m\U00E1xima"), size = 1.2) +
+    geom_line(aes(y = variable_max, color="maxima"), size = 1.2) +
     geom_line(aes(y = variable_avg, color="media"), size = 1.2) +
-    geom_line(aes(y = variable_min, color="m\U00EDnima"), size = 1.2) +
-    scale_color_manual(name = "", values = c("m\U00E1xima" = "#FA8275", "media"="#00AFBB", "m\U00EDnima"="#00C32F"))+
+    geom_line(aes(y = variable_min, color="minima"), size = 1.2) +
+    scale_color_manual(name = "", values = c("maxima" = "#FA8275", "media"="#00AFBB", "minima"="#00C32F"))+
     labs(x ="A\U00f1o", y = unit, title = title_text) +
     theme_minimal() +
     scale_x_date(date_breaks = "1 year", date_labels = "%Y", expand = c(0,1)) +
