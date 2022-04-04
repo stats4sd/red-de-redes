@@ -44,7 +44,7 @@
 
                         @elseif(Auth::user()->type==="admin")
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='home') active @endif" href="{{url('home')}}">Inicio</a>
+                          <a class="nav-link @if(Route::current()->uri==='intro') active @endif" href="{{url('intro')}}">Inicio</a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link @if(Route::current()->uri==='data-download' && Auth::user()->type==="admin") active @endif" href="{{url('data-download')}}">Data Download</a>

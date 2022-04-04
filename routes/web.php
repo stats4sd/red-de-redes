@@ -26,6 +26,10 @@ Route::get('', function () {
 
 Auth::routes();
 
+// Introduction page
+Route::view('intro', 'intro')->name('intro');
+
+// Routes for orignal data download page written in Vue 2
 Route::resource('home', 'DataController')->middleware('auth');
 Route::post('download', [DataController::class,'download']);
 
