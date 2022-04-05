@@ -20,8 +20,6 @@ class YearlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStr
     // constructor to set HTTP request object to private variable
     public function __construct(array $query = null)
     {
-        logger("YearlyMetDataExport.construct() starts...");
-
         $this->query = $query;
 
         $this->fields = [
