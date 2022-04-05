@@ -4,15 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Exports\TendaysExport;
 use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
-use App\Exports\Download\Met\DailyMetDataExport;
-use App\Exports\Download\Met\YearlyMetDataExport;
-use App\Exports\Download\Met\MonthlyMetDataExport;
-use App\Exports\Download\Met\TendaysMetDataExport;
+use App\Exports\Download\Met\MetDataWorkbookExport;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class DataProductController extends Controller
@@ -45,34 +41,15 @@ class DataProductController extends Controller
         if ($actionType === 'download_file') {
 
             // 1. Generate an Excel file with Laravel Excel + return the resulting file for download
-            if ($aggregation === 'daily_data') {
-                $filename = "Daily Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
-                return Excel::download(new DailyMetDataExport($query), $filename);
-            }
 
-            if ($aggregation === 'tendays_data') {
-                $filename = "Tendays Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
-
-                return Excel::download(new TendaysMetDataExport($query), $filename);
-            }
-
-            if ($aggregation === 'monthly_data') {
-                $filename = "Monthly Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
-
-                return Excel::download(new MonthlyMetDataExport($query), $filename);
-            }
-
-            if ($aggregation === 'yearly_data') {
-                $filename = "Yearly Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
-
-                return Excel::download(new YearlyMetDataExport($query), $filename);
-            }
-
+            // filename will be refined in Vue component level
+            $filename = "Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
+            return Excel::download(new MetDataWorkbookExport($query), $filename);
 
             // 2. Generate an CSV file with R + return the result for download
             if ($aggregation === 'senamhi_daily') {
 
-                // TODO: setup + run Rscript process;
+                // setup + run Rscript process;
 
                 // senamhi_daily arguments: stations[0], fromYear, meteoIndividualVariable;
                 $process = new Process(["Rscript", base_path('scripts/R/senamhi_daily.R'), $query['stations'][0], $query['fromYear'], $query['meteoIndividualVariable']]);
@@ -91,7 +68,7 @@ class DataProductController extends Controller
 
             if ($aggregation === 'senamhi_monthly') {
 
-                // TODO: setup + run Rscript process;
+                // setup + run Rscript process;
 
                 // senamhi_monthly arguments: stations[0], fromYear, toYear meteoIndividualVariable;
                 $process = new Process(["Rscript", base_path('scripts/R/senamhi_monthly.R'), $query['stations'][0], $query['fromYear'], $query['toYear'], $query['meteoIndividualVariable']]);
