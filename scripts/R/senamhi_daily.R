@@ -58,5 +58,33 @@ senamhi_daily <- data %>%
                     JUL = `7`, AGO = `8`, SEP = `9`, OCT = `10`, NOV = `11`, DIC = `12`
                 )
 
-senamhi_details <- paste(selected_station_label, selected_year, selected_variable)
-write.xlsx(senamhi_daily, "senamhi_daily.xlsx", sheetname = senamhi_details)
+variable <- c("max_temperatura_interna", "min_temperatura_interna", "avg_temperatura_interna",
+              "max_temperatura_externa","min_temperatura_externa", "avg_temperatura_externa",
+              "max_humedad_interna", "min_humedad_interna", "avg_humedad_interna",
+              "max_humedad_externa", "min_humedad_externa", "avg_humedad_externa",
+              "max_presion_relativa", "min_presion_relativa", "avg_presion_relativa",
+              "max_presion_absoluta", "min_presion_absoluta", "avg_presion_absoluta",
+              "max_velocidad_viento", "min_velocidad_viento", "avg_velocidad_viento",
+              "max_sensacion_termica", "min_sensacion_termica","avg_sensacion_termica",
+              "lluvia_24_horas_total")
+
+label <- c("Temperatura M\U00E1xima Interna (\u00b0C)", "Temperatura M\U00EDnima Interna (\u00b0C)", "Temperatura Media Interna (\u00b0C)",
+           "Temperatura M\U00E1xima Externa (\u00b0C)", "Temperatura M\U00EDnima Interna (\u00b0C)", "Temperatura Media Interna (\u00b0C)",
+           "Humedad M\U00E1xima Interna %", "Humedad M\U00EDnima Interna %", "Humedad Media Interna %",
+           "Humedad M\U00E1xima Externa %", "Humedad M\U00EDnima Externa %", "Humedad Media Externa %",
+           "Presi\U00F3n Relativa M\U00E1xima (hPa)", "Presi\U00F3n Relativa M\U00EDnima (hPa)", "Presi\U00F3n Relativa Media (hPa)",
+           "Presi\U00F3n Absoluta M\U00E1xima (hPa)", "Presi\U00F3n Absoluta M\U00EDnima (hPa)", "Presi\U00F3n Absoluta Media (hPa)",
+           "Velocidad Viento M\U00E1xima (m/s)", "Velocidad Viento M\U00EDnima (m/s)", "Velocidad Viento Media (m/s)",
+           "Sensaci\U00F3n T\U00E9rmica M\U00E1xima (\u00b0C)", "Sensaci\U00F3n T\U00E9rmica M\U00EDnima (\u00b0C)", "Sensaci\U00F3n T\U00E9rmica Media (\u00b0C)",
+           "Precipitaci\U00F3n Diaria (mm)")
+
+selected_variable_label <- as.character(data.frame(variable,label) %>%
+                                        filter(variable==selected_variable) %>%
+                                        select(2))
+
+criterios <- c("ID de la estación", "Estación", "Agregación", "Año", "Variable")
+valor <- c(selected_station, selected_station_label, "Senamhi Diario", selected_year, selected_variable_label)
+metadata <- data.frame(criterios, valor)
+
+sheets <- list("Metadatos" = metadata, "Datos" = senamhi_daily)
+write.xlsx(sheets, file = "senamhi_daily.xlsx")
