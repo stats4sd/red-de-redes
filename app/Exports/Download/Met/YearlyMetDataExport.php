@@ -128,7 +128,7 @@ class YearlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStr
 
     public function title(): string
     {
-        return 'Yearly Met Data';
+        return 'Datos';
     }
 
     public function headings(): array

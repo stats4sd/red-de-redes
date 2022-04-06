@@ -43,7 +43,7 @@ class DataProductController extends Controller
             // 1. Generate an Excel file with Laravel Excel + return the resulting file for download
 
             // filename will be refined in Vue component level
-            $filename = "Met Data - " . Carbon::now()->format('Ymd_His') . ".xlsx";
+            $filename = "Datos meteorologicos - " . Carbon::now()->format('Ymd_His') . ".xlsx";
             return Excel::download(new MetDataWorkbookExport($query), $filename);
 
             // 2. Generate an CSV file with R + return the result for download

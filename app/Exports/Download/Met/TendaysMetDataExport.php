@@ -142,7 +142,7 @@ class TendaysMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
 
     public function title(): string
     {
-        return 'Tendays Met Data';
+        return 'Datos';
     }
 
     public function headings(): array

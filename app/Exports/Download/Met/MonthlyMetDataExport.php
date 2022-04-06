@@ -136,7 +136,7 @@ class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
 
     public function title(): string
     {
-        return 'Monthly Met Data';
+        return 'Datos';
     }
 
     public function headings(): array

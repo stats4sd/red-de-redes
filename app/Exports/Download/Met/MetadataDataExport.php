@@ -25,8 +25,8 @@ class MetadataDataExport implements WithTitle, WithHeadings, FromCollection
         $this->query = $query;
 
         $this->fields = [
-            'criteria',
-            'value',
+            'criterios',
+            'valor',
         ];
     }
 
