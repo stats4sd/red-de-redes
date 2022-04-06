@@ -40,9 +40,9 @@
                                         <!-- add small map, met station photo, nearby village photo for visual identification -->
                                         <table border="1" width="100%">
                                             <tr>
-                                                <td width="33%"><b>Map</b></td>
-                                                <td width="33%"><b>Met Station</b></td>
-                                                <td width="34%"><b>Nearby Village</b></td>
+                                                <td width="33%"><b>Mapa</b></td>
+                                                <td width="33%"><b>Estación</b></td>
+                                                <td width="34%"><b>Pueblo cercano</b></td>
                                             </tr>
                                             <tr>
                                                 <td><img :src="'images/met_station/'+selectedStation.id+'_map.jpg'" width="150" height="100"></td>

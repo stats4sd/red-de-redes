@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div id="title">
-            <h2>Data Download Page</h2>
+            <h2>Descaragar Datos</h2>
         </div>
 
         <!-- Section 1. Criteria for met data -->
@@ -12,27 +12,12 @@
             <table width="500" border="1" cellpadding="5" cellspacing="2">
                 <tr>
                     <td colspan="2" bgcolor="lightblue">
-                        <b>Section 1. Met Data</b>
+                        <b>Datos meteorológicos</b>
                     </td>
                 </tr>
 
                 <tr>
-                    <td width="200">
-                        Met Station *
-                        <br /><br />
-                        <p>(Press [Cntl] for multiple selection)</p>
-                    </td>
-                    <td>
-                        <select v-model="metDataForm.stations" multiple>
-                            <option :key="station.id" v-for="station in stations" :value="station.id">
-                                {{ station.id }}. {{ station.label }}
-                            </option>
-                        </select>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Aggregation *</td>
+                    <td>Agregación</td>
                     <td>
                         <select
                             v-model="metDataForm.aggregation"
@@ -50,7 +35,22 @@
                 </tr>
 
                 <tr>
-                    <td>From *</td>
+                    <td width="200">
+                        Estación
+                        <br /><br />
+                        <p>(Pulse [Ctrl] para varias estaciones)</p>
+                    </td>
+                    <td>
+                        <select v-model="metDataForm.stations" multiple>
+                            <option :key="station.id" v-for="station in stations" :value="station.id">
+                                {{ station.id }}. {{ station.label }}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Año Inicial </td>
                     <td>
                         <select v-model="metDataForm.fromYear">
                             <option v-for="year in years" :value="year" :key="year">
@@ -62,7 +62,7 @@
 
                 <!-- disable To Year when aggregation is Senamhi Daily -->
                 <tr>
-                    <td>To *</td>
+                    <td>Año Final</td>
                     <td>
                         <select v-model="metDataForm.toYear" :disabled="metDataForm.aggregation == 'senamhi_daily'">
                             <option v-for="year in years" :value="year" :key="year">
@@ -74,7 +74,7 @@
 
                 <!-- disable Individual Variable when aggreation is not Senamhi Daily or Senamhi Monthly -->
                 <tr>
-                    <td>Individual Variable</td>
+                    <td>Variable</td>
                     <td>
                         <select v-model="metDataForm.meteoIndividualVariable" :disabled="metDataForm.aggregation != 'senamhi_daily' && metDataForm.aggregation != 'senamhi_monthly'">
                             <option
@@ -98,7 +98,7 @@
                             @click="showGraph1"
                             id="btnShowGraph1"
                             name="btnShowGraph1"
-                            value="Show Graph"
+                            value="Visualizar los datos"
                         />
                         &nbsp;
                         <input
@@ -106,7 +106,7 @@
                             @click="downloadMetDataFile"
                             id="btnDownloadMetDataFile"
                             name="btnDownloadMetDataFile"
-                            value="Download File"
+                            value="Descargar el archivo de datos"
                         />
                     </td>
                 </tr>
@@ -137,12 +137,12 @@
             <table width="500" border="1" cellpadding="5" cellspacing="2">
                 <tr>
                     <td colspan="2" bgcolor="lightblue">
-                        <b>Section 2. Additional Graphs</b>
+                        <b>Gráficos</b>
                     </td>
                 </tr>
 
                 <tr>
-                    <td>Graph Type *</td>
+                    <td>Tipo de gráfico</td>
                     <td>
                         <select v-model="graphForm.graphType">
                             <option
@@ -158,7 +158,7 @@
 
                 <tr>
                     <td width="200">
-                        Met Station *
+                        Estación
                     </td>
                     <td>
                         <select v-model="graphForm.station">
@@ -170,7 +170,7 @@
                 </tr>
 
                 <tr>
-                    <td>From *</td>
+                    <td>Año Inicial</td>
                     <td>
                         <select v-model="graphForm.fromYear">
                             <option v-for="year in years" :value="year" :key="year">
@@ -181,7 +181,7 @@
                 </tr>
 
                 <tr>
-                    <td>To *</td>
+                    <td>Año Final</td>
                     <td>
                         <select v-model="graphForm.toYear">
                             <option v-for="year in years" :value="year" :key="year">
@@ -193,7 +193,7 @@
 
                 <!-- meteo individual variables for time series, boxplot -->
                 <tr>
-                    <td>Variable Type</td>
+                    <td>Variable</td>
                     <td>
                         <select v-model="graphForm.meteoVariableType">
                             <option
@@ -216,7 +216,7 @@
                             @click="showGraph2"
                             id="btnShowGraph2"
                             name="btnShowGraph2"
-                            value="Show Graph"
+                            value="Mostrar el gráfico"
                         />
                     </td>
                 </tr>
@@ -425,12 +425,12 @@
 
                 // pre-defined options for corresponding selection box
                 aggregations: [
-                    { label: "Senamhi Diario", value: "senamhi_daily" },
-                    { label: "Senamhi Mensual", value: "senamhi_monthly" },
                     { label: "Diario", value: "daily_data" },
                     { label: "Diez días", value: "tendays_data" },
                     { label: "Mensual", value: "monthly_data" },
                     { label: "Anual", value: "yearly_data" },
+                    { label: "Senamhi Diario", value: "senamhi_daily" },
+                    { label: "Senamhi Mensual", value: "senamhi_monthly" },
                 ],
 
                 years: [
@@ -498,27 +498,27 @@
                         value: "avg_humedad_externa",
                     },
                     {
-                        label: "Presion Relativa Máxima (hPa)",
+                        label: "Presión Relativa Máxima (hPa)",
                         value: "max_presion_relativa",
                     },
                     {
-                        label: "Presion Relativa Mínima (hPa)",
+                        label: "Presión Relativa Mínima (hPa)",
                         value: "min_presion_relativa",
                     },
                     {
-                        label: "Presion Relativa Media (hPa)",
+                        label: "Presión Relativa Media (hPa)",
                         value: "avg_presion_relativa",
                     },
                     {
-                        label: "Presion Absoluta Máxima (hPa)",
+                        label: "Presión Absoluta Máxima (hPa)",
                         value: "max_presion_absoluta",
                     },
                     {
-                        label: "Presion Absoluta Mínima (hPa)",
+                        label: "Presión Absoluta Mínima (hPa)",
                         value: "min_presion_absoluta",
                     },
                     {
-                        label: "Presion Absoluta Media (hPa)",
+                        label: "Presión Absoluta Media (hPa)",
                         value: "avg_presion_absoluta",
                     },
                     {
@@ -534,15 +534,15 @@
                         value: "avg_velocidad_viento",
                     },
                     {
-                        label: "Sensacion Termica Máxima (°C)",
+                        label: "Sensación Termica Máxima (°C)",
                         value: "max_sensacion_termica",
                     },
                     {
-                        label: "Sensacion Termica Mínima (°C)",
+                        label: "Sensación Termica Mínima (°C)",
                         value: "min_sensacion_termica",
                     },
                     {
-                        label: "Sensacion Termica Media (°C)",
+                        label: "Sensación Termica Media (°C)",
                         value: "avg_sensacion_termica",
                     },
                     {
@@ -569,10 +569,10 @@
                     },
                     { label: "Humedad Interna %", value: "humedad_interna" },
                     { label: "Humedad Externa %", value: "humedad_externa" },
-                    { label: "Presion Relativa (hPa)", value: "presion_relativa" },
-                    { label: "Presion Absoluta (hPa)", value: "presion_absoluta" },
+                    { label: "Presión Relativa (hPa)", value: "presion_relativa" },
+                    { label: "Presión Absoluta (hPa)", value: "presion_absoluta" },
                     { label: "Velocidad Viento (m/s)", value: "velocidad_viento" },
-                    { label: "Sensacion Termica (°C)", value: "sensacion_termica" },
+                    { label: "Sensación Termica (°C)", value: "sensacion_termica" },
                     {
                         label: "Precipitación Diaria (mm)",
                         value: "lluvia_24_horas_total",
@@ -665,29 +665,29 @@
                     this.metDataForm.stations === undefined ||
                     this.metDataForm.stations.length == 0
                 ) {
-                    alert("Please select at least one met station");
+                    alert("Seleccione por lo menos una estación");
                     return false;
                 }
 
                 if (this.metDataForm.aggregation == "") {
-                    alert("Please select an aggregation");
+                    alert("Seleccione una agregación");
                     return false;
                 }
 
                 if (this.metDataForm.fromYear == "") {
-                    alert("Please select a From Year");
+                    alert("Seleccione el año inicial");
                     return false;
                 }
 
                 // To year is not necessary for senamhi daily
                 if (this.metDataForm.aggregation != "senamhi_daily") {
                     if (this.metDataForm.toYear == "") {
-                        alert("Please select a To Year");
+                        alert("Seleccione el año final");
                         return false;
                     }
 
                     if (this.metDataForm.fromYear > this.metDataForm.toYear) {
-                        alert("From Year should be equal to or earlier than To Year");
+                        alert("El año inicio debe ser anterior o el mismo que el año final");
                         return false;
                     }
                 }
@@ -697,12 +697,12 @@
                     this.metDataForm.aggregation == "senamhi_monthly"
                 ) {
                     if (this.metDataForm.stations.length > 1) {
-                        alert("For senamhi daily or senamhi monthly, please select one met station only");
+                        alert("Para Senamhi Diario o Senamhi Mensual, seleccione sólo una estación");
                         return false;
                     }
 
                     if (this.metDataForm.meteoIndividualVariable == "") {
-                        alert("Please select an individual variable");
+                        alert("Seleccione una variable");
                         return false;
                     }
                 }
@@ -743,7 +743,7 @@
             },
 
             showPleaseWaitInGraph1() {
-                this.metDataForm.graph1Url = "/images/graph/please_wait.png";
+                this.metDataForm.graph1Url = "/images/graph/please_wait_es.png";
             },
 
             // to adding leading zero for value less than 10
@@ -819,33 +819,33 @@
                 //alert("validateGraphForm");
 
                 if (this.graphForm.graphType == "") {
-                    alert("Please select a graph type");
+                    alert("Seleccione un tipo de gráfico");
                     return false;
                 }
 
                 // array empty or does not exist
                 if (this.graphForm.station == "") {
-                    alert("Please select a met station");
+                    alert("Seleccione una estación");
                     return false;
                 }
 
                 if (this.graphForm.fromYear == "") {
-                    alert("Please select a From Year");
+                    alert("Seleccione el año inicial");
                     return false;
                 }
 
                 if (this.graphForm.toYear == "") {
-                    alert("Please select a To Year");
+                    alert("Seleccione el año final");
                     return false;
                 }
 
                 if (this.graphForm.fromYear > this.graphForm.toYear) {
-                    alert("From Year should be equal to or earlier than To Year");
+                    alert("El año inicio debe ser anterior o el mismo que el año final");
                     return false;
                 }
 
                 if (this.graphForm.meteoVariableType == "") {
-                    alert("Please select a variable type");
+                    alert("Seleccione una variable");
                     return false;
                 }
 
@@ -885,7 +885,7 @@
             },
 
             showPleaseWaitInGraph2() {
-                this.graphForm.graph2Url = "/images/graph/please_wait.png";
+                this.graphForm.graph2Url = "/images/graph/please_wait_es.png";
             },
 
 
@@ -995,7 +995,7 @@
             },
 
             showPleaseWaitInGraph3() {
-                this.agroDataForm.graph3Url = "/images/graph/please_wait.png";
+                this.agroDataForm.graph3Url = "/images/graph/please_wait_es.png";
             },
 
             // to send request for met data file download
