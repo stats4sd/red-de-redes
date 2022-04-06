@@ -36,13 +36,13 @@ class MetadataDataExport implements WithTitle, WithHeadings, FromCollection
         $aggregation = $this->query['aggregation'];
 
         if ($aggregation == 'daily_data') {
-            $aggregationForDisplay = 'Daily';
+            $aggregationForDisplay = 'Diario';
         } else if ($aggregation == 'tendays_data') {
-            $aggregationForDisplay = 'Tendays';
+            $aggregationForDisplay = 'Diez días';
         } else if ($aggregation == 'monthly_data') {
-            $aggregationForDisplay = 'Monthly';
+            $aggregationForDisplay = 'Mensual';
         } else if ($aggregation == 'yearly_data') {
-            $aggregationForDisplay = 'Yearly';
+            $aggregationForDisplay = 'Anual';
         }
 
 
@@ -67,17 +67,17 @@ class MetadataDataExport implements WithTitle, WithHeadings, FromCollection
 
 
         return new Collection([
-            ['Met Station ID', $stationIdsForDisplay],
-            ['Met Station', $stationsForDisplay],
-            ['Aggregation', $aggregationForDisplay], 
-            ['From', $this->query['fromYear']],
-            ['To', $this->query['toYear']],
+            ['ID de la estación', $stationIdsForDisplay],
+            ['Estación', $stationsForDisplay],
+            ['Agregación', $aggregationForDisplay], 
+            ['Año Inicial', $this->query['fromYear']],
+            ['Año Final', $this->query['toYear']],
         ]);
     }
 
     public function title(): string
     {
-        return 'Metadata';
+        return 'Metadatos';
     }
 
     public function headings(): array
