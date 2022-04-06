@@ -47,7 +47,7 @@
                           <a class="nav-link @if(Route::current()->uri==='home') active @endif" href="{{url('home')}}">Inicio</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='data-download' && Auth::user()->type==="admin") active @endif" href="{{url('data-download')}}">Data Download</a>
+                          <a class="nav-link @if(Route::current()->uri==='data-download' && Auth::user()->type==="admin") active @endif" href="{{url('data-download')}}">Descargar Datos</a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link @if(Route::current()->uri==='data-upload' && Auth::user()->type==="admin") active @endif" href="{{url('data-upload')}}">Subir Datos Meteorológicos</a>
