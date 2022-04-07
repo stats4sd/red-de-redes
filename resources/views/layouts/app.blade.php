@@ -30,7 +30,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('home') }}" style="color:white;" >
+                <a class="navbar-brand" href="{{ url('intro') }}" style="color:white;" >
                     Agronometric
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -44,7 +44,7 @@
 
                         @elseif(Auth::user()->type==="admin")
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='home') active @endif" href="{{url('home')}}">Inicio</a>
+                          <a class="nav-link @if(Route::current()->uri==='intro') active @endif" href="{{url('intro')}}">Inicio</a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link @if(Route::current()->uri==='data-download' && Auth::user()->type==="admin") active @endif" href="{{url('data-download')}}">Descargar Datos</a>

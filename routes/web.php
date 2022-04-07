@@ -21,11 +21,15 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 Route::get('', function () {
-    return redirect('/home');
+    return redirect('/intro');
 });
 
 Auth::routes();
 
+// Introduction page
+Route::view('intro', 'intro')->name('intro');
+
+// Routes for orignal data download page written in Vue 2
 Route::resource('home', 'DataController')->middleware('auth');
 Route::post('download', [DataController::class,'download']);
 

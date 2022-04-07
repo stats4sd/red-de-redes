@@ -514,6 +514,9 @@ export default {
                     console.log(error);
                     if (error.response && error.response.hasOwnProperty('data')) {
                         this.uploadError = error.response.data.message;
+
+                        // instead of showing the full error message from Python, show the last few lines only
+                        this.uploadError = this.uploadError.split("File").pop();
                     } else {
                         this.uploadError = "No se pudo subir el archivo. Verifique que esté en el formato correcto o póngase en contacto con el administrador de la plataforma para obtener más información.";
                     }

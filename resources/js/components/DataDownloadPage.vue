@@ -795,7 +795,7 @@
 
                         // prepare filename with current date and time
                         var today = new Date();
-                        var filename = "Met Data - " +
+                        var filename = "Datos meteorologicos - " +
                                        aggregationLabel + " - " +
                                        today.getFullYear() +
                                        this.addLeadingZero(today.getMonth()+1) +
