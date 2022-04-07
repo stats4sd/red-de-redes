@@ -11,13 +11,10 @@ use App\Exports\TendaysExport;
 use App\Exports\YearlyExport;
 use App\Http\Controllers\selectStation;
 use App\Monthly;
-use App\Station;
 use App\Tendays;
 use App\Yearly;
 use DB;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Khill\Lavacharts\Lavacharts;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
@@ -69,13 +66,13 @@ class HomeController extends Controller
                         -> addRows($data);
 
             $lava->LineChart('Temperature', $datatable,[
-                    'title' => 'DailyTemperatures'                 
+                    'title' => 'DailyTemperatures'
             ]);
         }
-        
+
 
         return view('home')->with(compact('station_data','stations','daily','monthly','yearly','tendays','lava'));
-       
+
 
     }
 
@@ -84,18 +81,18 @@ class HomeController extends Controller
     {
         $graphics_id = $request->input('graphics_id');
         $station_data = DB::table('data')->get();
-         
+
         return $graphics_id;
-        
+
     }
 
     public function excel(Request $request)
     {
-    
+
         $stationSelected = $request->input('stationSelected');
         $periodSelected = $request->input('periodSelected');
-   
-        if($periodSelected =='1'){    
+
+        if($periodSelected =='1'){
             return Excel::download(new DailyExport($stationSelected), 'DailyData.csv');
 
         }else if($periodSelected == '2'){
@@ -107,7 +104,7 @@ class HomeController extends Controller
         }else if($periodSelected == '4'){
             return Excel::download(new YearlyExport($stationSelected), 'YearlyData.csv');
         }
-    
+
     }
 
     public function excelData(Request $request)
@@ -159,7 +156,7 @@ class HomeController extends Controller
 
         if($graphics_id=='1'){
         $lava= new Lavacharts;
-            
+
                 $data=Daily::select("fecha as 0","max_temperatura_interna as 1", "avg_temperatura_interna as 2","min_temperatura_interna as 3")->get()->toArray();
                 $datatable = $lava->DataTable();
 
@@ -169,12 +166,12 @@ class HomeController extends Controller
                             -> addNumberColumn('Min Temp Int')
                             -> addRows($data);
 
-                
+
                 $lava->LineChart('Temperature', $datatable,[
                         'title' => 'DailyTemperatures'
-                        
+
                 ]);
-            
+
         }
         return $datatable->toJson();
 

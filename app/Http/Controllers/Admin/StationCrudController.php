@@ -8,7 +8,6 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\StationRequest as StoreRequest;
 use App\Http\Requests\StationRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 /**
  * Class StationCrudController
@@ -28,7 +27,7 @@ class StationCrudController extends CrudController
         | CrudPanel Basic Information
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('App\Models\Station');
+        $this->crud->setModel('App\Models\Met\Station');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/station');
         $this->crud->setEntityNameStrings('estación', 'estaciones');
 
@@ -76,6 +75,7 @@ class StationCrudController extends CrudController
                 'label' => 'Altitud',
                 'type' => 'decimal',
             ],
+
         ]);
 
         $this->crud->addFields([
@@ -103,7 +103,7 @@ class StationCrudController extends CrudController
                 'type' => 'number',
                   // optionals
                 'attributes' => ["step" => "any"], // allow decimals
-               
+
             ],
             [
                 'name' => 'longitude',
@@ -117,6 +117,7 @@ class StationCrudController extends CrudController
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
             ],
+            
         ]);
         // add asterisk for fields that are required in StationRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');

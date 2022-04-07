@@ -14,7 +14,7 @@ class AddCoordinatesToTable extends Migration
     public function up()
     {
         Schema::table('meteobridge', function (Blueprint $table) {
-            $table->decimal('latitude', 9,6)->after('id_station');
+            $table->decimal('latitude', 9,6)->after('station_id');
             $table->decimal('longitude', 9,6)->after('latitude');
         });
     }

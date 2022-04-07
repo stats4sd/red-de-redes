@@ -5,24 +5,13 @@ namespace App\Http\Controllers;
 use DB;
 use ZipArchive;
 use Carbon\Carbon;
-use Pusher\Pusher;
-use App\Models\Data;
-use App\Models\Daily;
-use App\Models\Plaga;
-use App\Models\Suelo;
-use App\Models\Parcela;
-use App\Models\Comunidad;
-use App\Models\Fenologia;
-use App\Models\Rendimento;
-use App\Models\Enfermedade;
+use App\Models\Met\MetData;
 use Illuminate\Support\Str;
 use App\Models\DataTemplate;
 use Illuminate\Http\Request;
-use App\Models\ManejoParcela;
-use App\Models\Station;
+use App\Models\Met\Station;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Expr\AssignOp\Concat;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class DataController extends Controller
@@ -77,75 +66,62 @@ class DataController extends Controller
         $senamhi_data = [];
         $station = Station::findOrFail($request->stationsSelected)->first();
         foreach ($request->modulesSelected as $module) {
-            if($module=='daily_data'){
-                if($request->aggregationSelected=='daily_data'){
-                    $weather = DB::table('daily_data')->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(100);
+            if ($module=='daily_data') {
+                if ($request->aggregationSelected=='daily_data') {
+                    $weather = DB::table('daily_data')->where('fecha', '>=', $request->startDate)->where('fecha', '<=', $request->endDate)->whereIn('station_id', $request->stationsSelected)->paginate(100);
+                } elseif ($request->aggregationSelected=='tendays_data') {
+                    $weather = DB::table($request->aggregationSelected)->where('max_fecha', '>=', $request->startDate)->where('min_fecha', '<=', $request->endDate)->whereIn('station_id', $request->stationsSelected)->paginate(5);
+                } elseif ($request->aggregationSelected=="monthly_data") {
+                    $weather = DB::table($request->aggregationSelected)->where('fecha', '>=', $request->startDate)->where('fecha', '<=', $request->endDate)->whereIn('station_id', $request->stationsSelected)->paginate(5);
+                } elseif ($request->aggregationSelected=="yearly_data") {
+                    $weather = DB::table($request->aggregationSelected)->where('fecha', '>=', $request->startDate)->where('fecha', '<=', $request->endDate)->whereIn('station_id', $request->stationsSelected)->paginate(5);
+                } elseif ($request->aggregationSelected=="senamhi_daily") {
+                    $senamhi = DB::table('daily_data')->whereYear('fecha', $request->yearSelected)->select(DB::raw('MONTH(fecha) month, DAY(fecha) day'), $request->meteoParameterSelected)->where('station_id', $request->stationsSelected)->orderBy('day', 'asc')->get();
 
-                }else if($request->aggregationSelected=='tendays_data'){
-                    $weather = DB::table($request->aggregationSelected)->where('max_fecha','>=',$request->startDate)->where('min_fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
-
-                }else if($request->aggregationSelected=="monthly_data"){
-                    $weather = DB::table($request->aggregationSelected)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
-                  
-                }else if($request->aggregationSelected=="yearly_data"){
-                    $weather = DB::table($request->aggregationSelected)->where('fecha','>=',$request->startDate)->where('fecha','<=',$request->endDate)->whereIn('id_station', $request->stationsSelected)->paginate(5);
-                
-                }else if($request->aggregationSelected=="senamhi_daily"){
-                    $senamhi = DB::table('daily_data')->whereYear('fecha',$request->yearSelected)->select(DB::raw('MONTH(fecha) month, DAY(fecha) day'),$request->meteoParameterSelected)->where('id_station', $request->stationsSelected)->orderBy('day', 'asc')->get();
-                    
                     foreach ($senamhi as $month) {
                         $month_name = date('F', mktime(0, 0, 0, $month->month, 10));
                         $short_name = strtoupper(substr($month_name, 0, 3));
                         $parameter = array_keys((array)$month)[2];
                         $month->$short_name = $month->$parameter;
                     }
-                
+
 
                     $senamhi = $senamhi->groupBy('day');
-                   
+
                     $senamhi_data = [];
                     $data = (object)[];
-                   
+
                     foreach ($senamhi as $days) {
-                        foreach($days as $day) {
-                            
+                        foreach ($days as $day) {
                             $short_month = array_keys((array)$day)[3];
                             $data->day = $day->day;
                             $data->$short_month = $day->$short_month;
                         }
-                        
-                        $senamhi_data[]=(array)$data;
-                         
-                    }
-               
 
+                        $senamhi_data[]=(array)$data;
+                    }
                 } else {
-                    $senamhi = DB::table('monthly_data')->where('id_station', $request->stationsSelected)->whereBetween('year',[$request->yearInitialSelected, $request->yearFinalSelected])->whereBetween('month',[$request->monthInitialSelected, $request->monthFinalSelected])->select('year', 'month', $request->meteoParameterSelected)->orderBy('year', 'asc')->get();
-                    
+                    $senamhi = DB::table('monthly_data')->where('station_id', $request->stationsSelected)->whereBetween('year', [$request->yearInitialSelected, $request->yearFinalSelected])->whereBetween('month', [$request->monthInitialSelected, $request->monthFinalSelected])->select('year', 'month', $request->meteoParameterSelected)->orderBy('year', 'asc')->get();
+
                     foreach ($senamhi as $month) {
                         $month_name = date('F', mktime(0, 0, 0, $month->month, 10));
                         $short_name = strtoupper(substr($month_name, 0, 3));
                         $parameter = array_keys((array)$month)[2];
                         $month->$short_name = $month->$parameter;
                     }
-                    
+
                     $senamhi = $senamhi->groupBy('year');
                     $senamhi_data = [];
                     $data = (object)[];
                     foreach ($senamhi as $year) {
-                        foreach($year as $month) {
-                            
+                        foreach ($year as $month) {
                             $short_month = array_keys((array)$month)[3];
                             $data->year = $month->year;
                             $data->$short_month = $month->$short_month;
                         }
                         $senamhi_data[]=(array)$data;
                     }
-                    
-
-             
-                } 
-
+                }
             }
         }
 
@@ -161,7 +137,6 @@ class DataController extends Controller
             'rendimentos' => $rendimentos,
             'fenologia' => $fenologia,
         ]);
-
     }
 
     /**
@@ -172,7 +147,7 @@ class DataController extends Controller
      */
     public function edit($id)
     {
-         //
+        //
     }
 
     /**
@@ -208,108 +183,90 @@ class DataController extends Controller
         $sheet_names = '';
 
         foreach ($request->modulesSelected as $module) {
-            if($module=='daily_data'){
-                if($request->aggregationSelected=='tendays_data'){
-                    $query = "select * from ". $request->aggregationSelected . " where max_fecha >= '".$request->startDate."' and max_fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
+            if ($module=='daily_data') {
+                if ($request->aggregationSelected=='tendays_data') {
+                    $query = "select * from ". $request->aggregationSelected . " where max_fecha >= '".$request->startDate."' and max_fecha <= '".$request->endDate."' and station_id in (". implode(",", $request->stationsSelected).");";
+                } else {
+                    $query = "select * from ". $request->aggregationSelected . " where fecha >= '".$request->startDate."' and fecha <= '".$request->endDate."' and station_id in (". implode(",", $request->stationsSelected).");";
                 }
-                
-                else{
 
-                    $query = "select * from ". $request->aggregationSelected . " where fecha >= '".$request->startDate."' and fecha <= '".$request->endDate."' and id_station in (". implode(",",$request->stationsSelected).");";
-                }
-            
-                
+
 
 
 
                 $queries = $queries.$query;
                 $sheet_names = $sheet_names.$request->aggregationSelected.', ';
-              
-
-
-            } if($module=='parcelas') {
-
-                $query = "select * from ". 'parcela' . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+            }
+            if ($module=='parcelas') {
+                $query = "select * from ". 'parcela' . " where comunidad_id in (". implode(",", $request->comunidadsSelected).");";
 
                 $queries = $queries.$query;
                 $sheet_names = $sheet_names.'parcelas, ';
-                foreach ($request->parcelasModulesSelected as $parcelas_modules){
-                    if($parcelas_modules=='suelos'){
-
-                        $query = "select * from ". 'suelo' . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+                foreach ($request->parcelasModulesSelected as $parcelas_modules) {
+                    if ($parcelas_modules=='suelos') {
+                        $query = "select * from ". 'suelo' . " where comunidad_id in (". implode(",", $request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
                         $sheet_names = $sheet_names.'suelos, ';
-
                     }
-                    if($parcelas_modules=='manejo_parcelas'){
-                        $query = "select * from ". 'manejo_parcela' . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+                    if ($parcelas_modules=='manejo_parcelas') {
+                        $query = "select * from ". 'manejo_parcela' . " where comunidad_id in (". implode(",", $request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
                         $sheet_names = $sheet_names.'manejo_parcelas, ';
-
                     }
-                    if($parcelas_modules=='plagas'){
-                        $query = "select * from ". $parcelas_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+                    if ($parcelas_modules=='plagas') {
+                        $query = "select * from ". $parcelas_modules . " where comunidad_id in (". implode(",", $request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
                         $sheet_names = $sheet_names.'plagas, ';
                     }
-                    if($parcelas_modules=='enfermedades'){
-                        $query = "select * from ". $parcelas_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+                    if ($parcelas_modules=='enfermedades') {
+                        $query = "select * from ". $parcelas_modules . " where comunidad_id in (". implode(",", $request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
                         $sheet_names = $sheet_names.'enfermedades, ';
                     }
-                    if($parcelas_modules=='rendimentos'){
-                        $query = "select * from ". $parcelas_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+                    if ($parcelas_modules=='rendimentos') {
+                        $query = "select * from ". $parcelas_modules . " where comunidad_id in (". implode(",", $request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
                         $sheet_names = $sheet_names.'rendimentos, ';
-
                     }
-
                 }
-
-
-            } if($module=='cultivos') {
-
-                foreach ($request->cultivosModulesSelected as $cultivo_modules){
-                    if($cultivo_modules=='fenologia'){
-                        $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+            }
+            if ($module=='cultivos') {
+                foreach ($request->cultivosModulesSelected as $cultivo_modules) {
+                    if ($cultivo_modules=='fenologia') {
+                        $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",", $request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
                         $sheet_names = $sheet_names.'fenologia, ';
-
                     }
-                    if($cultivo_modules=='manejo_parcelas'){
-                        $query = "select * from ". 'manejo_parcela' . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+                    if ($cultivo_modules=='manejo_parcelas') {
+                        $query = "select * from ". 'manejo_parcela' . " where comunidad_id in (". implode(",", $request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
                         $sheet_names = $sheet_names.'manejo_parcelas, ';
-
                     }
-                    if($cultivo_modules=='plagas'){
-                        $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+                    if ($cultivo_modules=='plagas') {
+                        $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",", $request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
                         $sheet_names = $sheet_names.'plagas, ';
-
                     }
-                    if($cultivo_modules=='enfermedades'){
-                        $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+                    if ($cultivo_modules=='enfermedades') {
+                        $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",", $request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
                         $sheet_names = $sheet_names.'plagas, ';
-
                     }
-                    if($cultivo_modules=='rendimentos'){
-                        $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",",$request->comunidadsSelected).");";
+                    if ($cultivo_modules=='rendimentos') {
+                        $query = "select * from ". $cultivo_modules . " where comunidad_id in (". implode(",", $request->comunidadsSelected).");";
 
                         $queries = $queries.$query;
                         $sheet_names = $sheet_names.'rendimentos, ';
                     }
-
                 }
             }
         }
@@ -323,46 +280,41 @@ class DataController extends Controller
 
         $process->run();
 
-        if(!$process->isSuccessful()) {
-
-           throw new ProcessFailedException($process);
-
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
         } else {
-
             $process->getOutput();
-            
         }
 
         #Create Zip Archive for observation files.
-        $weather_observation = Data::whereHas('observation')->with('observation')->where('id_station', $request->stationsSelected)->whereBetween('fecha_hora',[$request->startDate, $request->endDate])->get();
-       
+        $weather_observation = MetData::whereHas('observation')->with('observation')->where('station_id', $request->stationsSelected)->whereBetween('fecha_hora', [$request->startDate, $request->endDate])->get();
+
         $list_files = array();
         foreach ($weather_observation as $observation) {
-            if(!in_array($observation->observation->files, $list_files)){
+            if (!in_array($observation->observation->files, $list_files)) {
                 array_push($list_files, $observation->observation->files);
             }
         }
-      
+
         $zip = new ZipArchive();
 
         $zip_name = Str::slug('Agronometric'.'_'.Carbon::now()->toDateTimeString());
 
         $zip->open(storage_path("app/public/data/{$zip_name}_files.zip"), ZipArchive::CREATE);
-      
+
         foreach ($list_files as $file) {
             $split_filename = explode('/', $file);
             $original_filename = $split_filename[1];
-         
+
             $zip->addFile(public_path('/storage/'.$file), "Observation files/{$original_filename}");
         }
 
         #Add file with Agronometric Data
-        
+
         $zip->addFile(public_path('/storage/data/'.$file_name), "{$file_name}");
         $zip->close();
- 
+
         $path_download =  Storage::url('/data/'.$zip_name.'_files.zip');
         return response()->json(['path' => $path_download]);
     }
-
 }

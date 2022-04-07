@@ -2,6 +2,10 @@
 
 return [
 
+
+    /** determines if pipenv is used in current environment*/
+    'pipenv' => env('PIPENV', true),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -57,7 +61,7 @@ return [
     'asset_url' => env('ASSET_URL', null),
     'post_url' => env('POST_URL'),
     'admin_email' => env('ADMIN_EMAIL'),
-    
+
 
     /*
     |--------------------------------------------------------------------------

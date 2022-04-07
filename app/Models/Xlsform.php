@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\DataMap;
-use App\Models\Submission;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;

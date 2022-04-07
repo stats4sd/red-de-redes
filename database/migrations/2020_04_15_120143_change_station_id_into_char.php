@@ -14,7 +14,7 @@ class ChangeStationIdIntoChar extends Migration
     public function up()
     {
         Schema::table('meteobridge', function (Blueprint $table) {
-            $table->text('id_station')->change();
+            $table->text('station_id')->change();
         });
     }
 

@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class DataPreviewView extends Migration
@@ -23,7 +21,7 @@ class DataPreviewView extends Migration
                 -- ## Grouped by weather-station
                 max(`data_template`.`id`) as `id`,
                 LEFT(fecha_hora,10) as fecha,
-                id_station as id_station,
+                station_id as station_id,
 
                 -- #########################################
                 -- #########################################
@@ -78,10 +76,10 @@ class DataPreviewView extends Migration
                 -- ## So, for days we can just use the 24_horas column.
 
                 MAX(lluvia_24_horas) as lluvia_24_horas_total
-                
+
 
                 FROM data_template
-                GROUP BY fecha, id_station;
+                GROUP BY fecha, station_id;
         ");
     }
 

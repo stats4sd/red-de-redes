@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Models\Station;
+use App\Models\Met\Station;
 use App\Http\Controllers\Controller;
 
 class StationController extends Controller
@@ -14,12 +14,16 @@ class StationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-
     {
         //all data in this model
         $stations = Station::all();
 
-        return $stations->toJson(); 
+        // add a label with id for easier met station selection in front end
+        foreach ($stations as $station) {
+            $station->label_with_id = $station->id . '. ' . $station->label;
+        }
+
+        return $stations->toJson();
     }
 
     /**

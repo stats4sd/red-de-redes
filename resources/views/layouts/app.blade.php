@@ -30,7 +30,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('home') }}" style="color:white;" >
+                <a class="navbar-brand" href="{{ url('intro') }}" style="color:white;" >
                     Agronometric
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -42,18 +42,21 @@
                     <ul class="navbar-nav mr-auto">
                         @guest
 
-                        @elseif(Auth::user()->type=="admin")
+                        @elseif(Auth::user()->type==="admin")
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='home') active @endif" href="home">Inicio</a>
+                          <a class="nav-link @if(Route::current()->uri==='intro') active @endif" href="{{url('intro')}}">Inicio</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='weatherstations' && Auth::user()->type=="admin") active @endif" href="weatherstations">Subir Datos Meteorológicos</a>
+                          <a class="nav-link @if(Route::current()->uri==='data-download' && Auth::user()->type==="admin") active @endif" href="{{url('data-download')}}">Descargar Datos</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='admin' && Auth::user()->type=="admin") active @endif" href="admin">Admin</a>
+                          <a class="nav-link @if(Route::current()->uri==='data-upload' && Auth::user()->type==="admin") active @endif" href="{{url('data-upload')}}">Subir Datos Meteorológicos</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link @if(Route::current()->uri==='qr-codes' && Auth::user()->type=="admin") active @endif" href="{{ url('qr-codes') }}">Códigos QR</a>
+                          <a class="nav-link @if(Route::current()->uri==='admin' && Auth::user()->type==="admin") active @endif" href="{{url('admin')}}">Admin</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link @if(Route::current()->uri==='qr-codes' && Auth::user()->type==="admin") active @endif" href="{{ url('qr-codes') }}">Códigos QR</a>
                         </li>
                          @endguest
                     </ul>

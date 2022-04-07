@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\DataMapRequest;
 use App\Http\Requests\DataMapStoreRequest;
 use App\Http\Requests\DataMapUpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class DataMapCrudController
