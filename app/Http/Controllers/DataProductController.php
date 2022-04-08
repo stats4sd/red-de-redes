@@ -24,7 +24,7 @@ class DataProductController extends Controller
         $actionType = $query['actionType'];
 
         // which aggregated met data to be generated
-        // possible values: daily, tendays, monthly, yearly, senamhi_daily, senamhi_monthly
+        // possible values: daily_data, tendays_data, monthly_data, yearly_data, senamhi_daily, senamhi_monthly
 
         // do existence check because aggregation is available for data download only
         if (array_key_exists('aggregation', $query)) {
@@ -42,9 +42,11 @@ class DataProductController extends Controller
 
             // 1. Generate an Excel file with Laravel Excel + return the resulting file for download
 
-            // filename will be refined in Vue component level
-            $filename = "Datos meteorologicos - " . Carbon::now()->format('Ymd_His') . ".xlsx";
-            return Excel::download(new MetDataWorkbookExport($query), $filename);
+            if ($aggregation === 'daily_data' || $aggregation === 'tendays_data' || $aggregation === 'monthly_data' || $aggregation === 'yearly_data') {
+                // filename will be refined when download file in Vue component level
+                $filename = "Datos meteorologicos - " . Carbon::now()->format('Ymd_His') . ".xlsx";
+                return Excel::download(new MetDataWorkbookExport($query), $filename);
+            }
 
             // 2. Generate an CSV file with R + return the result for download
             if ($aggregation === 'senamhi_daily') {
