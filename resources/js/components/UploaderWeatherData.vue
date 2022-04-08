@@ -98,6 +98,8 @@
                                         revisar los valores de los datos y confirmar que estas son las unidades correctas
                                         antes de continuar.
                                     </b-alert>
+                                    <br/>
+                                    <br/>
                                     <b-alert show variant="danger" v-if="uploadError!=null">{{ uploadError }}</b-alert>
                                     <br/>
                                     <button class="site-btn my-4" v-on:click="submit();" :disabled="busy">
@@ -515,8 +517,9 @@ export default {
                     if (error.response && error.response.hasOwnProperty('data')) {
                         this.uploadError = error.response.data.message;
 
-                        // instead of showing the full error message from Python, show the last few lines only
-                        this.uploadError = this.uploadError.split("File").pop();
+                        // instead of showing the full error message from Python, show a generic error message and the last few lines of error message only
+                        // P.S. error message will be simplifed as "Server Error" in live env because debug mode is turned off
+                        this.uploadError = "The met data file seems not in correct format. Please check and ensure the met data file is in correct format. "+ this.uploadError.split("File").pop();
                     } else {
                         this.uploadError = "No se pudo subir el archivo. Verifique que esté en el formato correcto o póngase en contacto con el administrador de la plataforma para obtener más información.";
                     }
