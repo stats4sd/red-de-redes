@@ -21,7 +21,7 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 Route::get('', function () {
-    return redirect('/intro');
+    return redirect('/login');
 });
 
 Auth::routes();
