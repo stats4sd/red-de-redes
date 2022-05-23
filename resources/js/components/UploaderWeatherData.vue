@@ -479,10 +479,30 @@ export default {
             // after upgrading from Vue 2 to Vue 3:
             // 1. needs to pass v-model.value instead of passing v-model
             // 2. default value not assigned, add default value as parameter value if user has not selected an option in selection box
-            formData.append('selectedUnitTemp', this.selectedUnitTemp.value ?? 'ºC');
-            formData.append('selectedUnitPres', this.selectedUnitPres.value ?? 'hpa');
-            formData.append('selectedUnitWind', this.selectedUnitWind.value ?? 'm/s');
-            formData.append('selectedUnitRain', this.selectedUnitRain.value ?? 'mm');
+
+            if (this.selectedUnitTemp == undefined) {
+                formData.append('selectedUnitTemp', 'ºC');
+            } else {
+                formData.append('selectedUnitTemp', this.selectedUnitTemp.value ?? 'ºC');
+            }
+            
+            if (this.selectedUnitPres == undefined) {
+                formData.append('selectedUnitPres', 'hpa');
+            } else {
+                formData.append('selectedUnitPres', this.selectedUnitPres.value ?? 'hpa');
+            }
+
+            if (this.selectedUnitWind == undefined) {
+                formData.append('selectedUnitWind', 'm/s');
+            } else {
+                formData.append('selectedUnitWind', this.selectedUnitWind.value ?? 'm/s');
+            }
+
+            if (this.selectedUnitRain == undefined) {
+                formData.append('selectedUnitRain', 'mm');
+            } else {
+                formData.append('selectedUnitRain', this.selectedUnitRain.value ?? 'mm');
+            }
 
             axios.post(rootUrl + '/files', formData, {}).then((result) => {
 
