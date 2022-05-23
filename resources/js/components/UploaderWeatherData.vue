@@ -80,16 +80,16 @@
 
                                 <div class="row py-4 mx-4 justify-content-center">
                                     <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
-                                        <v-select v-model="selectedUnitTemp" :options="unitTemp"></v-select>
+                                        <v-select v-model="selectedUnitTemp" :options="unitTemp" :clearable="false"></v-select>
                                     </label>
                                     <label class="control-label col-sm-3" style="color: black"><h5>Presión</h5>
-                                        <v-select v-model="selectedUnitPres" :options="unitPres"></v-select>
+                                        <v-select v-model="selectedUnitPres" :options="unitPres" :clearable="false"></v-select>
                                     </label>
                                     <label class="control-label col-sm-3" style="color: black"><h5>Velocidad del viento</h5>
-                                        <v-select v-model="selectedUnitWind" :options="unitWind"></v-select>
+                                        <v-select v-model="selectedUnitWind" :options="unitWind" :clearable="false"></v-select>
                                     </label>
                                     <label class="control-label col-sm-3" style="color: black"><h5>Precipitación</h5>
-                                        <v-select v-model="selectedUnitRain" :options="unitRain"></v-select>
+                                        <v-select v-model="selectedUnitRain" :options="unitRain" :clearable="false"></v-select>
                                     </label>
                                 </div>
 
@@ -479,30 +479,10 @@ export default {
             // after upgrading from Vue 2 to Vue 3:
             // 1. needs to pass v-model.value instead of passing v-model
             // 2. default value not assigned, add default value as parameter value if user has not selected an option in selection box
-
-            if (this.selectedUnitTemp == undefined) {
-                formData.append('selectedUnitTemp', 'ºC');
-            } else {
-                formData.append('selectedUnitTemp', this.selectedUnitTemp.value ?? 'ºC');
-            }
-            
-            if (this.selectedUnitPres == undefined) {
-                formData.append('selectedUnitPres', 'hpa');
-            } else {
-                formData.append('selectedUnitPres', this.selectedUnitPres.value ?? 'hpa');
-            }
-
-            if (this.selectedUnitWind == undefined) {
-                formData.append('selectedUnitWind', 'm/s');
-            } else {
-                formData.append('selectedUnitWind', this.selectedUnitWind.value ?? 'm/s');
-            }
-
-            if (this.selectedUnitRain == undefined) {
-                formData.append('selectedUnitRain', 'mm');
-            } else {
-                formData.append('selectedUnitRain', this.selectedUnitRain.value ?? 'mm');
-            }
+            formData.append('selectedUnitTemp', this.selectedUnitTemp.value ?? 'ºC');
+            formData.append('selectedUnitPres', this.selectedUnitPres.value ?? 'hpa');
+            formData.append('selectedUnitWind', this.selectedUnitWind.value ?? 'm/s');
+            formData.append('selectedUnitRain', this.selectedUnitRain.value ?? 'mm');
 
             axios.post(rootUrl + '/files', formData, {}).then((result) => {
 
