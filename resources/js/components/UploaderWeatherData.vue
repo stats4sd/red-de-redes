@@ -305,26 +305,30 @@ export default {
                     'title': "Comprobar unidades y guardar datos",
                 }
             ],
+            // after upgrading from Vue 2 to Vue 3
+            // 1. need to use attribute "label" instead of attribute "text"
             unitTemp: [
-                {value: 'ºC', text: 'Celsius (ºC)'},
-                {value: 'ºF', text: 'Farhenheit (ºF)'}
+                {value: 'ºC', label: 'Celsius (ºC)'},
+                {value: 'ºF', label: 'Farhenheit (ºF)'}
             ],
             unitPres: [
-                {value: 'hpa', text: 'hPa'},
-                {value: 'inhg', text: 'inhg'},
-                {value: 'mmhg', text: 'mmhg'}
+                {value: 'hpa', label: 'hPa'},
+                {value: 'inhg', label: 'inhg'},
+                {value: 'mmhg', label: 'mmhg'}
             ],
             unitWind: [
-                {value: 'm/s', text: 'm/s'},
-                {value: 'km/h', text: 'km/h'},
-                {value: 'mph', text: 'mph'}
+                {value: 'm/s', label: 'm/s'},
+                {value: 'km/h', label: 'km/h'},
+                {value: 'mph', label: 'mph'}
             ],
             unitRain: [
-                {value: 'mm', text: 'mm'},
-                {value: 'inch', text: 'inch'}
+                {value: 'mm', label: 'mm'},
+                {value: 'inch', label: 'inch'}
             ],
             stations: [],
             selectedStation: null,
+            // after upgrading from Vue 2 to Vue 3
+            // 1. default value has been set as selection box initial selected option, but it has not been assigned to v-model.value
             selectedUnitTemp: 'ºC',
             selectedUnitPres: 'hpa',
             selectedUnitWind: 'm/s',
@@ -412,7 +416,7 @@ export default {
         }
     },
     mounted() {
-
+        
         axios.get('api/stations').then((response) => {
             this.stations = response.data;
         })
@@ -471,11 +475,33 @@ export default {
             formData.append('data-file', this.file.file);
             formData.append('data-filesObservation', this.filesObservation ? this.filesObservation.file : null);
             formData.append('selectedStation', this.selectedStation.id);
-            formData.append('selectedUnitTemp', this.selectedUnitTemp);
-            formData.append('selectedUnitPres', this.selectedUnitPres);
-            formData.append('selectedUnitWind', this.selectedUnitWind);
-            formData.append('selectedUnitRain', this.selectedUnitRain);
 
+            // after upgrading from Vue 2 to Vue 3:
+            // 1. needs to pass v-model.value instead of passing v-model
+            // 2. default value not assigned, add default value as parameter value if user has not selected an option in selection box
+            if (this.selectedUnitTemp.value == undefined) {
+                formData.append('selectedUnitTemp', 'ºC');
+            } else {
+                formData.append('selectedUnitTemp', this.selectedUnitTemp.value);
+            }
+
+            if (this.selectedUnitPres.value == undefined) {
+                formData.append('selectedUnitPres', 'hpa');
+            } else {
+                formData.append('selectedUnitPres', this.selectedUnitPres.value);
+            }
+
+            if (this.selectedUnitWind.value == undefined) {
+                formData.append('selectedUnitWind', 'm/s');
+            } else {
+                formData.append('selectedUnitWind', this.selectedUnitWind.value);
+            }
+
+            if (this.selectedUnitRain.value == undefined) {
+                formData.append('selectedUnitRain', 'mm');
+            } else {
+                formData.append('selectedUnitRain', this.selectedUnitRain.value);
+            }
 
             axios.post(rootUrl + '/files', formData, {}).then((result) => {
 
