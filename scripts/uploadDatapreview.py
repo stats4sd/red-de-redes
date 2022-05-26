@@ -436,7 +436,7 @@ try:
 
 
     # define data_value as an empty array
-    data_value = []
+    #data_value = []
 
 
     # iterate each row in data frome
@@ -449,11 +449,15 @@ try:
 
         # append INSERT SQL statement to data_value array for later execution
         # prepare INSERT SQL statement VALUES clause with data of multiple records
-        data_value.append(tuple(row))
+        # data_value.append(tuple(row))
+
+        # MySQL connection is gone when INSERT SQL is too long (i.e. when data file > 2.5 MB)
+        # run one short INSERT SQL for each record, instead of running one very long INSERT SQL for all records
+        cursor.execute(sql, tuple(row))
 
 
     # no error handling if SQL excption occured (e.g. unique constraint violated due to two records with same date time)
-    cursor.executemany(sql, data_value)
+    #cursor.executemany(sql, data_value)
 
 
     # commit changes to database
