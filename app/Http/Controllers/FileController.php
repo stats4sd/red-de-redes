@@ -125,6 +125,12 @@ class FileController extends Controller
             // number of not existed records = number of uploaded records - number of existed records
             $numberNotExistedRecords = $numberUploadedRecords - $numberExistedRecords;
 
+            // update file record
+            $newFile->update([
+                'new_records_count' => $numberNotExistedRecords,
+                'duplicate_records_count' => $numberExistedRecords,
+            ]);
+
 
             // prepare advice message
             $scenario = 0;

@@ -19,6 +19,8 @@ class AddLegacyFlagAndUploaderToFilesTable extends Migration
             $table->unsignedInteger('uploader_id')->comment('The user who uploaded the file')->nullable();
             $table->string('upload_id')->comment('unique ID to track records through preview and live table');
             $table->unsignedBigInteger('observation_id')->nullable();
+            $table->unsignedInteger('new_records_count')->nullable()->comment('how many records in the file are new (not already in the database, using station and timestamp to compare');
+            $table->unsignedInteger('duplicate_records_count')->nullable()->comment('how many records in the file already exist in the database, using station and timestamp to compare');
         });
     }
 
