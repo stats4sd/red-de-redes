@@ -19,3 +19,5 @@ yarn-error.log
 /scripts/dbConfig.py
 .Rproj.user
 /scripts/R/.Rhistory
+.DS_Store
+**/*.DS_Store
