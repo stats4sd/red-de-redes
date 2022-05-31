@@ -11,6 +11,7 @@ use \GuzzleHttp\Client;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Met\MetDataPreview;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
@@ -29,11 +30,8 @@ class FileController extends Controller
     public function store(Request $request): JsonResponse
     {
         // TODO: Update with proper validation
-        $newObservation_id = "null";
         $station = $request->selectedStation ?? null ;
 
-
-        $station = $request->selectedStation;
         if ($request->hasFile('data-filesObservation')) {
             // handle file and store it for prosperity
             $filesObservation = $request->file('data-filesObservation');
@@ -57,15 +55,20 @@ class FileController extends Controller
             $file_name = str_replace(" ", "_", $file->getClientOriginalName());
             $name = time() . '_' . $file_name;
             $path = $file->storeAs('rawfiles', $name);
-            $newFile = new File;
-            $newFile->path = $path;
-            $newFile->name = $name;
-            $newFile->station_id = $station;
-            $newFile->save();
+
+            // store the file entry in the database;
+            $newFile = File::create([
+                'path' => $path,
+                'name' => $name,
+                'station_id' => $station,
+                'observation_id' => $newObservation_id ?? null,
+                'uploader_id' => Auth::id(),
+                'upload_id' => $this->generateRandomString(),
+            ]);
+
             $scriptName = 'uploadDatapreview.py';
             $scriptPath = base_path() . '/scripts/' . $scriptName;
             $path_name = Storage::path("/") . $path;
-            $uploader_id = $this->generateRandomString();
 
             //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
             if ($request->hasFile('data-filesObservation')) {
@@ -77,11 +80,11 @@ class FileController extends Controller
 
             if (config('app.pipenv')) {
                 $isWindows = 0;
-                //dd(collect(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $isWindows, $newObservation_id])->join(" "));
-                $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $isWindows, $newObservation_id]);
+                //dd(collect(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $upload_id, $isWindows, $newObservation_id])->join(" "));
+                $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
             } else {
                 $isWindows = 1;
-                $process = new Process(['python', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $isWindows, $newObservation_id]);
+                $process = new Process(['python', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
             }
 
             $process->setWorkingDirectory(base_path());
@@ -94,13 +97,13 @@ class FileController extends Controller
                 throw new ProcessFailedException($process);
             }
 
-            $metDataPreview = MetDataPreview::where('uploader_id', '=', $uploader_id)->orderBy('id')->paginate(10);
+            $metDataPreview = MetDataPreview::where('uploader_id', '=', $newFile->upload_id)->orderBy('id')->paginate(10);
 
-            // $error_data = $this->checkValues($uploader_id);
+            // $error_data = $this->checkValues($newFile->upload_id);
 
 
             // check number of uploaded records
-            $sqlUploadedRecords = " SELECT COUNT(*) as number_of_records FROM met_data_preview WHERE uploader_id = '" . $uploader_id . "';";
+            $sqlUploadedRecords = " SELECT COUNT(*) as number_of_records FROM met_data_preview WHERE uploader_id = '" . $newFile->upload_id . "';";
 
             // execute custom SELECT SQL
             $uploadedRecordsResults = DB::select($sqlUploadedRecords);
@@ -110,7 +113,7 @@ class FileController extends Controller
             // check number of records already existed in database
             $sqlExistedRecords = " SELECT COUNT(*) as number_of_records";
             $sqlExistedRecords .= " FROM met_data ta, met_data_preview tb";
-            $sqlExistedRecords .= " WHERE tb.uploader_id = '" . $uploader_id . "'";
+            $sqlExistedRecords .= " WHERE tb.uploader_id = '" . $newFile->upload_id . "'";
             $sqlExistedRecords .= " AND ta.fecha_hora = tb.fecha_hora";
             $sqlExistedRecords .= " AND ta.station_id = tb.station_id;";
 
@@ -202,7 +205,7 @@ class FileController extends Controller
         //
     }
 
-    public function checkValues($uploader_id)
+    public function checkValues($upload_id)
     {
         $error_date = [];
         $error_temp = false;
@@ -211,7 +214,7 @@ class FileController extends Controller
         $error_rain = false;
 
 
-        $daily_preview = DB::table('daily_data_preview')->where('uploader_id', '=', $uploader_id)->get();
+        $daily_preview = DB::table('daily_data_preview')->where('uploader_id', '=', $upload_id)->get();
 
         foreach ($daily_preview as $key => $value) {
 
@@ -249,7 +252,7 @@ class FileController extends Controller
             }
         }
 
-        $error_data = MetDataPreview::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $uploader_id)->get();
+        $error_data = MetDataPreview::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $upload_id)->get();
 
         return response([
 
@@ -279,9 +282,9 @@ class FileController extends Controller
 
 
     // when user click "Cancel" button, remove staging records in table met_data_preview
-    public function cleanTable($uploader_id)
+    public function cleanTable($upload_id)
     {
-        DB::table('met_data_preview')->where('uploader_id', '=', $uploader_id)->delete();
+        DB::table('met_data_preview')->where('uploader_id', '=', $upload_id)->delete();
 
         return Redirect::back();
 
@@ -290,15 +293,15 @@ class FileController extends Controller
 
     // when user click "Confirm" button, run Python program to "move" staging records from
     // met_data_preview table to data table
-    public function storeFile($uploader_id)
+    public function storeFile($upload_id)
     {
 
         $scriptPath = base_path() . '/scripts/storeData.py';
 
         if (config('app.pipenv')) {
-            $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $uploader_id]);
+            $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $upload_id]);
         } else {
-            $process = new Process(['python', $scriptPath, $uploader_id]);
+            $process = new Process(['python', $scriptPath, $upload_id]);
         }
 
         $process->run();
@@ -309,22 +312,21 @@ class FileController extends Controller
 
         if (!$process->isSuccessful()) {
 
-            throw new ProcessFailedException($process);
+            Log::error('process failed');
+            Log::error($process->getErrorOutput());
 
             return response()->json(['error' => 'Los datos no se pueden guardar en la base de datos. Recomendamos verificar si hay duplicados']);
 
-        } else {
-
-            $process->getOutput();
-
-            return response()->json(['success' => 'Los datos han sido ingresados exitosamente.']);
         }
-        Log::info("python done.");
-        Log::info($process->getOutput());
 
+        // update file reference to mark it as successful, for future review;
+        File::whereUploadId($upload_id)->update([
+            'is_success' => 1
+        ]);
 
-        return Redirect::back();
+        $process->getOutput();
 
+        return response()->json(['success' => 'Los datos han sido ingresados exitosamente.']);
     }
 
 }

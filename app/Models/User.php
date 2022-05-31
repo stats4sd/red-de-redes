@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Met\File;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -41,4 +42,10 @@ class User extends Authenticatable
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
+    public function files ()
+    {
+        return $this->hasMany(File::class, 'uploader_id');
+    }
+
 }
