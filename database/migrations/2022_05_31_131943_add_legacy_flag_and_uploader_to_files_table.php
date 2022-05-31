@@ -37,6 +37,8 @@ class AddLegacyFlagAndUploaderToFilesTable extends Migration
             $table->dropColumn('uploader_id');
             $table->dropColumn('upload_id');
             $table->dropColumn('observation_id');
+            $table->dropColumn('new_records_count');
+            $table->dropColumn('duplicate_records_count');
         });
     }
 }
