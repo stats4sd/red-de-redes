@@ -20,8 +20,6 @@ class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
     // constructor to set HTTP request object to private variable
     public function __construct(array $query = null)
     {
-        logger("MonthlyMetDataExport.construct() starts...");
-
         $this->query = $query;
 
         $this->fields = [
@@ -138,7 +136,7 @@ class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
 
     public function title(): string
     {
-        return 'Monthly Met Data';
+        return 'Datos';
     }
 
     public function headings(): array

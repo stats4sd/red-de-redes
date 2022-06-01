@@ -23,8 +23,6 @@ class TendaysMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
     // constructor to set HTTP request object to private variable
     public function __construct(array $query = null)
     {
-        logger("TendaysMetDataExport.construct() starts...");
-
         $this->query = $query;
 
         $this->fields = [
@@ -144,7 +142,7 @@ class TendaysMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
 
     public function title(): string
     {
-        return 'Tendays Met Data';
+        return 'Datos';
     }
 
     public function headings(): array

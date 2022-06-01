@@ -14,10 +14,14 @@ class StationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-
     {
         //all data in this model
         $stations = Station::all();
+
+        // add a label with id for easier met station selection in front end
+        foreach ($stations as $station) {
+            $station->label_with_id = $station->id . '. ' . $station->label;
+        }
 
         return $stations->toJson();
     }

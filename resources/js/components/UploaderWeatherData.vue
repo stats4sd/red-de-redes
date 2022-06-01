@@ -19,7 +19,7 @@
                                 <div class="row mx-4 justify-content-center">
                                     <label class="control-label col-sm-6" style="color: black"><h5>Seleccione la
                                         estación</h5>
-                                        <v-select @change="modalShow = !modalShow" :options="stations" label="label"
+                                        <v-select @change="modalShow = !modalShow" :options="stations" label="label_with_id"
                                                 v-model="selectedStation"></v-select>
                                     </label>
                                 </div>
@@ -40,9 +40,9 @@
                                         <!-- add small map, met station photo, nearby village photo for visual identification -->
                                         <table border="1" width="100%">
                                             <tr>
-                                                <td width="33%"><b>Map</b></td>
-                                                <td width="33%"><b>Met Station</b></td>
-                                                <td width="34%"><b>Nearby Village</b></td>
+                                                <td width="33%"><b>Mapa</b></td>
+                                                <td width="33%"><b>Estación</b></td>
+                                                <td width="34%"><b>Pueblo cercano</b></td>
                                             </tr>
                                             <tr>
                                                 <td><img :src="'images/met_station/'+selectedStation.id+'_map.jpg'" width="150" height="100"></td>
@@ -80,16 +80,16 @@
 
                                 <div class="row py-4 mx-4 justify-content-center">
                                     <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
-                                        <v-select v-model="selectedUnitTemp" :options="unitTemp"></v-select>
+                                        <v-select v-model="selectedUnitTemp" :options="unitTemp" :clearable="false"></v-select>
                                     </label>
                                     <label class="control-label col-sm-3" style="color: black"><h5>Presión</h5>
-                                        <v-select v-model="selectedUnitPres" :options="unitPres"></v-select>
+                                        <v-select v-model="selectedUnitPres" :options="unitPres" :clearable="false"></v-select>
                                     </label>
                                     <label class="control-label col-sm-3" style="color: black"><h5>Velocidad del viento</h5>
-                                        <v-select v-model="selectedUnitWind" :options="unitWind"></v-select>
+                                        <v-select v-model="selectedUnitWind" :options="unitWind" :clearable="false"></v-select>
                                     </label>
                                     <label class="control-label col-sm-3" style="color: black"><h5>Precipitación</h5>
-                                        <v-select v-model="selectedUnitRain" :options="unitRain"></v-select>
+                                        <v-select v-model="selectedUnitRain" :options="unitRain" :clearable="false"></v-select>
                                     </label>
                                 </div>
 
@@ -98,7 +98,10 @@
                                         revisar los valores de los datos y confirmar que estas son las unidades correctas
                                         antes de continuar.
                                     </b-alert>
+                                    <br/>
+                                    <br/>
                                     <b-alert show variant="danger" v-if="uploadError!=null">{{ uploadError }}</b-alert>
+                                    <br/>
                                     <button class="site-btn my-4" v-on:click="submit();" :disabled="busy">
                                         <b-spinner small v-if="busy" label="Spinning"></b-spinner>
                                         Subir
@@ -109,7 +112,7 @@
                     </vue-collapsible-panel>
                     <vue-collapsible-panel :expanded="false">
                         <template #title>
-                            <span ref="panel1">Paso 2: {{ steps[1].title }}</span>
+                            <span ref="panel2">Paso 2: {{ steps[1].title }}</span>
                         </template>
 
                         <template #content >
@@ -239,13 +242,14 @@
                                     <b-alert show variant="danger" v-if="error!=null">{{ error }}</b-alert>
                                     <b-alert show variant="success" v-if="success!=null">{{ success }}</b-alert>
                                     <b-alert show variant="warning" v-if="scenario3"><input type="checkbox" v-model="scenario3Confirmed"><b><font color="red"> I confirm that I understand the potential risk of uploading this data file with existing records.</font></b></b-alert>
-
+                                    <br/>
                                     <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
                                             aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable"
                                             style="background: red;">
                                         <b-spinner small v-if="busy" label="Spinning"></b-spinner>
                                         Cancelar
                                     </button>
+                                    &nbsp;
                                     <button type="submit" class="site-btn my-4" data-toggle="collapse"
                                             href="#collapseThree" id="btnConfirm"
                                             aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile"
@@ -301,26 +305,30 @@ export default {
                     'title': "Comprobar unidades y guardar datos",
                 }
             ],
+            // after upgrading from Vue 2 to Vue 3
+            // 1. need to use attribute "label" instead of attribute "text"
             unitTemp: [
-                {value: 'ºC', text: 'Celsius (ºC)'},
-                {value: 'ºF', text: 'Farhenheit (ºF)'}
+                {value: 'ºC', label: 'Celsius (ºC)'},
+                {value: 'ºF', label: 'Farhenheit (ºF)'}
             ],
             unitPres: [
-                {value: 'hpa', text: 'hPa'},
-                {value: 'inhg', text: 'inhg'},
-                {value: 'mmhg', text: 'mmhg'}
+                {value: 'hpa', label: 'hPa'},
+                {value: 'inhg', label: 'inhg'},
+                {value: 'mmhg', label: 'mmhg'}
             ],
             unitWind: [
-                {value: 'm/s', text: 'm/s'},
-                {value: 'km/h', text: 'km/h'},
-                {value: 'mph', text: 'mph'}
+                {value: 'm/s', label: 'm/s'},
+                {value: 'km/h', label: 'km/h'},
+                {value: 'mph', label: 'mph'}
             ],
             unitRain: [
-                {value: 'mm', text: 'mm'},
-                {value: 'inch', text: 'inch'}
+                {value: 'mm', label: 'mm'},
+                {value: 'inch', label: 'inch'}
             ],
             stations: [],
             selectedStation: null,
+            // after upgrading from Vue 2 to Vue 3
+            // 1. default value has been set as selection box initial selected option, but it has not been assigned to v-model.value
             selectedUnitTemp: 'ºC',
             selectedUnitPres: 'hpa',
             selectedUnitWind: 'm/s',
@@ -467,11 +475,14 @@ export default {
             formData.append('data-file', this.file.file);
             formData.append('data-filesObservation', this.filesObservation ? this.filesObservation.file : null);
             formData.append('selectedStation', this.selectedStation.id);
-            formData.append('selectedUnitTemp', this.selectedUnitTemp);
-            formData.append('selectedUnitPres', this.selectedUnitPres);
-            formData.append('selectedUnitWind', this.selectedUnitWind);
-            formData.append('selectedUnitRain', this.selectedUnitRain);
 
+            // after upgrading from Vue 2 to Vue 3:
+            // 1. needs to pass v-model.value instead of passing v-model
+            // 2. default value not assigned, add default value as parameter value if user has not selected an option in selection box
+            formData.append('selectedUnitTemp', this.selectedUnitTemp.value ?? 'ºC');
+            formData.append('selectedUnitPres', this.selectedUnitPres.value ?? 'hpa');
+            formData.append('selectedUnitWind', this.selectedUnitWind.value ?? 'm/s');
+            formData.append('selectedUnitRain', this.selectedUnitRain.value ?? 'mm');
 
             axios.post(rootUrl + '/files', formData, {}).then((result) => {
 
@@ -512,6 +523,10 @@ export default {
                     console.log(error);
                     if (error.response && error.response.hasOwnProperty('data')) {
                         this.uploadError = error.response.data.message;
+
+                        // instead of showing the full error message from Python, show a generic error message and the last few lines of error message only
+                        // P.S. error message will be simplifed as "Server Error" in live env because debug mode is turned off
+                        this.uploadError = "The met data file seems not in correct format. Please check and ensure the met data file is in correct format. "+ this.uploadError.split("File").pop();
                     } else {
                         this.uploadError = "No se pudo subir el archivo. Verifique que esté en el formato correcto o póngase en contacto con el administrador de la plataforma para obtener más información.";
                     }
