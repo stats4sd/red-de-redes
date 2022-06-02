@@ -70,3 +70,5 @@
 </li>
 
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('observation') }}'><i class='nav-icon fa fa-files-o'></i> Observaciones</a></li>
+
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('file') }}'><i class='nav-icon la la-question'></i> Files</a></li>
