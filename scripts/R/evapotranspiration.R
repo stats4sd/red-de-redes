@@ -19,10 +19,16 @@ data <- daily_met_data_table %>%
           filter(is.na(evapo)) %>%
           collect()
 
-data_updated <- data %>%
-                mutate(evapo=1)
+stations <- unique(data$station_id)
 
-for(row in 1:nrow(data_updated)) {
-  query <- paste0("UPDATE daily_met_data SET evapo = ", data_updated$evapo[row], " WHERE id = '", data_updated$id[row], "';")
-  dbSendStatement(con, query)
+for(i in 1:length(stations)) {
+  
+  # update evapotranspiration calculation here
+  data_updated <- data %>% mutate(evapo=1)
+  
+  for(row in 1:nrow(data_updated)) {
+    query <- paste0("UPDATE daily_met_data SET evapo = ", data_updated$evapo[row], " WHERE station_id = '", stations[i], "' AND fecha = '", data_updated$fecha[row], "';")
+    dbSendStatement(con, query)
+  }
+  
 }
