@@ -13,9 +13,9 @@ con <- dbConnect(RMySQL::MySQL(),
                  password = Sys.getenv("DB_PASSWORD")
 )
 
-daily_met_data_table <- tbl(con, "daily_met_data")
+met_data_table <- tbl(con, "met_data")
 
-data <- daily_met_data_table %>%
+data <- met_data_table %>%
           filter(is.na(evapo)) %>%
           collect()
 
