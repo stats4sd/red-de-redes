@@ -7,7 +7,7 @@ library('stringi')
 ############################################
 # SETUP
 ############################################
-source('init.R')
+source('../init.R')
 
 met_data <- tbl(con, 'met_data')
 files <- tbl(con, 'files') %>%
@@ -76,11 +76,11 @@ open_and_format_file <- function(checking_file_name) {
 txt_files <- files$name
 
 ## import column maps from Python scripts
-txt_columns <- jsonlite::read_json('txt_column_list.json')
-csv_columns <- jsonlite::read_json('csv_column_list.json')
+txt_columns <- jsonlite::read_json('../txt_column_list.json')
+csv_columns <- jsonlite::read_json('../csv_column_list.json')
 
 ## column headers in R replace brackets, degrees symbol, percentages and slashes with dots when importing from csv files, so make sure the column headers here match:
-names(csv_columns) <- gsub('[()/°% ]', '.', names(csv_columns))
+names(csv_columns) <- gsub('[()/°% ]', '..', names(csv_columns))
 
 ## Create a data table to hold every file and the various counts we will generate
 count_checks <- data.table(
