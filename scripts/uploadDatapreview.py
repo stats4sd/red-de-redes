@@ -1,25 +1,10 @@
-# import mysql database driver, call it as "mysql"
 import mysql.connector as mysql
-
-# import database connection configuration from file "dbConfig.py", call it as "config"
 import dbConfig as config
-
-# import column names settings from file "listColumnsName.py", call it as "columns_name"
 import listColumnsName as columns_name
-
-# import popular Python-based data analysis library "pandas", call it as "pd"
 import pandas as pd
-
-# import numpy library, call it as "np"
 import numpy as np
-
-# import unit conversion custom library from file "convertorUnits.py", call it as "convertor"
 import convertorUnits as convertor
-
-# import date time library, call it as "datetime"
 from datetime import datetime
-
-# import system library, to access system-specific parameters and functions
 import sys
 
 

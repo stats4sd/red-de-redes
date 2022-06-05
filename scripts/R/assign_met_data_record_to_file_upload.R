@@ -58,5 +58,5 @@ expected_file_count <- file_from_files_table$new_records_count
         file_met_data <- met_data %>% filter(fecha_hora %in% timestamps & station_id == file_station_id) %>% collect()
 
     }
-}
+
 #}
