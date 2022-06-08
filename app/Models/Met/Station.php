@@ -30,4 +30,9 @@ class Station extends Model
         return $this->hasMany(MetData::class, 'station_id');
     }
 
+    public function file()
+    {
+        return $this->hasMany(File::class);
+    }
+
 }
