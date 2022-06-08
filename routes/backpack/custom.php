@@ -37,7 +37,7 @@ Route::group([
 ], function () { // custom admin routes
 
     // General Admin + Platform Management
-    Route::get('dashboard', [DashboardController::class, 'index']);
+    // Route::get('dashboard', [DashboardController::class, 'index']);
     Route::post('dashboard/charts', [DashboardController::class, 'charts']);
     Route::crud('user', UserCrudController::class);
 
@@ -87,4 +87,7 @@ Route::group([
     Route::crud('lkpcultivo', LkpCultivoCrudController::class);
     Route::crud('lkpvariedad', LkpVariedadCrudController::class);
     Route::crud('muestrasuelo', MuestraSueloCrudController::class);
+
+    Route::crud('file', FileCrudController::class);
+    
 }); // this should be the absolute last line of this file

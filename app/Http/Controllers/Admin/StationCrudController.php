@@ -47,12 +47,12 @@ class StationCrudController extends CrudController
             ],
             [
                 'name' => 'hardware_id',
-                'label' => 'Hardware ID',
+                'label' => 'ID de hardware',
                 'type' => 'text',
             ],
             [
                 'name' => 'label',
-                'label' => 'Label',
+                'label' => 'Etiqueta',
                 'type' => 'text',
             ],
             [
@@ -81,12 +81,12 @@ class StationCrudController extends CrudController
         $this->crud->addFields([
             [
                 'name' => 'hardware_id',
-                'label' => 'Hardware ID',
+                'label' => 'ID de hardware',
                 'type' => 'text',
             ],
             [
                 'name' => 'label',
-                'label' => 'Label',
+                'label' => 'Etiqueta',
                 'type' => 'text',
             ],
             [
