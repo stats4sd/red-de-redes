@@ -38,18 +38,18 @@ class FileCrudController extends CrudController {
         ],
         [
             'name'  => 'is_success',
-            'type'  => 'check',
+            'type'  => 'boolean',
             'label' => 'Subido con éxito',
         ],
         [
             'name'  => 'is_legacy',
-            'type'  => 'check',
+            'type'  => 'boolean',
             'label' => 'Archivo heredado',
         ],
         [
-            'name'  => 'uploader_id',
+            'name'  => 'uploader.name',
             'type'  => 'text',
-            'label' => 'ID del subidor',
+            'label' => 'Subidor',
         ],
         [
             'name'  => 'upload_id',
