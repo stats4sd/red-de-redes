@@ -42,14 +42,14 @@ class FileCrudController extends CrudController {
             'label' => 'Subido con éxito',
         ],
         [
-            'name'  => 'is_legacy',
-            'type'  => 'boolean',
-            'label' => 'Archivo heredado',
-        ],
-        [
             'name'  => 'uploader.name',
             'type'  => 'text',
-            'label' => 'Subidor',
+            'label' => 'Subido por',
+        ],
+        [
+            'name'  => 'created_at',
+            'type'  => 'date',
+            'label' => 'Fecha de subida',
         ],
         [
             'name'  => 'upload_id',
@@ -70,16 +70,6 @@ class FileCrudController extends CrudController {
             'name'  => 'duplicate_records_count',
             'type'  => 'text',
             'label' => 'Número de registros duplicados',
-        ],
-        [
-            'name'  => 'name',
-            'type'  => 'text',
-            'label' => 'Nombre',
-        ],
-        [
-            'name'  => 'path',
-            'type'  => 'text',
-            'label' => 'Path',
         ],
     ]);
 
