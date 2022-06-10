@@ -2,6 +2,7 @@
 
 use App\Models\Met\Station;
 use App\Http\Requests\FileRequest;
+use Illuminate\Support\Facades\Storage;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 class FileCrudController extends CrudController {
@@ -25,6 +26,11 @@ class FileCrudController extends CrudController {
             'name'  => 'original_name',
             'type'  => 'text',
             'label' => 'Nombre original',
+            'wrapper'   => [
+                'href' => function ($crud, $column, $entry) {
+                    return Storage::url($entry->path);
+                },
+            ]
         ],
         [
             'name'  => 'station.label',
