@@ -61,6 +61,11 @@ class StationCrudController extends CrudController
                 'type' => 'text',
             ],
             [
+                'name' => 'manager',
+                'label' => 'Encargado',
+                'type' => 'text',
+            ],
+            [
                 'name' => 'latitude',
                 'label' => 'Latitud',
                 'type' => 'decimal',
