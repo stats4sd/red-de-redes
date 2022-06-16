@@ -7,7 +7,7 @@ use App\Http\Requests\FileRequest;
 use Illuminate\Support\Facades\Storage;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Controllers\Admin\Operations\MarkToRemoveOperation;
-use App\Http\Controllers\Admin\Operations\MarkAsReviewedOperation;
+use App\Http\Controllers\Admin\Operations\MarkToKeepOperation;
 
 class FileCrudController extends CrudController
 {
@@ -15,7 +15,7 @@ class FileCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use MarkToRemoveOperation;
-    use MarkAsReviewedOperation;
+    use MarkToKeepOperation;
 
     public function setup()
     {
@@ -57,21 +57,6 @@ class FileCrudController extends CrudController
                 'label' => 'ID de estación',
             ],
             [
-                'name'  => 'is_success',
-                'type'  => 'boolean',
-                'label' => 'Subido con éxito',
-            ],
-            [
-                'name'  => 'is_marked_as_reviewed',
-                'type'  => 'boolean',
-                'label' => 'Marked as Reviewed',
-            ],
-            [
-                'name'  => 'is_marked_to_remove',
-                'type'  => 'boolean',
-                'label' => 'Marked to Remove',
-            ],
-            [
                 'name'  => 'uploader.name',
                 'type'  => 'text',
                 'label' => 'Subido por',
@@ -86,11 +71,11 @@ class FileCrudController extends CrudController
                 'type'  => 'text',
                 'label' => 'ID del subido',
             ],
-            [
-                'name'  => 'observation_id',
-                'type'  => 'text',
-                'label' => 'ID de observación',
-            ],
+            // [
+            //     'name'  => 'observation_id',
+            //     'type'  => 'text',
+            //     'label' => 'ID de observación',
+            // ],
             [
                 'name'  => 'new_records_count',
                 'type'  => 'text',
@@ -100,6 +85,21 @@ class FileCrudController extends CrudController
                 'name'  => 'duplicate_records_count',
                 'type'  => 'text',
                 'label' => 'Número de registros duplicados',
+            ],
+            [
+                'name'  => 'is_success',
+                'type'  => 'boolean',
+                'label' => 'Subido con éxito',
+            ],
+            [
+                'name'  => 'is_marked_to_keep',
+                'type'  => 'boolean',
+                'label' => 'Marked to Keep',
+            ],
+            [
+                'name'  => 'is_marked_to_remove',
+                'type'  => 'boolean',
+                'label' => 'Marked to Remove',
             ],
         ]);
 
@@ -129,16 +129,16 @@ class FileCrudController extends CrudController
         });
 
         $this->crud->addFilter([
-            'name'  => 'is_marked_as_reviewed',
+            'name'  => 'is_marked_to_keep',
             'type'  => 'dropdown',
-            'label' => 'Marked as reviewed'
+            'label' => 'Marked to keep'
         ], function () {
             return [
                 0 => 'No',
                 1 => 'Sí',
             ];
         }, function ($value) { // if the filter is active
-            $this->crud->addClause('where', 'is_marked_as_reviewed', $value);
+            $this->crud->addClause('where', 'is_marked_to_keep', $value);
         });
 
         $this->crud->addFilter([

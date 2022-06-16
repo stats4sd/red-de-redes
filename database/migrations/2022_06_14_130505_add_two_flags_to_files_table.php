@@ -14,7 +14,7 @@ class AddTwoFlagsToFilesTable extends Migration
     public function up()
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->boolean('is_marked_as_reviewed')->nullable()->comment('A flag to indicate whether this file is marked as reviewed');
+            $table->boolean('is_marked_to_keep')->nullable()->comment('A flag to indicate whether this file is marked to keep');
             $table->boolean('is_marked_to_remove')->nullable()->comment('A flag to indicate whether this file is marked to remove');
 
         });
@@ -28,7 +28,7 @@ class AddTwoFlagsToFilesTable extends Migration
     public function down()
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->dropColumn('is_marked_as_reviewed');
+            $table->dropColumn('is_marked_to_keep');
             $table->dropColumn('is_marked_to_remove');
         });
     }

@@ -1,8 +1,8 @@
-@if ($crud->hasAccess('markasreviewed'))
-  @if ($entry->is_marked_as_reviewed)
-    <input type="button" value="Unmark as Reviewed" onclick="markOrUnmarkAsReviewed(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/markasreviewed') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarkasreviewed') }}" class="btn btn-primary" data-button-type="markorunmarkasreviewed">
+@if ($crud->hasAccess('marktokeep'))
+  @if ($entry->is_marked_to_keep)
+    <input type="button" value="Unmark to Keep" onclick="markOrUnmarkToKeep(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/marktokeep') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarktokeep') }}" class="btn btn-warning" data-button-type="markorunmarktokeep">
   @else
-    <input type="button" value="Mark as Reviewed"   onclick="markOrUnmarkAsReviewed(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/markasreviewed') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarkasreviewed') }}" class="btn btn-primary" data-button-type="markorunmarkasreviewed">
+    <input type="button" value="Mark to Keep"   onclick="markOrUnmarkToKeep(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/marktokeep') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarktokeep') }}" class="btn btn-primary" data-button-type="markorunmarktokeep">
   @endif  
 @endif
 
@@ -11,10 +11,10 @@
 {{-- - pushed to the end of the page, after jQuery is loaded, for non-AJAX operations (ex: Show) --}}
 @push('after_scripts') @if (request()->ajax()) @endpush @endif
 <script>
-    if (typeof markOrUnmarkAsReviewed != 'function') {
-      $("[data-button-type = markorunmarkasreviewed]").unbind('click');
+    if (typeof markOrUnmarkToKeep != 'function') {
+      $("[data-button-type = markorunmarktokeep]").unbind('click');
 
-      function markOrUnmarkAsReviewed(button) {
+      function markOrUnmarkToKeep(button) {
           // ask for confirmation before deleting an item
           // e.preventDefault();
           var button = $(button);
@@ -26,25 +26,27 @@
           var failedMessage;
 
           // hardcode column number of flag showed in CRUD panel
-          var columnNumber = 5;
+          var columnNumber = 10;
           var fileId = button.attr('data-id');
           var rowNumber;
           var flagLabel;
 
 
           // assign different values depending on which button is clicked
-          if (button.attr('value') == "Mark as Reviewed") {
+          if (button.attr('value') == "Mark to Keep") {
               route = markRoute;
-              successMessage = "<strong>Entry has been marked as reviewed successfully</strong>";
-              failedMessage = "<strong>Failed to mark entry as reviewed</strong>";
-              button.attr('value', "Unmark as Reviewed");
+              successMessage = "<strong>Entry has been marked to keep successfully</strong>";
+              failedMessage = "<strong>Failed to mark entry to keep</strong>";
               flagLabel = 'Sí';
-          } else if (button.attr('value') == "Unmark as Reviewed") {
+              button.attr('value', "Unmark to Keep");
+              button.attr('class', "btn btn-warning");
+          } else if (button.attr('value') == "Unmark to Keep") {
               route = unmarkRoute;
-              successMessage = "<strong>Entry has been unmarked as reviewed successfully</strong>";
-              failedMessage = "<strong>Failed to unmark entry as reviewed</strong>";
-              button.attr('value', "Mark as Reviewed");
+              successMessage = "<strong>Entry has been unmarked to keep successfully</strong>";
+              failedMessage = "<strong>Failed to unmark entry to keep</strong>";
               flagLabel = 'No';
+              button.attr('value', "Mark to Keep");
+              button.attr('class', "btn btn-primary");
           }
 
 

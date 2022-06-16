@@ -1,6 +1,6 @@
 @if ($crud->hasAccess('marktoremove'))
   @if ($entry->is_marked_to_remove)
-    <input type="button" value="Unmark to Remove" onclick="markOrUnmarkToRemove(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/marktoremove') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarktoremove') }}" class="btn btn-primary" data-button-type="markorunmarktoremove">
+    <input type="button" value="Unmark to Remove" onclick="markOrUnmarkToRemove(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/marktoremove') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarktoremove') }}" class="btn btn-warning" data-button-type="markorunmarktoremove">
   @else
     <input type="button" value="Mark to Remove"   onclick="markOrUnmarkToRemove(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/marktoremove') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarktoremove') }}" class="btn btn-primary" data-button-type="markorunmarktoremove">
   @endif  
@@ -26,7 +26,7 @@
           var failedMessage;
 
           // hardcode column number of flag showed in CRUD panel
-          var columnNumber = 6;
+          var columnNumber = 11;
           var fileId = button.attr('data-id');
           var rowNumber;
           var flagLabel;
@@ -37,14 +37,16 @@
               route = markRoute;
               successMessage = "<strong>Entry has been marked to remove successfully</strong>";
               failedMessage = "<strong>Failed to mark entry to remove</strong>";
-              button.attr('value', "Unmark to Remove");
               flagLabel = 'Sí';
+              button.attr('value', "Unmark to Remove");
+              button.attr('class', "btn btn-warning");
           } else if (button.attr('value') == "Unmark to Remove") {
               route = unmarkRoute;
               successMessage = "<strong>Entry has been unmarked to remove successfully</strong>";
               failedMessage = "<strong>Failed to unmark entry to remove</strong>";
-              button.attr('value', "Mark to Remove");
               flagLabel = 'No';
+              button.attr('value', "Mark to Remove");
+              button.attr('class', "btn btn-primary");
           }
 
 
