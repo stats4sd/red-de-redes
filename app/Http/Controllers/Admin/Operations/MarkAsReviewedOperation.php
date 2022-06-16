@@ -20,6 +20,12 @@ trait MarkAsReviewedOperation
             'uses'      => $controller.'@markasreviewed',
             'operation' => 'markasreviewed',
         ]);
+
+        Route::post($segment.'/{id}/unmarkasreviewed', [
+            'as'        => $routeName.'.unmarkasreviewed',
+            'uses'      => $controller.'@unmarkasreviewed',
+            'operation' => 'unmarkasreviewed',
+        ]);
     }
 
     /**
@@ -43,4 +49,11 @@ trait MarkAsReviewedOperation
     {
         $this->crud->model->findOrFail($id)->update(array('is_marked_as_reviewed' => 1));
     }
+
+
+    public function unmarkasreviewed($id) 
+    {
+        $this->crud->model->findOrFail($id)->update(array('is_marked_as_reviewed' => 0));
+    }
+
 }

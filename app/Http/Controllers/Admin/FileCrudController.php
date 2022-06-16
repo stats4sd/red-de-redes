@@ -29,6 +29,13 @@ class FileCrudController extends CrudController
     {
 
         $this->crud->addColumns([
+            // Question: is it possible to add a column but not showing it in CRUD panel?
+            [
+                'name'  => 'id',
+                'type' => 'hidden',
+                'label' => 'ID',
+                'visibleInTable' => false,
+            ],
             [
                 'name'  => 'original_name',
                 'type'  => 'text',

@@ -1,8 +1,8 @@
 @if ($crud->hasAccess('marktoremove'))
   @if ($entry->is_marked_to_remove)
-    <a href="javascript:void(0)" onclick="markToRemove(this)" data-route="{{ url($crud->route.'/'.$entry->getKey().'/marktoremove') }}" class="btn btn-primary disabled" data-button-type="marktoremove"><i class="la"></i> Mark to Remove</a>
+    <input type="button" value="Unmark to Remove" onclick="markOrUnmarkToRemove(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/marktoremove') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarktoremove') }}" class="btn btn-primary" data-button-type="markorunmarktoremove">
   @else
-    <a href="javascript:void(0)" onclick="markToRemove(this)" data-route="{{ url($crud->route.'/'.$entry->getKey().'/marktoremove') }}" class="btn btn-primary" data-button-type="marktoremove"><i class="la"></i> Mark to Remove</a>
+    <input type="button" value="Mark to Remove"   onclick="markOrUnmarkToRemove(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/marktoremove') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarktoremove') }}" class="btn btn-primary" data-button-type="markorunmarktoremove">
   @endif  
 @endif
 
@@ -11,14 +11,42 @@
 {{-- - pushed to the end of the page, after jQuery is loaded, for non-AJAX operations (ex: Show) --}}
 @push('after_scripts') @if (request()->ajax()) @endpush @endif
 <script>
-    if (typeof markToRemove != 'function') {
-      $("[data-button-type=marktoremove]").unbind('click');
+    if (typeof markOrUnmarkToRemove != 'function') {
+      $("[data-button-type = markorunmarktoremove]").unbind('click');
 
-      function markToRemove(button) {
+      function markOrUnmarkToRemove(button) {
           // ask for confirmation before deleting an item
           // e.preventDefault();
           var button = $(button);
-          var route = button.attr('data-route');
+          var markRoute = button.attr('data-mark-route');
+          var unmarkRoute = button.attr('data-unmark-route');
+
+          var route;
+          var successMessage;
+          var failedMessage;
+
+          // hardcode column number of flag showed in CRUD panel
+          var columnNumber = 6;
+          var fileId = button.attr('data-id');
+          var rowNumber;
+          var flagLabel;
+
+
+          // assign different values depending on which button is clicked
+          if (button.attr('value') == "Mark to Remove") {
+              route = markRoute;
+              successMessage = "<strong>Entry has been marked to remove successfully</strong>";
+              failedMessage = "<strong>Failed to mark entry to remove</strong>";
+              button.attr('value', "Unmark to Remove");
+              flagLabel = 'Sí';
+          } else if (button.attr('value') == "Unmark to Remove") {
+              route = unmarkRoute;
+              successMessage = "<strong>Entry has been unmarked to remove successfully</strong>";
+              failedMessage = "<strong>Failed to unmark entry to remove</strong>";
+              button.attr('value', "Mark to Remove");
+              flagLabel = 'No';
+          }
+
 
           $.ajax({
               url: route,
@@ -27,21 +55,32 @@
                   // Show an alert with the result
                   new Noty({
                     type: "success",
-                    text: "<strong>Entry has been marked to remove successfully</strong>"
+                    text: successMessage
                   }).show();
 
                   // Hide the modal, if any
                   $('.modal').modal('hide');
 
                   if (typeof crud !== 'undefined') {
-                    crud.table.ajax.reload();
+                      // convert File ID column data to an array, use data Id to find row number
+                      var fileIdArray = crud.table.column( 0 ).data().toArray();
+
+                      for (var i = 0; i < fileIdArray.length; i++) {
+                          if (fileIdArray[i].indexOf(fileId) != -1) {
+                              rowNumber = i;
+                              break;
+                          }
+                      }
+
+                      // update content of a particular cell
+                      crud.table.cell( rowNumber, columnNumber ).data(flagLabel);
                   }
               },
               error: function(result) {
                   // Show an alert with the result
                   new Noty({
                     type: "warning",
-                    text: "<strong>Failed to mark entry to remove</strong>"
+                    text: failedMessage
                   }).show();
               }
           });

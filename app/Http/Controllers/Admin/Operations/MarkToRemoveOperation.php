@@ -20,6 +20,12 @@ trait MarkToRemoveOperation
             'uses'      => $controller.'@marktoremove',
             'operation' => 'marktoremove',
         ]);
+
+        Route::post($segment.'/{id}/unmarktoremove', [
+            'as'        => $routeName.'.unmarktoremove',
+            'uses'      => $controller.'@unmarktoremove',
+            'operation' => 'unmarktoremove',
+        ]);
     }
 
     /**
@@ -43,4 +49,11 @@ trait MarkToRemoveOperation
     {
         $this->crud->model->findOrFail($id)->update(array('is_marked_to_remove' => 1));
     }
+
+
+    public function unmarktoremove($id) 
+    {
+        $this->crud->model->findOrFail($id)->update(array('is_marked_to_remove' => 0));
+    }
+
 }
