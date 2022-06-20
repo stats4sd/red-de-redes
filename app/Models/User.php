@@ -48,4 +48,9 @@ class User extends Authenticatable
         return $this->hasMany(File::class, 'uploader_id');
     }
 
+    public function organisation()
+    {
+        return $this->belongsTo(Organisation::class);
+    }
+
 }

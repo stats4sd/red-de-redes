@@ -52,6 +52,11 @@ class UserCrudController extends CrudController
                     'type' => 'email',
                 ],
                 [
+                    'name' => 'organisation',
+                    'type' => 'relationship',
+                    'label' => 'organización',
+                ],
+                [
                     'name' => 'type',
                     'label' => 'Tipo',
                     'type' => 'text',
@@ -91,6 +96,11 @@ class UserCrudController extends CrudController
                     'type' => 'select_from_array',
                     'options' => ['default' => 'Default', 'admin' => 'Admin'],
                 ],
+                [
+                    'name' => 'organisation',
+                    'type' => 'relationship',
+                    'label' => 'organización',
+                ],
             ]);
 
         });
@@ -114,6 +124,11 @@ class UserCrudController extends CrudController
                     'label' => 'Type',
                     'type' => 'select_from_array',
                     'options' => ['default' => 'Default', 'admin' => 'Admin'],
+                ],
+                [
+                    'name' => 'organisation_id',
+                    'type' => 'relationship',
+                    'label' => 'organización',
                 ],
             ]);
 

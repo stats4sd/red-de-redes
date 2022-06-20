@@ -19,4 +19,9 @@ class Organisation extends Model
     {
         return $this->hasMany(Station::class);
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }
