@@ -2,7 +2,6 @@
 
 <!-- <li class='nav-item'><a class='nav-link' href="{{ backpack_url('dashboard') }}"><i class="nav-icon fa fa-dashboard"></i> {{ trans('backpack::base.dashboard') }}</a></li> -->
 
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('organisation') }}'><i class='nav-icon la la-question'></i> Organizaciones</a></li>
 
 <h4 class='nav-item nav-link text-white mt-3'>Datos meteorlógicos</h4>
 <li class='nav-item'><a class='nav-link' href="{{ backpack_url('station') }}"><i class="nav-icon fa fa-mobile"></i> Estaciones</a></li>
@@ -52,7 +51,10 @@
 </li> -->
 
 <h4 class='nav-item nav-link text-white mt-3'>Administración de la plataforma</h4>
-<li class='nav-item'><a class='nav-link' href="{{ backpack_url('user') }}"><i class="nav-icon fa fa-users"></i> Usuarios</a></li>
+<li class='nav-item'><a class='nav-link' href="{{ backpack_url('user') }}"><i class="nav-icon fa fa-user"></i> Usuarios</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('organisation') }}'><i class='nav-icon fa fa-users'></i> Organizaciones</a></li>
+
+
 
 <li class='nav-item nav-dropdown'>
     <a class='nav-link nav-dropdown-toggle' href="#"><i class="fa fa-cog"></i> Sistema Kobo</a>
