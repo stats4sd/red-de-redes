@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Backpack\CRUD\app\Http\Controllers\CrudController;
+use App\Models\Organisation;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
+use Backpack\CRUD\CrudPanel;
 use App\Http\Requests\UserRequest as StoreRequest;
 use App\Http\Requests\UserRequest as UpdateRequest;
-use Backpack\CRUD\CrudPanel;
+use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 
 /**
@@ -67,6 +68,16 @@ class UserCrudController extends CrudController
                     'type' => 'date',
                 ],
             ]);
+
+            $this->crud->addFilter([
+                'name' => 'organisation',
+                'label' => 'Organización',
+                'type' => 'dropdown',
+            ], function () {
+                return Organisation::all()->pluck('label', 'id')->toArray();
+            }, function ($value) { // if the filter is active
+                $this->crud->addClause('where', 'organisation_id', $value);
+            });
 
         });
 
