@@ -1,8 +1,8 @@
 @if ($crud->hasAccess('marktokeep'))
   @if ($entry->is_marked_to_keep)
-    <input type="button" value="Unmark to Keep" onclick="markOrUnmarkToKeep(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/marktokeep') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarktokeep') }}" class="btn btn-warning" data-button-type="markorunmarktokeep">
+    <input type="button" value="Desmarcar para guardar" onclick="markOrUnmarkToKeep(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/marktokeep') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarktokeep') }}" class="btn btn-warning" data-button-type="markorunmarktokeep">
   @else
-    <input type="button" value="Mark to Keep"   onclick="markOrUnmarkToKeep(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/marktokeep') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarktokeep') }}" class="btn btn-primary" data-button-type="markorunmarktokeep">
+    <input type="button" value="Marcar para guardar"   onclick="markOrUnmarkToKeep(this)" data-id="{{ $entry->getKey() }}" data-mark-route="{{ url($crud->route.'/'.$entry->getKey().'/marktokeep') }}" data-unmark-route="{{ url($crud->route.'/'.$entry->getKey().'/unmarktokeep') }}" class="btn btn-primary" data-button-type="markorunmarktokeep">
   @endif  
 @endif
 
@@ -33,19 +33,19 @@
 
 
           // assign different values depending on which button is clicked
-          if (button.attr('value') == "Mark to Keep") {
+          if (button.attr('value') == "Marcar para guardar") {
               route = markRoute;
-              successMessage = "<strong>Entry has been marked to keep successfully</strong>";
-              failedMessage = "<strong>Failed to mark entry to keep</strong>";
+              successMessage = "<strong>El archivo ha sido marcado para guardarlo.</strong>";
+              failedMessage = "<strong>Error. El archivo no ha sido marcado para guardarlo.</strong>";
               flagLabel = 'Sí';
-              button.attr('value', "Unmark to Keep");
+              button.attr('value', "Desmarcar para guardar");
               button.attr('class', "btn btn-warning");
-          } else if (button.attr('value') == "Unmark to Keep") {
+          } else if (button.attr('value') == "Desmarcar para guardar") {
               route = unmarkRoute;
-              successMessage = "<strong>Entry has been unmarked to keep successfully</strong>";
-              failedMessage = "<strong>Failed to unmark entry to keep</strong>";
+              successMessage = "<strong>El archivo ha sido desmarcado para guardarlo.</strong>";
+              failedMessage = "<strong>Error. El archivo no ha sido desmarcado para guardarlo.</strong>";
               flagLabel = 'No';
-              button.attr('value', "Mark to Keep");
+              button.attr('value', "Marcar para guardar");
               button.attr('class', "btn btn-primary");
           }
 
