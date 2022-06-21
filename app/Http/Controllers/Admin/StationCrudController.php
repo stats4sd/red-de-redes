@@ -68,7 +68,7 @@ class StationCrudController extends CrudController
             ],
             [
                 'name' => 'organisation',
-                'label' => 'Encargado',
+                'label' => 'Organización',
                 'type' => 'relationship',
             ],
             [
@@ -102,7 +102,7 @@ class StationCrudController extends CrudController
             ],
             [
                 'name' => 'organisation_id',
-                'label' => 'Encargado',
+                'label' => 'Organización',
                 'type' => 'relationship',
                 'ajax' => true,
                 'minimum_input_length' => 0,
@@ -148,7 +148,7 @@ class StationCrudController extends CrudController
         $this->crud->setValidation(StoreRequest::class);
 
         CRUD::filter('organizaciones')
-            ->label('organizaciones')
+            ->label('Organización')
             ->type('select2')
             ->options(Organisation::all()->pluck('label','id')->toArray())
             ->whenActive(function($value) {

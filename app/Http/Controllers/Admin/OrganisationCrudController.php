@@ -43,8 +43,8 @@ class OrganisationCrudController extends CrudController
 
         $this->crud->query->withCount('stations');
 
-        CRUD::column('label')->label('nombre');
-        CRUD::column('stations_count')->label('número de estaciones');
+        CRUD::column('label')->label('Nombre');
+        CRUD::column('stations_count')->label('Número de estaciones');
 
     }
 
@@ -58,7 +58,7 @@ class OrganisationCrudController extends CrudController
     {
         CRUD::setValidation(OrganisationRequest::class);
 
-        CRUD::field('label')->title('Nombre de la organización');
+        CRUD::field('label')->label('Nombre de la organización');
 
     }
 

@@ -106,7 +106,7 @@ class FileCrudController extends CrudController
 
         $this->crud->addFilter([
             'name' => 'organisation',
-            'label' => 'Organizacion',
+            'label' => 'Organización',
             'type' => 'dropdown',
         ], function () {
             return Organisation::all()->pluck('label', 'id')->toArray();

@@ -54,7 +54,7 @@ class UserCrudController extends CrudController
                 [
                     'name' => 'organisation',
                     'type' => 'relationship',
-                    'label' => 'organización',
+                    'label' => 'Organización',
                 ],
                 [
                     'name' => 'type',
@@ -99,7 +99,7 @@ class UserCrudController extends CrudController
                 [
                     'name' => 'organisation',
                     'type' => 'relationship',
-                    'label' => 'organización',
+                    'label' => 'Organización',
                 ],
             ]);
 
@@ -110,7 +110,7 @@ class UserCrudController extends CrudController
             $this->crud->addFields([
                 [
                     'name' => 'name',
-                    'label' => 'Name',
+                    'label' => 'Nombre',
                     'type' => 'text',
                     'priority' => 1,
                 ],
@@ -121,14 +121,14 @@ class UserCrudController extends CrudController
                 ],
                 [
                     'name' => 'type',
-                    'label' => 'Type',
+                    'label' => 'Tipo',
                     'type' => 'select_from_array',
                     'options' => ['default' => 'Default', 'admin' => 'Admin'],
                 ],
                 [
                     'name' => 'organisation_id',
                     'type' => 'relationship',
-                    'label' => 'organización',
+                    'label' => 'Organización',
                 ],
             ]);
 
