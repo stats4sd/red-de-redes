@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Agronomic\SueloCrudController;
 use App\Http\Controllers\Admin\ComunidadCrudController;
 use App\Http\Controllers\Admin\DataMapCrudController;
 use App\Http\Controllers\Admin\DepartamentoCrudController;
+use App\Http\Controllers\Admin\FileCrudController;
 use App\Http\Controllers\Admin\LkpCultivoCrudController;
 use App\Http\Controllers\Admin\LkpVariedadCrudController;
 use App\Http\Controllers\Admin\Met\DailyCrudController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\Admin\Met\ObservationCrudController;
 use App\Http\Controllers\Admin\Met\TenDaysCrudController;
 use App\Http\Controllers\Admin\Met\YearlyCrudController;
 use App\Http\Controllers\Admin\MunicipioCrudController;
+use App\Http\Controllers\Admin\OrganisationCrudController;
 use App\Http\Controllers\Admin\RegionCrudController;
 use App\Http\Controllers\Admin\StationCrudController;
 use App\Http\Controllers\Admin\SubmissionCrudController;
@@ -36,7 +38,7 @@ Route::group([
 ], function () { // custom admin routes
 
     // General Admin + Platform Management
-    Route::get('dashboard', [DashboardController::class, 'index']);
+    // Route::get('dashboard', [DashboardController::class, 'index']);
     Route::post('dashboard/charts', [DashboardController::class, 'charts']);
     Route::crud('user', UserCrudController::class);
 
@@ -86,4 +88,7 @@ Route::group([
     Route::crud('lkpcultivo', LkpCultivoCrudController::class);
     Route::crud('lkpvariedad', LkpVariedadCrudController::class);
     Route::crud('muestrasuelo', MuestraSueloCrudController::class);
+
+    Route::crud('file', FileCrudController::class);
+    Route::crud('organisation', OrganisationCrudController::class);
 }); // this should be the absolute last line of this file

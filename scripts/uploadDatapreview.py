@@ -1,25 +1,10 @@
-# import mysql database driver, call it as "mysql"
 import mysql.connector as mysql
-
-# import database connection configuration from file "dbConfig.py", call it as "config"
 import dbConfig as config
-
-# import column names settings from file "listColumnsName.py", call it as "columns_name"
 import listColumnsName as columns_name
-
-# import popular Python-based data analysis library "pandas", call it as "pd"
 import pandas as pd
-
-# import numpy library, call it as "np"
 import numpy as np
-
-# import unit conversion custom library from file "convertorUnits.py", call it as "convertor"
 import convertorUnits as convertor
-
-# import date time library, call it as "datetime"
 from datetime import datetime
-
-# import system library, to access system-specific parameters and functions
 import sys
 
 
@@ -436,7 +421,7 @@ try:
 
 
     # define data_value as an empty array
-    data_value = []
+    #data_value = []
 
 
     # iterate each row in data frome
@@ -449,11 +434,15 @@ try:
 
         # append INSERT SQL statement to data_value array for later execution
         # prepare INSERT SQL statement VALUES clause with data of multiple records
-        data_value.append(tuple(row))
+        # data_value.append(tuple(row))
+
+        # MySQL connection is gone when INSERT SQL is too long (i.e. when data file > 2.5 MB)
+        # run one short INSERT SQL for each record, instead of running one very long INSERT SQL for all records
+        cursor.execute(sql, tuple(row))
 
 
     # no error handling if SQL excption occured (e.g. unique constraint violated due to two records with same date time)
-    cursor.executemany(sql, data_value)
+    #cursor.executemany(sql, data_value)
 
 
     # commit changes to database
