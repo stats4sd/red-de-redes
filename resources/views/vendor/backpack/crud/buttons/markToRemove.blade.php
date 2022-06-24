@@ -35,15 +35,15 @@
           // assign different values depending on which button is clicked
           if (button.attr('value') == "Marcar para quitar") {
               route = markRoute;
-              successMessage = "<strong>Entry has been marked to remove successfully</strong>";
-              failedMessage = "<strong>Failed to mark entry to remove</strong>";
+              successMessage = "<strong>El archivo ha sido marcado para quitar con éxito</strong>";
+              failedMessage = "<strong>Error. El archivo no ha sido marcado para quitar.</strong>";
               flagLabel = 'Sí';
               button.attr('value', "Desmarcar para quitar");
               button.attr('class', "btn btn-warning");
           } else if (button.attr('value') == "Desmarcar para quitar") {
               route = unmarkRoute;
-              successMessage = "<strong>Entry has been unmarked to remove successfully</strong>";
-              failedMessage = "<strong>Failed to unmark entry to remove</strong>";
+              successMessage = "<strong>El archivo ha sido desmarcado para quitar con éxito</strong>";
+              failedMessage = "<strong>Error. El archivo no ha sido desmarcado para quitar.</strong>";
               flagLabel = 'No';
               button.attr('value', "Marcar para quitar");
               button.attr('class', "btn btn-primary");
