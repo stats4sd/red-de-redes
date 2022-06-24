@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Organisation;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
 use App\Http\Requests\StationRequest as StoreRequest;
 use App\Http\Requests\StationRequest as UpdateRequest;
+use Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
+use Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
 use Backpack\CRUD\CrudPanel;
+use CRUD;
 
 /**
  * Class StationCrudController
@@ -18,8 +22,12 @@ class StationCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use InlineCreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+
+    use FetchOperation;
+
     public function setup()
     {
         /*
@@ -37,8 +45,6 @@ class StationCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
 
-        // TODO: remove setFromDb() and manually define Fields and Columns
-        //$this->crud->setFromDb();
         $this->crud->setColumns([
             [
                 'name' => 'id',
@@ -61,9 +67,9 @@ class StationCrudController extends CrudController
                 'type' => 'text',
             ],
             [
-                'name' => 'manager',
-                'label' => 'Encargado',
-                'type' => 'text',
+                'name' => 'organisation',
+                'label' => 'Organización',
+                'type' => 'relationship',
             ],
             [
                 'name' => 'latitude',
@@ -95,6 +101,14 @@ class StationCrudController extends CrudController
                 'type' => 'text',
             ],
             [
+                'name' => 'organisation_id',
+                'label' => 'Organización',
+                'type' => 'relationship',
+                'ajax' => true,
+                'minimum_input_length' => 0,
+                'inline_create' => true,
+            ],
+            [
                 'name' => 'type',
                 'label' => 'Tipo de estación',
                 'type' => 'select2_from_array',
@@ -106,7 +120,7 @@ class StationCrudController extends CrudController
                 'name' => 'latitude',
                 'label' => 'Latitud',
                 'type' => 'number',
-                  // optionals
+                // optionals
                 'attributes' => ["step" => "any"], // allow decimals
 
             ],
@@ -122,7 +136,7 @@ class StationCrudController extends CrudController
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
             ],
-            
+
         ]);
         // add asterisk for fields that are required in StationRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
@@ -132,6 +146,16 @@ class StationCrudController extends CrudController
     protected function setupCreateOperation()
     {
         $this->crud->setValidation(StoreRequest::class);
+
+        CRUD::filter('organizaciones')
+            ->label('Organización')
+            ->type('select2')
+            ->options(Organisation::all()->pluck('label','id')->toArray())
+            ->whenActive(function($value) {
+                $this->crud->addClause('where', 'organisation_id', $value);
+            });
+
+
     }
 
     protected function setupUpdateOperation()
@@ -139,5 +163,12 @@ class StationCrudController extends CrudController
         $this->crud->setValidation(UpdateRequest::class);
     }
 
+
+    public function fetchOrganisation()
+    {
+        return $this->fetch([
+            'model' => Organisation::class
+        ]);
+    }
 
 }

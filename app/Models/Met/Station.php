@@ -3,6 +3,7 @@
 namespace App\Models\Met;
 
 use App\Models\Met\MetData;
+use App\Models\Organisation;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
@@ -33,6 +34,11 @@ class Station extends Model
     public function file()
     {
         return $this->hasMany(File::class);
+    }
+
+    public function organisation()
+    {
+        return $this->belongsTo(Organisation::class);
     }
 
 }

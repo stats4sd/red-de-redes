@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\Met\ObservationCrudController;
 use App\Http\Controllers\Admin\Met\TenDaysCrudController;
 use App\Http\Controllers\Admin\Met\YearlyCrudController;
 use App\Http\Controllers\Admin\MunicipioCrudController;
+use App\Http\Controllers\Admin\OrganisationCrudController;
 use App\Http\Controllers\Admin\RegionCrudController;
 use App\Http\Controllers\Admin\StationCrudController;
 use App\Http\Controllers\Admin\SubmissionCrudController;
@@ -89,5 +90,5 @@ Route::group([
     Route::crud('muestrasuelo', MuestraSueloCrudController::class);
 
     Route::crud('file', FileCrudController::class);
-    
+    Route::crud('organisation', OrganisationCrudController::class);
 }); // this should be the absolute last line of this file
