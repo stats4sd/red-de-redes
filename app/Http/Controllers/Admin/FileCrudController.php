@@ -93,14 +93,15 @@ class FileCrudController extends CrudController
                 'label' => 'Subido con éxito',
             ],
             [
-                'name' => 'is_marked_to_keep',
-                'type' => 'boolean',
-                'label' => 'Marked to Keep',
+
+                'name'  => 'is_marked_to_keep',
+                'type'  => 'boolean',
+                'label' => 'Marcado para guardar',
             ],
             [
-                'name' => 'is_marked_to_remove',
-                'type' => 'boolean',
-                'label' => 'Marked to Remove',
+                'name'  => 'is_marked_to_remove',
+                'type'  => 'boolean',
+                'label' => 'Marcado para quitar',
             ],
         ]);
 
@@ -140,9 +141,9 @@ class FileCrudController extends CrudController
         });
 
         $this->crud->addFilter([
-            'name' => 'is_marked_to_keep',
-            'type' => 'dropdown',
-            'label' => 'Marked to keep'
+            'name'  => 'is_marked_to_keep',
+            'type'  => 'dropdown',
+            'label' => 'Marcado para guardar'
         ], function () {
             return [
                 0 => 'No',
@@ -153,9 +154,9 @@ class FileCrudController extends CrudController
         });
 
         $this->crud->addFilter([
-            'name' => 'is_marked_to_remove',
-            'type' => 'dropdown',
-            'label' => 'Marked to remove'
+            'name'  => 'is_marked_to_remove',
+            'type'  => 'dropdown',
+            'label' => 'Marcado para quitar'
         ], function () {
             return [
                 0 => 'No',
