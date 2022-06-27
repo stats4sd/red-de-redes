@@ -75,6 +75,7 @@ class YearlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStr
             $yearlyMetData->max_humedad_interna,
             $yearlyMetData->min_humedad_interna,
             $yearlyMetData->avg_humedad_interna,
+            $yearlyMetData->max_temperatura_externa,
             $yearlyMetData->min_temperatura_externa,
             $yearlyMetData->avg_temperatura_externa,
             $yearlyMetData->max_humedad_externa,
