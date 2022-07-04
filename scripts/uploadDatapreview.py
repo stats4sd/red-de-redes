@@ -43,7 +43,7 @@ def openFile():
         # specify row 0 and row 1 to as column headers
         # do not specify low_memory = False, internally process the file in chunks,
         # resulting in lower memory use while parsing, but possibly mixed type inference
-        df = pd.read_csv(path, na_values=['--.-', '--', '---', '------'], sep="\t", header=[0,1])
+        df = pd.read_csv(path, na_values=['--.-', '--', '---', '------',999], sep="\t", header=[0,1])
 
 
         # option to print out all columns in a data frame
@@ -234,7 +234,7 @@ def openFile():
         # specify separater as comma ,
         # do not specify which row is header, default row 0 as column names
         # specify low_memory = False, to ensure no mixed types, the entire file is read into a single DataFrame
-        data = pd.read_csv(path, na_values=['--.-',' --.-', '--',' --', '---',' ---', '------', ' ------'], sep=",", low_memory=False)
+        data = pd.read_csv(path, na_values=['--.-',' --.-', '--',' --', '---',' ---', '------', ' ------',999], sep=",", low_memory=False)
 
 
         # option to print out all columns in a data frame
