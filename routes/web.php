@@ -17,6 +17,7 @@ use App\Http\Controllers\DataController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\Admin\Met\MetDataCrudController;
 use App\Http\Controllers\DataProductController;
+use App\Imports\PreProcessDavisHeaders;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -66,15 +67,18 @@ Route::get('qr-print', [QrController::class,'printView'])->name('qr-print');
 
 
 
-Route::get('rtest', function(){
-    $process = new Process(['/Program Files/R/R-3.6.1/bin/Rscript.exe', 'updated_test.R']);
-        $process->setWorkingDirectory(base_path('scripts/R'));
+Route::get('test', function(){
 
-        $process->run();
+    $processor = (new PreProcessDavisHeaders);
 
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
+    $fileWithMergedHeaders = $processor(base_path('tests/Files/large-davis.txt'));
 
-        ddd('ok');
+
+   \Maatwebsite\Excel\Facades\Excel::import(
+       new \App\Imports\DavisFileImport('large-test', 1),
+       $fileWithMergedHeaders,
+   null,
+   \Maatwebsite\Excel\Excel::TSV);
+
+   ddd('ok');
 });
