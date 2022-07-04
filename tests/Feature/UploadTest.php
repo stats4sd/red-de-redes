@@ -89,4 +89,65 @@ class UploadTest extends TestCase
 
 
     }
+
+    /** @test */
+    public function it_uploads_a_david_file_with_missing_values(): void
+    {
+        $user = User::factory()->create(['type' => 'admin']);
+        $station = Station::factory()->create(['type' => 'davis']);
+
+        $uploadFile = new UploadedFile(
+            base_path('tests/Files/missing-davis.txt'),
+            'missing-davis.txt'
+        );
+
+        $this->actingAs($user)
+            ->post(url('files'), [
+                'data-file' => $uploadFile,
+                'selectedStation' => $station->id,
+                'selectedUnitTemp' => 'ºC',
+                'selectedUnitPres' => 'hpa',
+                'selectedUnitWind' => 'm/s',
+                'selectedUnitRain' => 'mm',
+            ]);
+
+        $this->assertDatabaseHas('met_data_preview', [
+            'fecha_hora' => '2016-04-13 21:00:00',
+            'station_id' => $station->id,
+            'temperatura_externa' => null,
+            'hi_temp' => 60.0,
+            'low_temp' => null,
+        ]);
+    }
+
+    /** @test */
+    public function it_uploads_a_davis_file_with_999_values(): void
+    {
+        $user = User::factory()->create(['type' => 'admin']);
+        $station = Station::factory()->create(['type' => 'davis']);
+
+        $uploadFile = new UploadedFile(
+            base_path('tests/Files/999-davis.txt'),
+            'missing-davis.txt'
+        );
+
+        $this->actingAs($user)
+            ->post(url('files'), [
+                'data-file' => $uploadFile,
+                'selectedStation' => $station->id,
+                'selectedUnitTemp' => 'ºC',
+                'selectedUnitPres' => 'hpa',
+                'selectedUnitWind' => 'm/s',
+                'selectedUnitRain' => 'mm',
+            ]);
+
+        $this->assertDatabaseHas('met_data_preview', [
+            'fecha_hora' => '2016-04-13 21:00:00',
+            'station_id' => $station->id,
+            'temperatura_externa' => null,
+            'hi_temp' => 60.0,
+            'low_temp' => null,
+            'rain' => null,
+        ]);
+    }
 }
