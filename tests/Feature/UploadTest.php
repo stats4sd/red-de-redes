@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Met\Station;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
@@ -91,7 +92,7 @@ class UploadTest extends TestCase
     }
 
     /** @test */
-    public function it_uploads_a_david_file_with_missing_values(): void
+    public function it_uploads_a_davis_file_with_missing_values(): void
     {
         $user = User::factory()->create(['type' => 'admin']);
         $station = Station::factory()->create(['type' => 'davis']);
@@ -187,5 +188,40 @@ class UploadTest extends TestCase
             'punto_rocio' => 3.9,
             'lluvia_hora' => 1.23,
         ]);
+    }
+
+    /**
+     * # large-davis.txt ~ 10mb file with 56691 records - the upper limit of what is currently accepted;
+     * @test
+     */
+    public function it_uploads_a_large_davis_file(): void
+    {
+
+        $startTime = Carbon::now();
+
+        $user = User::factory()->create(['type' => 'admin']);
+        $station = Station::factory()->create(['type' => 'davis']);
+
+        $uploadFile = new UploadedFile(
+            base_path('tests/Files/large-davis.txt'),
+            'large-davis.txt'
+        );
+
+       $this->actingAs($user)
+            ->post(url('files'), [
+                'data-file' => $uploadFile,
+                'selectedStation' => $station->id,
+                'selectedUnitTemp' => 'ºC',
+                'selectedUnitPres' => 'hpa',
+                'selectedUnitWind' => 'm/s',
+                'selectedUnitRain' => 'mm',
+            ]);
+
+        $this->assertDatabaseCount('met_data_preview', 56691);
+
+        $endTime = Carbon::now();
+
+        $this->assertLessThan('60', $endTime->diffInSeconds($startTime));
+
     }
 }
