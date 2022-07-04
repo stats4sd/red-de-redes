@@ -150,4 +150,42 @@ class UploadTest extends TestCase
             'rain' => null,
         ]);
     }
+
+    /** @test */
+    public function it_uploads_a_chinas_file(): void
+    {
+        $user = User::factory()->create(['type' => 'admin']);
+        $station = Station::factory()->create(['type' => 'davis']);
+
+        $uploadFile = new UploadedFile(
+            base_path('tests/Files/default-chinas.csv'),
+            'default-chinas.csv'
+        );
+
+        $this->actingAs($user)
+            ->post(url('files'), [
+                'data-file' => $uploadFile,
+                'selectedStation' => $station->id,
+                'selectedUnitTemp' => 'ºC',
+                'selectedUnitPres' => 'hpa',
+                'selectedUnitWind' => 'm/s',
+                'selectedUnitRain' => 'mm',
+            ]);
+
+        $this->assertDatabaseHas('met_data_preview', [
+            'fecha_hora' => '2021-01-14 15:35:01',
+            'station_id' => $station->id,
+            'temperatura_interna' => 23,
+            'humedad_interna' => 40,
+            'temperatura_externa' => 19.8,
+            'humedad_externa' => 35,
+            'presion_relativa' => 1013,
+            'presion_absoluta' => 646.9,
+            'velocidad_viento' => 12.2,
+            'rafaga' => 13.3,
+            'direccion_del_viento' => ' S',
+            'punto_rocio' => 3.9,
+            'lluvia_hora' => 1.23,
+        ]);
+    }
 }
