@@ -9,9 +9,7 @@ use App\Models\Met\File;
 use App\Models\Met\Station;
 use DB;
 use App\Models\Met\Daily;
-use App\Models\Met\Observation;
 use Illuminate\Http\JsonResponse;
-use \GuzzleHttp\Client;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Met\MetDataPreview;
@@ -20,9 +18,7 @@ use Illuminate\Support\Facades\Log;
 use JsonException;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\Process\Process;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class FileController extends Controller
 {
@@ -56,7 +52,6 @@ class FileController extends Controller
             $processor = (new PreProcessDavisHeaders());
             $fileWithMergedHeaders = $processor($fileRecord->data_file);
 
-            //dd($fileWithMergedHeaders);
             Excel::import(new DavisFileImport($fileRecord), $fileWithMergedHeaders, 'public', \Maatwebsite\Excel\Excel::TSV);
 
         }
@@ -112,61 +107,6 @@ class FileController extends Controller
 
         ]);
 
-
-        if ($request->hasFile('observationFiles')) {
-            // handle file and store it for prosperity
-            $filesObservation = $request->file('data-filesObservation');
-            $filesObservation_name = str_replace(" ", "_", $filesObservation->getClientOriginalName());
-            $observation_name = time() . '_' . $filesObservation_name;
-            $path = $filesObservation->storeAs('observationFiles', $observation_name);
-            $newObservation = new Observation;
-            $newObservation->files = $path;
-            $newObservation->save();
-
-            // refresh it from the database to retrieve ID
-            $newObservation->refresh();
-            $newObservation_id = $newObservation->id;
-
-        }
-
-
-        if ($request->hasFile('dataFiles')) {
-            // handle file and store it for prosperity
-            $file = $request->file('data-file');
-            $file_name = str_replace(" ", "_", $file->getClientOriginalName());
-            $name = time() . '_' . $file_name;
-            $path = $file->storeAs('rawfiles', $name);
-
-
-            $fullPath = Storage::path("/") . $path;
-
-
-            // TODO: add Chinas file support
-
-            if (config('app.pipenv')) {
-                $isWindows = 0;
-                //dd(collect(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $upload_id, $isWindows, $newObservation_id])->join(" "));
-                $process = new Process(['pipenv', 'run', 'python3', $scriptPath, config('app.env'), $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
-            } else {
-                $isWindows = 1;
-                $process = new Process(['python', $scriptPath, config('app.env'), $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
-            }
-
-            $process->setWorkingDirectory(base_path());
-
-            $process->run();
-
-//            Log::info($process->getOutput());
-
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
-            }
-        }
-
-        abort(500, 'request did not contain a file - please check that the file was correctly attached');
-
-
-        // Send file onto cloud function
     }
 
     /**
