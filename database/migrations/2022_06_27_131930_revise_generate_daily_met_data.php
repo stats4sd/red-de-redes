@@ -38,7 +38,8 @@ BEGIN
 	DELETE FROM daily_met_data
 	WHERE fecha = id_date
 	AND station_id = iv_station_id;
-	
+
+
 	-- find number of raw met data records
 	SELECT COUNT(*)
 	INTO actual_number_of_records
@@ -62,7 +63,7 @@ BEGIN
 		);
 	
 	ELSE
-	
+
 		-- generate daily_met_data record by summarizing all records for a specific date and a specific station
 		INSERT INTO daily_met_data 
 		(fecha, station_id, 
@@ -81,13 +82,13 @@ BEGIN
 		DATE_FORMAT(fecha_hora, '%Y-%m-%d'), station_id,
 		MAX(temperatura_interna), MIN(temperatura_interna), AVG(temperatura_interna),
 		MAX(humedad_interna), MIN(humedad_interna), AVG(humedad_interna),
-		MAX(temperatura_externa), MIN(temperatura_externa), AVG(temperatura_externa),
+		MAX(hi_temp), MIN(low_temp), AVG(temperatura_externa),
 		MAX(humedad_externa), MIN(humedad_externa), AVG(humedad_externa),
 		MAX(presion_relativa), MIN(presion_relativa), AVG(presion_relativa),
 		MAX(presion_absoluta), MIN(presion_absoluta), AVG(presion_absoluta),
-		MAX(velocidad_viento), MIN(velocidad_viento), AVG(velocidad_viento),
+		MAX(hi_speed), MIN(velocidad_viento), AVG(velocidad_viento),
 		MAX(sensacion_termica), MIN(sensacion_termica), AVG(sensacion_termica),
-		SUM(lluvia_total), 
+		SUM(rain), 
 		COUNT(*), expected_number_of_records,
 		NOW(), NOW()
 		FROM met_data
@@ -95,7 +96,7 @@ BEGIN
 		id_date AND DATE_ADD(DATE_ADD(id_date, INTERVAL 1 DAY), INTERVAL -1 SECOND)
 		AND station_id = iv_station_id
 		GROUP BY DATE_FORMAT(fecha_hora, '%Y-%m-%d'), station_id;
-	
+
 	END IF;
 	
 END
