@@ -26,7 +26,14 @@ class FileRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'station_id' => ['required', 'exists:stations,id'],
+            'data_file' => 'file',
+            'observation_file' => ['file', 'sometimes', 'nullable'],
+            'selectedUnitTemp' => ['nullable', 'string'],
+            'selectedUnitPres' => ['nullable', 'string'],
+            'selectedUnitWind' => ['nullable', 'string'],
+            'selectedUnitRain' => ['nullable', 'string'],
+
         ];
     }
 

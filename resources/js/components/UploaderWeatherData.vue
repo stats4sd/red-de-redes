@@ -283,6 +283,7 @@ import 'vue-select/dist/vue-select.css'
 
 import CustomModal from './Elements/CustomModal.vue'
 import FileInput from 'vue3-simple-file-input'
+import ProgressBar from './ProgressBar'
 
 export default {
     components: {
@@ -291,6 +292,7 @@ export default {
         vSelect,
         CustomModal,
         FileInput,
+        ProgressBar
     },
     data() {
         return {
@@ -472,9 +474,11 @@ export default {
 
             this.busy = true;
             let formData = new FormData();
-            formData.append('data-file', this.file.file);
-            formData.append('data-filesObservation', this.filesObservation ? this.filesObservation.file : null);
-            formData.append('selectedStation', this.selectedStation.id);
+            formData.append('station_id', this.selectedStation.id);
+            formData.append('data_file', this.file.file);
+            if(this.filesObservation) {
+                formData.append('observation_file', this.filesObservation);
+            }
 
             // after upgrading from Vue 2 to Vue 3:
             // 1. needs to pass v-model.value instead of passing v-model

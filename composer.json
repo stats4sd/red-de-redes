@@ -28,6 +28,7 @@
         "prologue/alerts": "^0.4.3",
         "pusher/pusher-php-server": "^4.0",
         "spatie/laravel-translatable": "^4.0",
+        "stats4sd/laravel-file-util": "^0.1.2",
         "stats4sd/laravel-sql-views": "^1.02",
         "symfony/process": "5.1.*",
         "symfony/psr-http-message-bridge": "*",

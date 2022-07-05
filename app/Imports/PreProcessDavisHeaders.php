@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PreProcessDavisHeaders
@@ -10,8 +11,9 @@ class PreProcessDavisHeaders
     public function __invoke($filePath): string
     {
         // avoid reading entire file into memory with fopen
+        $fullFilePath = Storage::path($filePath);
 
-        $file = fopen($filePath, 'r');
+        $file = fopen($fullFilePath, 'r');
 
         $header1 = fgets($file);
         $header2 = fgets($file);
@@ -29,7 +31,7 @@ class PreProcessDavisHeaders
                 : $this->formatHeader($header2Array[$index]);
         }
 
-        $newFile = fopen($filePath . ".with_merged_headers.txt", "w");
+        $newFile = fopen($fullFilePath . ".with_merged_headers.txt", "w");
 
         fwrite($newFile, implode("\t", $headerMerged) . PHP_EOL);
 

@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Met\File;
 use App\Models\Met\MetData;
 use App\Models\Met\MetDataPreview;
 use Carbon\Carbon;
@@ -32,7 +33,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
     /**
      * @throws \JsonException
      */
-    public function __construct(string $uploaderId, int $stationId)
+    public function __construct(File $fileRecord)
     {
         HeadingRowFormatter::default('none');
 
@@ -44,8 +45,8 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
             )
             ), true, 512, JSON_THROW_ON_ERROR);
 
-        $this->uploaderId = $uploaderId;
-        $this->stationId = $stationId;
+        $this->upload_id = $fileRecord->upload_id;
+        $this->stationId = $fileRecord->station_id;
 
 
     }
@@ -72,7 +73,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
             // create merged date_time
             $newRow['fecha_hora'] = (Carbon::createFromFormat('d/m/y H:i', $newRow['fecha_hora'] . ' ' . $newRow['time']));
 
-            $newRow['uploader_id'] = $this->uploaderId;
+            $newRow['upload_id'] = $this->upload_id;
             $newRow['station_id'] = $this->stationId;
 
             $metDataItem = MetDataPreview::create($newRow->toArray());

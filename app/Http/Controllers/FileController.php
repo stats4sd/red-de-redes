@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FileRequest;
 use App\Imports\DavisFileImport;
 use App\Imports\PreProcessDavisHeaders;
 use App\Models\Met\File;
@@ -16,6 +17,7 @@ use Illuminate\Http\Request;
 use App\Models\Met\MetDataPreview;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use JsonException;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
@@ -26,18 +28,92 @@ class FileController extends Controller
 {
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws \JsonException
+     * @throws JsonException
      */
-    public function store(Request $request): JsonResponse
+    public function store(FileRequest $request): JsonResponse
     {
-        // TODO: Update with proper validation
-        $station = $request->selectedStation ?? null ;
+        // create File Record
+        $validated = $request->validated();
 
-        if ($request->hasFile('data-filesObservation')) {
+        // get observation file details
+        $observationFile = $validated['observationFile'] ?? null;
+        $observationFileName = isset($validated['observationFile']) ? $validated['observationFile']->getClientOriginalName() : null;
+
+        $fileRecord = File::create([
+            'data_file' => $validated['data_file'],
+            'name' => $validated['data_file']->getClientOriginalName(),
+            // original name is now (potentially) legacy?
+            'original_name' => $validated['data_file']->getClientOriginalName(),
+            'observation_file' => $observationFile,
+            'observation_file_name' => $observationFileName,
+            'station_id' => $validated['station_id'],
+            'uploader_id' => Auth::id(),
+            'upload_id' => $this->generateRandomString(),
+        ]);
+
+        // upload data to met_data_preview table
+        if (Station::find($fileRecord['station_id'])->type === 'davis') {
+            $processor = (new PreProcessDavisHeaders());
+            $fileWithMergedHeaders = $processor($fileRecord->data_file);
+
+            //dd($fileWithMergedHeaders);
+            Excel::import(new DavisFileImport($fileRecord), $fileWithMergedHeaders, 'public', \Maatwebsite\Excel\Excel::TSV);
+
+        }
+
+        $metDataPreview = MetDataPreview::where('upload_id', '=', $fileRecord->upload_id)->orderBy('id')->paginate(10);
+
+        $metDataPreviewCount = MetDataPreview::where('upload_id', $fileRecord->upload_id)->count('id');
+
+        // check number of records already existed in database
+        $sqlExistedRecords = " SELECT COUNT(*) as number_of_records";
+        $sqlExistedRecords .= " FROM met_data ta, met_data_preview tb";
+        $sqlExistedRecords .= " WHERE tb.upload_id = '" . $fileRecord->upload_id . "'";
+        $sqlExistedRecords .= " AND ta.fecha_hora = tb.fecha_hora";
+        $sqlExistedRecords .= " AND ta.station_id = tb.station_id;";
+
+        // execute custom SELECT SQL
+        $existedRecordsResults = DB::select($sqlExistedRecords);
+        $numberExistedRecords = $existedRecordsResults[0]->number_of_records;
+
+        // number of not existed records = number of uploaded records - number of existed records
+        $numberNotExistedRecords = $metDataPreviewCount - $numberExistedRecords;
+
+        // update file record
+        $fileRecord->update([
+            'new_records_count' => $numberNotExistedRecords,
+            'duplicate_records_count' => $numberExistedRecords,
+        ]);
+
+        // prepare advice message
+        $scenario = 0;
+        $adviceMessage = "";
+
+        if ($numberNotExistedRecords === $metDataPreviewCount) {
+            $scenario = 1;
+            $adviceMessage = "All " . $metDataPreviewCount . " record(s) are new records. Please kindly confirm to upload this data file.";
+        } else if ($numberExistedRecords === $metDataPreviewCount) {
+            $scenario = 2;
+            $adviceMessage = "All " . $numberExistedRecords . " record(s) are already existed in system. Please kindly cancel this upload.";
+        } else {
+            $scenario = 3;
+            $adviceMessage = $numberExistedRecords . " out of " . $metDataPreviewCount . " records are already existed in system. Please kindly tick below checkbox to confirm uploading non existed records or cancel this upload to further check data file correctness.";
+        }
+
+
+        return response()->json([
+            'met_data_preview' => $metDataPreview,
+            'number_uploaded_records' => $metDataPreviewCount,
+            'number_existed_records' => $numberExistedRecords,
+            'number_not_existed_records' => $numberNotExistedRecords,
+            'scenario' => $scenario,
+            'adviceMessage' => $adviceMessage,
+            'error_data' => null
+
+        ]);
+
+
+        if ($request->hasFile('observationFiles')) {
             // handle file and store it for prosperity
             $filesObservation = $request->file('data-filesObservation');
             $filesObservation_name = str_replace(" ", "_", $filesObservation->getClientOriginalName());
@@ -54,117 +130,37 @@ class FileController extends Controller
         }
 
 
-        if ($request->hasFile('data-file')) {
+        if ($request->hasFile('dataFiles')) {
             // handle file and store it for prosperity
             $file = $request->file('data-file');
             $file_name = str_replace(" ", "_", $file->getClientOriginalName());
             $name = time() . '_' . $file_name;
             $path = $file->storeAs('rawfiles', $name);
 
-            // store the file entry in the database;
-            $newFile = File::create([
-                'path' => $path,
-                'name' => $name,
-                'station_id' => $station,
-                'observation_id' => $newObservation_id ?? null,
-                'uploader_id' => Auth::id(),
-                'upload_id' => $this->generateRandomString(),
-            ]);
 
             $fullPath = Storage::path("/") . $path;
-
-            // upload data to met_data_preview table
-            if(Station::find($station)->type === 'davis') {
-                $processor = (new PreProcessDavisHeaders());
-                $fileWithMergedHeaders = $processor($fullPath);
-
-                Excel::import(new DavisFileImport($newFile->upload_id, $station), $fileWithMergedHeaders, null,\Maatwebsite\Excel\Excel::TSV);
-
-            }
 
 
             // TODO: add Chinas file support
 
-//            if (config('app.pipenv')) {
-//                $isWindows = 0;
-//                //dd(collect(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $upload_id, $isWindows, $newObservation_id])->join(" "));
-//                $process = new Process(['pipenv', 'run', 'python3', $scriptPath, config('app.env'), $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
-//            } else {
-//                $isWindows = 1;
-//                $process = new Process(['python', $scriptPath, config('app.env'), $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
-//            }
-
-//            $process->setWorkingDirectory(base_path());
-//
-//            $process->run();
-//
-////            Log::info($process->getOutput());
-//
-//            if (!$process->isSuccessful()) {
-//                throw new ProcessFailedException($process);
-//            }
-
-            $metDataPreview = MetDataPreview::where('uploader_id', '=', $newFile->upload_id)->orderBy('id')->paginate(10);
-
-            // $error_data = $this->checkValues($newFile->upload_id);
-
-
-            // check number of uploaded records
-            $sqlUploadedRecords = " SELECT COUNT(*) as number_of_records FROM met_data_preview WHERE uploader_id = '" . $newFile->upload_id . "';";
-
-            // execute custom SELECT SQL
-            $uploadedRecordsResults = DB::select($sqlUploadedRecords);
-            $numberUploadedRecords = $uploadedRecordsResults[0]->number_of_records;
-
-
-            // check number of records already existed in database
-            $sqlExistedRecords = " SELECT COUNT(*) as number_of_records";
-            $sqlExistedRecords .= " FROM met_data ta, met_data_preview tb";
-            $sqlExistedRecords .= " WHERE tb.uploader_id = '" . $newFile->upload_id . "'";
-            $sqlExistedRecords .= " AND ta.fecha_hora = tb.fecha_hora";
-            $sqlExistedRecords .= " AND ta.station_id = tb.station_id;";
-
-            // execute custom SELECT SQL
-            $existedRecordsResults = DB::select($sqlExistedRecords);
-            $numberExistedRecords = $existedRecordsResults[0]->number_of_records;
-
-
-            // number of not existed records = number of uploaded records - number of existed records
-            $numberNotExistedRecords = $numberUploadedRecords - $numberExistedRecords;
-
-            // update file record
-            $newFile->update([
-                'new_records_count' => $numberNotExistedRecords,
-                'duplicate_records_count' => $numberExistedRecords,
-            ]);
-
-
-            // prepare advice message
-            $scenario = 0;
-            $adviceMessage = "";
-
-            if ($numberNotExistedRecords == $numberUploadedRecords) {
-                $scenario = 1;
-                $adviceMessage = "All " . $numberUploadedRecords . " record(s) are new records. Please kindly confirm to upload this data file.";
-            } else if ($numberExistedRecords == $numberUploadedRecords) {
-                $scenario = 2;
-                $adviceMessage = "All " . $numberExistedRecords . " record(s) are already existed in system. Please kindly cancel this upload.";
+            if (config('app.pipenv')) {
+                $isWindows = 0;
+                //dd(collect(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $upload_id, $isWindows, $newObservation_id])->join(" "));
+                $process = new Process(['pipenv', 'run', 'python3', $scriptPath, config('app.env'), $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
             } else {
-                $scenario = 3;
-                $adviceMessage = $numberExistedRecords . " out of " . $numberUploadedRecords . " records are already existed in system. Please kindly tick below checkbox to confirm uploading non existed records or cancel this upload to further check data file correctness.";
+                $isWindows = 1;
+                $process = new Process(['python', $scriptPath, config('app.env'), $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
             }
 
+            $process->setWorkingDirectory(base_path());
 
-            return response()->json([
-                'met_data_preview' => $metDataPreview,
-                'number_uploaded_records' => $numberUploadedRecords,
-                'number_existed_records' => $numberExistedRecords,
-                'number_not_existed_records' => $numberNotExistedRecords,
-                'scenario' => $scenario,
-                'adviceMessage' => $adviceMessage,
-                'error_data' => null
+            $process->run();
 
-            ]);
+//            Log::info($process->getOutput());
+
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
         }
 
         abort(500, 'request did not contain a file - please check that the file was correctly attached');
@@ -265,7 +261,7 @@ class FileController extends Controller
             }
         }
 
-        $error_data = MetDataPreview::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $upload_id)->get();
+        $error_data = MetDataPreview::whereIn('fecha_hora', $error_date)->where('uploader_id', '=', $upload_id)->get();
 
         return response([
 
