@@ -16,7 +16,6 @@ class UploadTest extends TestCase
     /** @test */
     public function it_uploads_a_davis_txt_file(): void
     {
-        $this->withoutExceptionHandling();
         $user = User::factory()->create(['type' => 'admin']);
         $station = Station::factory()->create(['type' => 'davis']);
 

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\DavisFileImport;
+use App\Imports\PreProcessDavisHeaders;
 use App\Models\Met\File;
+use App\Models\Met\Station;
 use DB;
 use App\Models\Met\Daily;
 use App\Models\Met\Observation;
@@ -13,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Models\Met\MetDataPreview;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
@@ -26,6 +30,7 @@ class FileController extends Controller
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws \JsonException
      */
     public function store(Request $request): JsonResponse
     {
@@ -66,36 +71,38 @@ class FileController extends Controller
                 'upload_id' => $this->generateRandomString(),
             ]);
 
-            $scriptName = 'uploadDatapreview.py';
-            $scriptPath = base_path() . '/scripts/' . $scriptName;
-            $path_name = Storage::path("/") . $path;
+            $fullPath = Storage::path("/") . $path;
 
-            //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
-            if ($request->hasFile('data-filesObservation')) {
-                $newObservation_id = $newObservation->id;
-            } else {
-                $newObservation_id = "null";
+            // upload data to met_data_preview table
+            if(Station::find($station)->type === 'davis') {
+                $processor = (new PreProcessDavisHeaders());
+                $fileWithMergedHeaders = $processor($fullPath);
+
+                Excel::import(new DavisFileImport($newFile->upload_id, $station), $fileWithMergedHeaders, null,\Maatwebsite\Excel\Excel::TSV);
+
             }
 
 
-            if (config('app.pipenv')) {
-                $isWindows = 0;
-                //dd(collect(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $upload_id, $isWindows, $newObservation_id])->join(" "));
-                $process = new Process(['pipenv', 'run', 'python3', $scriptPath, config('app.env'), $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
-            } else {
-                $isWindows = 1;
-                $process = new Process(['python', $scriptPath, config('app.env'), $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
-            }
+            // TODO: add Chinas file support
 
-            $process->setWorkingDirectory(base_path());
+//            if (config('app.pipenv')) {
+//                $isWindows = 0;
+//                //dd(collect(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $upload_id, $isWindows, $newObservation_id])->join(" "));
+//                $process = new Process(['pipenv', 'run', 'python3', $scriptPath, config('app.env'), $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
+//            } else {
+//                $isWindows = 1;
+//                $process = new Process(['python', $scriptPath, config('app.env'), $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $newFile->upload_id, $isWindows, $newObservation_id]);
+//            }
 
-            $process->run();
-
-//            Log::info($process->getOutput());
-
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
-            }
+//            $process->setWorkingDirectory(base_path());
+//
+//            $process->run();
+//
+////            Log::info($process->getOutput());
+//
+//            if (!$process->isSuccessful()) {
+//                throw new ProcessFailedException($process);
+//            }
 
             $metDataPreview = MetDataPreview::where('uploader_id', '=', $newFile->upload_id)->orderBy('id')->paginate(10);
 
