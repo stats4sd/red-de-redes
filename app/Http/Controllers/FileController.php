@@ -91,7 +91,7 @@ class FileController extends Controller
 
             $process->run();
 
-            Log::info($process->getOutput());
+//            Log::info($process->getOutput());
 
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
