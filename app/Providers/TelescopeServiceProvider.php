@@ -21,7 +21,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
         $this->hideSensitiveRequestDetails();
 
         Telescope::filter(function (IncomingEntry $entry) {
-            if ($this->app->isLocal() || config('app.env')=='staging' ) {
+            if (config('app.env') === 'local' || config('app.env')==='staging' ) {
                 return true;
             }
 

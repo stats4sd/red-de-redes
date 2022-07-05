@@ -16,6 +16,7 @@ class UploadTest extends TestCase
     /** @test */
     public function it_uploads_a_davis_txt_file(): void
     {
+        $this->withoutExceptionHandling();
         $user = User::factory()->create(['type' => 'admin']);
         $station = Station::factory()->create(['type' => 'davis']);
 
@@ -24,7 +25,7 @@ class UploadTest extends TestCase
             'default-davis.txt'
         );
 
-        $this->actingAs($user)
+        $response = $this->actingAs($user)
             ->post(url('files'), [
                 'data-file' => $uploadFile,
                 'selectedStation' => $station->id,
