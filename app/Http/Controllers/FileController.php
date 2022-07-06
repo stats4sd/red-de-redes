@@ -209,11 +209,11 @@ class FileController extends Controller
             'is_success' => 1
         ]);
 
-        ddd('hi, ' . $metDataCount);
+        $maxDate = MetData::where('file_id', $fileRecord->id)->max('fecha_hora');
+        $minDate = MetData::where('file_id', $fileRecord->id)->min('fecha_hora');
 
-
-        $maxDate = (new Carbon($newData->pluck('fecha_hora')->max()))->toDateString();
-        $minDate = (new Carbon($newData->pluck('fecha_hora')->min()))->toDateString();
+        $maxDate = (new Carbon($maxDate))->toDateString();
+        $minDate = (new Carbon($minDate))->toDateString();
 
         $result = \DB::select(
             "call generate_daily_met_data_by_date_range(?, ?, ?);",
@@ -221,7 +221,7 @@ class FileController extends Controller
         );
 
 
-        Alert::add('success', "Upload complete. All {$metDataCount} records are stored in the database and the daily summaries have been calculated")->flash();
+        Alert::add('success', "Upload complete. All {$metDataCount} records are stored in the database and the daily summaries have been calculated.")->flash();
 
         return Redirect::back();
     }

@@ -151,9 +151,17 @@
                                     año y
                                     las unidades elegidas.
                                 </div>
-                                <div class="alert alert-secondary" v-if="previewData!=null">Hay {{ total_rows }} filas
+                                <div class="alert alert-secondary" v-if="previewData!=null">
+                                    <ul>
+                                        <li>Hay {{ total_rows }} filas</li>
+                                        <li>Minumum temperature from records:<b> {{ min_temp }} ºC</b></li>
+                                        <li>Maximum temperature from records:<b> {{ max_temp }} ºC</b></li>
+                                        <li>Maximum daily rainfall from records:<b> {{ max_daily_rain }} mm</b></li>
+                                    </ul>
                                 </div>
 
+                                <h5>Preview</h5>
+                                <p>Below is a preview of the data that will be stored. It includes the first 10 records from the uploaded file.</p>
                                 <div class="mx-4 justify-content-center" style="overflow-x: scroll">
 
                                     <table class="table table-striped" style="max-height: 600px;">
@@ -247,110 +255,14 @@
 
                                 </div>
 
-                                <div class="py-4 mx-4 justify-content-center" style="overflow-x: scroll"
-                                     v-if="error_data!=null">
-                                    <div class="alert alert-danger"
-                                         v-if="error_temp || error_press || error_wind||error_rain ">Hay algunos valores
-                                        con las unidades incorrectas, consulte la siguiente tabla y continúe con
-                                        <b>Cancelar</b> para subir un nuevo archivo o haga clic en <b>Guardar en la base
-                                            de
-                                            datos</b> si los valores son correctos.
-                                    </div>
-
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <th v-if="error_temp">temperatura_interna</th>
-                                            <th v-if="error_temp">temperatura_externa</th>
-                                            <th v-if="error_temp">sensacion_termica</th>
-                                            <th v-if="error_temp">punto_rocio</th>
-                                            <th v-if="error_temp">wind_chill</th>
-                                            <th v-if="error_temp">hi_temp</th>
-                                            <th v-if="error_temp">low_temp</th>
-                                            <th v-if="error_press">presion_relativa</th>
-                                            <th v-if="error_press">presion_absoluta</th>
-                                            <th v-if="error_wind">velocidad_viento</th>
-                                            <th v-if="error_wind">rafaga</th>
-                                            <th v-if="error_wind">hi_speed</th>
-                                            <th v-if="error_wind">hi_dir</th>
-                                            <th v-if="error_rain">lluvia_hora</th>
-                                            <th v-if="error_rain">lluvia_24_horas</th>
-                                            <th v-if="error_rain">lluvia_semana</th>
-                                            <th v-if="error_rain">lluvia_mes</th>
-                                            <th v-if="error_rain">lluvia_total</th>
-                                            <th v-if="error_rain">rain</th>
-                                        </tr>
-                                        <tr v-for="row in error_data" :key="row.id">
-                                            <td v-if="error_temp">{{ row.temperatura_interna }} {{
-                                                    row.temperatura_interna && row.temperatura_interna != '' ? 'ºC' : ''
-                                                }}
-                                            </td>
-                                            <td v-if="error_temp">{{ row.temperatura_externa }} {{
-                                                    row.temperatura_externa && row.temperatura_externa != '' ? 'ºC' : ''
-                                                }}
-                                            </td>
-                                            <td v-if="error_temp">{{ row.sensacion_termica }}
-                                                {{ row.sensacion_termica && row.sensacion_termica != '' ? 'ºC' : '' }}
-                                            </td>
-                                            <td v-if="error_temp">{{ row.punto_rocio }}
-                                                {{ row.punto_rocio && row.punto_rocio != '' ? 'ºC' : '' }}
-                                            </td>
-                                            <td v-if="error_temp">{{ row.wind_chill }}
-                                                {{ row.wind_chill && row.wind_chill != '' ? 'ºC' : '' }}
-                                            </td>
-                                            <td v-if="error_temp">{{ row.hi_temp }}
-                                                {{ row.hi_temp && row.hi_temp != '' ? 'ºC' : '' }}
-                                            </td>
-                                            <td v-if="error_temp">{{ row.low_temp }}
-                                                {{ row.low_temp && row.low_temp != '' ? 'ºC' : '' }}
-                                            </td>
-                                            <td v-if="error_press">{{ row.presion_relativa }}
-                                                {{ row.presion_relativa && row.presion_relativa != '' ? 'hPa' : '' }}
-                                            </td>
-                                            <td v-if="error_press">{{ row.presion_absoluta }}
-                                                {{ row.presion_absoluta && row.presion_absoluta != '' ? 'hPa' : '' }}
-                                            </td>
-                                            <td v-if="error_wind">{{ row.velocidad_viento }}
-                                                {{ row.velocidad_viento && row.velocidad_viento != '' ? 'm/s' : '' }}
-                                            </td>
-                                            <td v-if="error_wind">{{ row.rafaga }}
-                                                {{ row.rafaga && row.rafaga != '' ? 'm/s' : '' }}
-                                            </td>
-                                            <td v-if="error_wind">{{ row.hi_speed }}
-                                                {{ row.hi_speed && row.hi_speed != '' ? 'm/s' : '' }}
-                                            </td>
-                                            <td v-if="error_wind">{{ row.hi_dir }}</td>
-                                            <td v-if="error_rain">{{ row.lluvia_hora }}
-                                                {{ row.lluvia_hora && row.lluvia_hora != '' ? 'mm' : '' }}
-                                            </td>
-                                            <td v-if="error_rain">{{ row.lluvia_24_horas }}
-                                                {{ row.lluvia_24_horas && row.lluvia_24_horas != '' ? 'mm' : '' }}
-                                            </td>
-                                            <td v-if="error_rain">{{ row.lluvia_semana }}
-                                                {{ row.lluvia_semana && row.lluvia_semana != '' ? 'mm' : '' }}
-                                            </td>
-                                            <td v-if="error_rain">{{ row.lluvia_mes }}
-                                                {{ row.lluvia_mes && row.lluvia_mes != '' ? 'mm' : '' }}
-                                            </td>
-                                            <td v-if="error_rain">{{ row.lluvia_total }}
-                                                {{ row.lluvia_total && row.lluvia_total != '' ? 'mm' : '' }}
-                                            </td>
-                                            <td v-if="error_rain">{{ row.rain }}
-                                                {{ row.rain && row.rain != '' ? 'mm' : '' }}
-                                            </td>
-                                        </tr>
-
-                                    </table>
-
-                                </div>
-
 
                                 <div style="text-align: center;">
-                                    <b-alert show variant="danger" v-if="error!=null">{{ error }}</b-alert>
-                                    <b-alert show variant="success" v-if="success!=null">{{ success }}</b-alert>
-                                    <b-alert show variant="warning" v-if="scenario3"><input type="checkbox"
-                                                                                            v-model="scenario3Confirmed"><b><font
-                                        color="red"> I confirm that I understand the potential risk of uploading this
-                                        data file with existing records.</font></b></b-alert>
+                                    <div class="alert alert-danger show" v-if="error!=null">{{ error }}</div>
+                                    <div class="alert alert-success show" v-if="success!=null">{{ success }}</div>
+                                    <div class="alert alert-warning show" v-if="scenario3">
+                                        <input type="checkbox" v-model="scenario3Confirmed">
+                                        <b>I confirm that I understand the potential risk of uploading this
+                                            data file with existing records.</b></div>
                                     <br/>
 
                                     <div class="d-flex justify-content-center">
@@ -370,14 +282,6 @@
                                             </button>
 
                                         </form>
-<!--                                        <button type="submit" class="site-btn my-4" data-toggle="collapse"-->
-<!--                                                href="#collapseThree" id="btnConfirm"-->
-<!--                                                aria-expanded="false" aria-controls="collapseThree"-->
-<!--                                                v-on:click="storeFile"-->
-<!--                                                :disabled="error || busy || (scenario3 && !scenario3Confirmed)">-->
-<!--                                            <b-spinner small v-if="busy" label="Spinning"></b-spinner>-->
-<!--                                            Guardar en la base de datos-->
-<!--                                        </button>-->
                                     </div>
 
                                 </div>
@@ -427,6 +331,9 @@ export default {
     data() {
         this.trackProgress = _.debounce(this.trackProgress, 1000);
         return {
+            max_temp: null,
+            min_temp: null,
+            max_daily_rain: null,
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             current_row: null,
             progress: null,
@@ -720,6 +627,9 @@ export default {
                     this.total_rows = payload.data.met_data_preview.total;
                     this.previewData = payload.data.met_data_preview.data;
                     this.upload_id = (this.previewData[0]['upload_id']);
+                    this.min_temp = payload.data.min_temp;
+                    this.max_temp = payload.data.max_temp;
+                    this.max_daily_rain = payload.data.max_daily_rain;
 
                     // show advice message
                     if (payload.data.scenario == 1) {

@@ -6,6 +6,7 @@ use App\Events\MetDataImportCompleted;
 use App\Models\Met\File;
 use App\Models\Met\MetDataPreview;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -59,6 +60,11 @@ class MetDataImportCompletedJob implements ShouldQueue
             'duplicate_records_count' => $numberExistedRecords,
         ]);
 
+        $maxTemp = MetDataPreview::where('upload_id', $this->fileRecord->upload_id)->max('hi_temp');
+        $minTemp = MetDataPreview::where('upload_id', $this->fileRecord->upload_id)->min('low_temp');
+
+        $maxDailyRain = MetDataPreview::where('upload_id', $this->fileRecord->upload_id)->groupByRaw('LEFT(`fecha_hora`, 10)')->sum('rain');
+
         if ($numberNotExistedRecords === $metDataPreviewCount) {
             $scenario = 1;
             $adviceMessage = "All " . $metDataPreviewCount . " record(s) are new records. Please kindly confirm to upload this data file.";
@@ -78,7 +84,11 @@ class MetDataImportCompletedJob implements ShouldQueue
                 'number_not_existed_records' => $numberNotExistedRecords,
                 'scenario' => $scenario,
                 'adviceMessage' => $adviceMessage,
-                'error_data' => null
+                'error_data' => null,
+                'min_temp' => $minTemp,
+                'max_temp' => $maxTemp,
+                'max_daily_rain' => $maxDailyRain,
+
             ],
             $this->user,
         );
