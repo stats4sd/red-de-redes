@@ -63,7 +63,9 @@ class MetDataImportCompletedJob implements ShouldQueue
         $maxTemp = MetDataPreview::where('upload_id', $this->fileRecord->upload_id)->max('hi_temp');
         $minTemp = MetDataPreview::where('upload_id', $this->fileRecord->upload_id)->min('low_temp');
 
-        $maxDailyRain = MetDataPreview::where('upload_id', $this->fileRecord->upload_id)->groupByRaw('LEFT(`fecha_hora`, 10)')->sum('rain');
+        $maxDailyRain = MetDataPreview::where('upload_id', $this->fileRecord->upload_id)
+            ->selectRaw('sum(rain) as aggregate')
+            ->groupByRaw('LEFT(`fecha_hora`, 10)')->get()->max()['aggregate'];
 
         if ($numberNotExistedRecords === $metDataPreviewCount) {
             $scenario = 1;

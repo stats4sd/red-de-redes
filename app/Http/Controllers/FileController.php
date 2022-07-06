@@ -201,7 +201,7 @@ class FileController extends Controller
 
 
         // confirm records are in database;
-        $metDataCount = MetData::where('file_id', $fileRecord)->count();
+        $metDataCount = MetData::where('file_id', $fileRecord->id)->count();
 
 
         // update file reference to mark it as successful, for future review;
