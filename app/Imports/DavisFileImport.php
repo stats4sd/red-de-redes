@@ -69,7 +69,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
             $newRow = collect($row)->mapWithKeys(function ($value, $key) {
 
                 if(!isset($this->keyMap[$key])) {
-                    return null;
+                    return ['null' => $value];
                 }
 
                 $newKey = $this->keyMap[$key];
@@ -82,7 +82,11 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
                 return [
                     $newKey => $value
                 ];
-            })->filter(fn($item) => $item !== null);
+            });
+
+            if(isset($newRow['null'])) {
+                unset($newRow['null']);
+            }
 
             // create merged date_time
             $newRow['fecha_hora'] = (Carbon::createFromFormat('d/m/y H:i', $newRow['fecha_hora'] . ' ' . $newRow['time']));
