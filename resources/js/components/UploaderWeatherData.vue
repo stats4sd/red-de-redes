@@ -386,9 +386,10 @@ import CustomModal from './Elements/CustomModal.vue'
 import FileInput from 'vue3-simple-file-input'
 import ProgressBar from './ProgressBar'
 import Noty from 'noty'
+import axios from 'axios'
 
 Noty.overrideDefaults({
-    theme: 'bootstrap-v4'
+    theme: 'bootstrap-v4',
 })
 
 export default {
@@ -601,36 +602,7 @@ export default {
             formData.append('selectedUnitRain', this.selectedUnitRain.value ?? 'mm');
 
             axios.post(rootUrl + '/files', formData, {}).then((result) => {
-
-                console.log(result)
-                this.total_rows = result.data.met_data_preview.total;
-                this.previewData = result.data.met_data_preview.data;
-                this.uploader_id = (this.previewData[0]['uploader_id']);
-
-                // show advice message
-                if (result.data.scenario == 1) {
-                    this.success = result.data.adviceMessage;
-                    this.scenario3 = false;
-                } else if (result.data.scenario == 2) {
-                    this.error = result.data.adviceMessage;
-                    this.scenario3 = false;
-                } else if (result.data.scenario == 3) {
-                    this.success = result.data.adviceMessage;
-                    this.scenario3 = true;
-                }
-
-
-                // this.error_data = result.data.error_data.original.error_data;
-                // this.error_temp = result.data.error_data.original.error_temp;
-                // this.error_press = result.data.error_data.original.error_press;
-                // this.error_wind = result.data.error_data.original.error_wind;
-                // this.error_rain = result.data.error_data.original.error_rain;
-
-
-                this.$refs.panel1.click()
-                this.$refs.panel2.click()
-
-
+                console.log('done');
             })
                 .catch((error) => {
                     this.busy = false;
@@ -714,6 +686,47 @@ export default {
                             "<b>Hi</bi>",
                         timeout: false
                     }).show();
+                })
+                .listen("MetDataImportStarted", payload => {
+                    new Noty({
+                        type: "info",
+                        text: `The import has started. All ${payload.recordCount} entries will be processed.`
+                    }).show()
+                })
+                .listen("MetDataImportCompleted", payload => {
+                    new Noty({
+                        type: "success",
+                        text: `The import is complete!.`
+                    }).show()
+
+                    console.log(payload)
+                this.total_rows = payload.data.met_data_preview.total;
+                this.previewData = payload.data.met_data_preview.data;
+                this.uploader_id = (this.previewData[0]['uploader_id']);
+
+                // show advice message
+                if (payload.data.scenario == 1) {
+                    this.success = payload.data.adviceMessage;
+                    this.scenario3 = false;
+                } else if (payload.data.scenario == 2) {
+                    this.error = payload.data.adviceMessage;
+                    this.scenario3 = false;
+                } else if (payload.data.scenario == 3) {
+                    this.success = result.data.adviceMessage;
+                    this.scenario3 = true;
+                }
+
+
+                // this.error_data = result.data.error_data.original.error_data;
+                // this.error_temp = result.data.error_data.original.error_temp;
+                // this.error_press = result.data.error_data.original.error_press;
+                // this.error_wind = result.data.error_data.original.error_wind;
+                // this.error_rain = result.data.error_data.original.error_rain;
+
+
+                this.$refs.panel1.click()
+                this.$refs.panel2.click()
+
                 })
 
         }

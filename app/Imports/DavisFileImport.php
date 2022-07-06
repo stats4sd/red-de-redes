@@ -6,6 +6,7 @@ use App\Models\Met\File;
 use App\Models\Met\MetData;
 use App\Models\Met\MetDataPreview;
 use Carbon\Carbon;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
@@ -21,7 +22,7 @@ use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, WithHeadingRow, WithChunkReading, WithBatchInserts, WithStrictNullComparison
+class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue, WithStrictNullComparison
 {
 
     protected array $keyMap;
@@ -79,12 +80,12 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
             $metDataItem = MetDataPreview::create($newRow->toArray());
         } catch (\Throwable $exception) {
             dump($row);
+            dump($this->keyMap);
             dump($this->getRowNumber());
             throw $exception;
         }
 
     }
-
 
 
     public function getCsvSettings(): array
@@ -96,11 +97,11 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
 
     public function batchSize(): int
     {
-        return 5000;
+        return 1000;
     }
 
     public function chunkSize(): int
     {
-        return 5000;
+        return 1000;
     }
 }

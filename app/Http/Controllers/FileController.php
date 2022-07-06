@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MetDataImportCompleted;
+use App\Events\MetDataImportStarted;
 use App\Http\Requests\FileRequest;
 use App\Imports\DavisFileImport;
 use App\Imports\PreProcessDavisHeaders;
+use App\Jobs\MetDataImportCompletedJob;
 use App\Models\Met\File;
 use App\Models\Met\Station;
 use DB;
@@ -50,9 +53,13 @@ class FileController extends Controller
         // upload data to met_data_preview table
         if (Station::find($fileRecord['station_id'])->type === 'davis') {
             $processor = (new PreProcessDavisHeaders());
-            $fileWithMergedHeaders = $processor($fileRecord->data_file);
+            [$fileWithMergedHeaders, $count] = $processor($fileRecord->data_file);
 
-            Excel::import(new DavisFileImport($fileRecord), $fileWithMergedHeaders, 'public', \Maatwebsite\Excel\Excel::TSV);
+            MetDataImportStarted::dispatch($count, Auth::user());
+
+            Excel::queueImport(new DavisFileImport($fileRecord), $fileWithMergedHeaders, 'public', \Maatwebsite\Excel\Excel::TSV)->chain([
+                new MetDataImportCompletedJob($fileRecord, Auth::user())
+            ]);
 
         }
 
