@@ -39,8 +39,13 @@ class PreProcessDavisHeaders
 
         // iterate through rest of file
         while (!feof($file)) {
-            ++$recordCount;
-            fwrite($newFile, fgets($file));
+
+            $line = fgets($file);
+            if(trim($line) !== "") {
+                ++$recordCount;
+            }
+            fwrite($newFile, $line);
+
         }
 
         fclose($newFile);
