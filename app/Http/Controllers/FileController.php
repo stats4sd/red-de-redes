@@ -9,6 +9,7 @@ use App\Imports\DavisFileImport;
 use App\Imports\PreProcessDavisHeaders;
 use App\Jobs\MetDataImportCompletedJob;
 use App\Models\Met\File;
+use App\Models\Met\MetData;
 use App\Models\Met\Station;
 use DB;
 use App\Models\Met\Daily;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use JsonException;
 use Maatwebsite\Excel\Facades\Excel;
+use Prologue\Alerts\Facades\Alert;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Redirect;
 
@@ -82,50 +84,6 @@ class FileController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 
     public function checkValues($upload_id)
     {
@@ -204,9 +162,14 @@ class FileController extends Controller
 
 
     // when user click "Cancel" button, remove staging records in table met_data_preview
-    public function cleanTable($upload_id)
+    public function cancelUpload($upload_id)
     {
-        DB::table('met_data_preview')->where('uploader_id', '=', $upload_id)->delete();
+
+        if ($upload_id) {
+            DB::table('met_data_preview')->where('upload_id', '=', $upload_id)->delete();
+        }
+
+        Alert::add('info', 'Upload Cancelled - all previewed data has been deleted from the database')->flash();
 
         return Redirect::back();
 
@@ -218,35 +181,23 @@ class FileController extends Controller
     public function storeFile($upload_id)
     {
 
-        $scriptPath = base_path() . '/scripts/storeData.py';
+        $newData = MetDataPreview::where('upload_id', $upload_id)->get();
 
-        if (config('app.pipenv')) {
-            $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $upload_id]);
-        } else {
-            $process = new Process(['python', $scriptPath, $upload_id]);
-        }
+        $fileRecord = File::firstWhere('upload_id', $upload_id);
 
-        $process->run();
+        $fileRecord->metData()->createMany($newData->toArray());
 
-        // write Python log message to Laravel log file
-        Log::info($process->getOutput());
+        // confirm records are in database;
+        $metDataCount = MetData::where('file_id', $fileRecord)->count();
 
-
-        if (!$process->isSuccessful()) {
-
-            Log::error('process failed');
-            Log::error($process->getErrorOutput());
-
-            return response()->json(['error' => 'Los datos no se pueden guardar en la base de datos. Recomendamos verificar si hay duplicados']);
-
+        if($metDataCount !== $newData->count()) {
+            ddd('darn');
         }
 
         // update file reference to mark it as successful, for future review;
-        File::whereUploadId($upload_id)->update([
+        $fileRecord->update([
             'is_success' => 1
         ]);
-
-        $process->getOutput();
 
         return response()->json(['success' => 'Los datos han sido ingresados exitosamente.']);
     }

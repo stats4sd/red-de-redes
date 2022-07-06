@@ -89,3 +89,4 @@ Route::get('test-event', function() {
 });
 
 Route::get('import-status/{upload_id}', [FileController::class, 'status']);
+Route::post('cancel-upload/{upload_id}', [FileController::class, 'cancelUpload']);

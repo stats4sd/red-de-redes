@@ -33,11 +33,11 @@ class MetData extends Model
         return $this->belongsTo(Station::class, 'station_id');
     }
 
-    public function observation()
-    {
-        return $this->belongsTo(Observation::class, 'observation_id');
-    }
 
+    public function file()
+    {
+        return $this->belongsTo(File::class, 'file_id');
+    }
 
     /*
     |--------------------------------------------------------------------------

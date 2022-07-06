@@ -111,14 +111,18 @@
                                 </div>
 
                                 <div style="text-align: center;">
-                                    <div class="alert alert-info show">Después de subir el archivo, tendrá la oportunidad de
+                                    <div class="alert alert-info show">Después de subir el archivo, tendrá la
+                                        oportunidad de
                                         revisar los valores de los datos y confirmar que estas son las unidades
                                         correctas
                                         antes de continuar.
                                     </div>
                                     <br/>
                                     <br/>
-                                    <div class="alert alert-danger show" v-if="uploadError!=null">{{ uploadError }}</div>
+                                    <div class="alert alert-danger show" v-if="uploadError!=null">{{
+                                            uploadError
+                                        }}
+                                    </div>
                                     <br/>
                                     <button class="site-btn my-4" v-on:click="submit();" :disabled="busy">
                                         <i class="la la-spinner" v-if="busy" label="Spinning"></i>
@@ -126,10 +130,10 @@
                                     </button>
 
                                     <div class="alert alert-info show" v-if="uploadActive">
-                                        PROGRESS: {{current_row }} / {{ total_rows }} ({{progress}} %)
+                                        PROGRESS: {{ current_row }} / {{ total_rows }} ({{ progress }} %)
                                     </div>
                                     <div class="alert alert-success show" v-if="!uploadActive && progress == 100">
-                                        PROGRESS: {{current_row }} / {{ total_rows }} ({{progress}} %)
+                                        PROGRESS: {{ current_row }} / {{ total_rows }} ({{ progress }} %)
                                     </div>
 
                                 </div>
@@ -352,20 +356,27 @@
                                         color="red"> I confirm that I understand the potential risk of uploading this
                                         data file with existing records.</font></b></b-alert>
                                     <br/>
-                                    <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                            aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable"
-                                            style="background: red;">
-                                        <b-spinner small v-if="busy" label="Spinning"></b-spinner>
-                                        Cancelar
-                                    </button>
-                                    &nbsp;
-                                    <button type="submit" class="site-btn my-4" data-toggle="collapse"
-                                            href="#collapseThree" id="btnConfirm"
-                                            aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile"
-                                            :disabled="error || busy || (scenario3 && !scenario3Confirmed)">
-                                        <b-spinner small v-if="busy" label="Spinning"></b-spinner>
-                                        Guardar en la base de datos
-                                    </button>
+
+                                    <div class="d-flex justify-content-center">
+
+                                        <form :action="'/cancel-upload/'+ upload_id" method="POST">
+                                            <input type="hidden" name="_token" :value="csrf"/>
+                                            <button class="site-btn my-4" type="submit"
+                                                    style="background: red;">
+                                                Cancelar
+                                            </button>
+
+                                        </form>
+                                        &nbsp;
+                                        <button type="submit" class="site-btn my-4" data-toggle="collapse"
+                                                href="#collapseThree" id="btnConfirm"
+                                                aria-expanded="false" aria-controls="collapseThree"
+                                                v-on:click="storeFile"
+                                                :disabled="error || busy || (scenario3 && !scenario3Confirmed)">
+                                            <b-spinner small v-if="busy" label="Spinning"></b-spinner>
+                                            Guardar en la base de datos
+                                        </button>
+                                    </div>
 
                                 </div>
                             </div>
@@ -414,6 +425,7 @@ export default {
     data() {
         this.trackProgress = _.debounce(this.trackProgress, 1000);
         return {
+            csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             current_row: null,
             progress: null,
             total_rows: null,
@@ -642,7 +654,7 @@ export default {
             this.busy = true;
             axios({
                 method: 'post',
-                url: "/storeFile/" + this.uploader_id,
+                url: "/storeFile/" + this.upload_id,
             })
                 .then((result) => {
                     console.log(result.data.success);
@@ -659,24 +671,6 @@ export default {
                     this.error = error
                     this.busy = false;
                 });
-        },
-
-        cleanTable: function () {
-            this.busy = true;
-            axios({
-                method: 'post',
-                url: "/cleanTable/" + this.uploader_id,
-            })
-                .then((result) => {
-                    console.log(result);
-                    this.busy = false;
-                    window.location.reload();
-
-                }, (error) => {
-                    console.log(error);
-                    this.busy = false;
-                });
-
         },
 
         stationConfirmed() {
@@ -720,33 +714,33 @@ export default {
                     }).show()
 
                     this.trackProgress()
-                this.uploadActive = false;
-                this.total_rows = payload.data.met_data_preview.total;
-                this.previewData = payload.data.met_data_preview.data;
-                this.upload_id = (this.previewData[0]['upload_id']);
+                    this.uploadActive = false;
+                    this.total_rows = payload.data.met_data_preview.total;
+                    this.previewData = payload.data.met_data_preview.data;
+                    this.upload_id = (this.previewData[0]['upload_id']);
 
-                // show advice message
-                if (payload.data.scenario == 1) {
-                    this.success = payload.data.adviceMessage;
-                    this.scenario3 = false;
-                } else if (payload.data.scenario == 2) {
-                    this.error = payload.data.adviceMessage;
-                    this.scenario3 = false;
-                } else if (payload.data.scenario == 3) {
-                    this.success = result.data.adviceMessage;
-                    this.scenario3 = true;
-                }
-
-
-                // this.error_data = result.data.error_data.original.error_data;
-                // this.error_temp = result.data.error_data.original.error_temp;
-                // this.error_press = result.data.error_data.original.error_press;
-                // this.error_wind = result.data.error_data.original.error_wind;
-                // this.error_rain = result.data.error_data.original.error_rain;
+                    // show advice message
+                    if (payload.data.scenario == 1) {
+                        this.success = payload.data.adviceMessage;
+                        this.scenario3 = false;
+                    } else if (payload.data.scenario == 2) {
+                        this.error = payload.data.adviceMessage;
+                        this.scenario3 = false;
+                    } else if (payload.data.scenario == 3) {
+                        this.success = result.data.adviceMessage;
+                        this.scenario3 = true;
+                    }
 
 
-                this.$refs.panel1.click()
-                this.$refs.panel2.click()
+                    // this.error_data = result.data.error_data.original.error_data;
+                    // this.error_temp = result.data.error_data.original.error_temp;
+                    // this.error_press = result.data.error_data.original.error_press;
+                    // this.error_wind = result.data.error_data.original.error_wind;
+                    // this.error_rain = result.data.error_data.original.error_rain;
+
+
+                    this.$refs.panel1.click()
+                    this.$refs.panel2.click()
 
                 })
 
@@ -754,7 +748,7 @@ export default {
         async trackProgress() {
             const {data} = await axios.get(`/import-status/${this.upload_id}`)
 
-            if(data.finished) {
+            if (data.finished) {
                 this.current_row = this.total_rows
                 this.progress = 100
                 return;

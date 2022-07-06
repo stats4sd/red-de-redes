@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Stats4sd\FileUtil\Models\Traits\HasUploadFields;
 
 class File extends Model
@@ -23,6 +24,11 @@ class File extends Model
     public function station(): BelongsTo
     {
         return $this->belongsTo(Station::class, 'station_id');
+    }
+
+    public function metData(): HasMany
+    {
+        return $this->hasMany(MetData::class, 'file_id');
     }
 
     public function setDataFileAttribute($value): void

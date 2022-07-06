@@ -16,5 +16,7 @@
 
 
 @section('javascript')
-    <script src="{{mix('js/data_upload.js') }}"></script>
+    <script src="{{ mix('js/data_upload.js') }}"></script>
+
+    @include('backpack::inc.alerts')
 @endsection

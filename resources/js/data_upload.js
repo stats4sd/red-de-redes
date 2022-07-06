@@ -3,6 +3,7 @@ import {createApp} from 'vue'
 import UploaderWeatherData from "./components/UploaderWeatherData";
 import axios from 'axios';
 import Echo from 'laravel-echo';
+window.Noty = require('noty');
 
 window.pusher = require('pusher-js')
 
