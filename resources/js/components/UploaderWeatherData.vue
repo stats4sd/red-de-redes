@@ -111,19 +111,27 @@
                                 </div>
 
                                 <div style="text-align: center;">
-                                    <b-alert show varient="info">Después de subir el archivo, tendrá la oportunidad de
+                                    <div class="alert alert-info show">Después de subir el archivo, tendrá la oportunidad de
                                         revisar los valores de los datos y confirmar que estas son las unidades
                                         correctas
                                         antes de continuar.
-                                    </b-alert>
+                                    </div>
                                     <br/>
                                     <br/>
-                                    <b-alert show variant="danger" v-if="uploadError!=null">{{ uploadError }}</b-alert>
+                                    <div class="alert alert-danger show" v-if="uploadError!=null">{{ uploadError }}</div>
                                     <br/>
                                     <button class="site-btn my-4" v-on:click="submit();" :disabled="busy">
-                                        <b-spinner small v-if="busy" label="Spinning"></b-spinner>
+                                        <i class="la la-spinner" v-if="busy" label="Spinning"></i>
                                         Subir
                                     </button>
+
+                                    <div class="alert alert-info show" v-if="uploadActive">
+                                        PROGRESS: {{current_row }} / {{ total_rows }} ({{progress}} %)
+                                    </div>
+                                    <div class="alert alert-success show" v-if="!uploadActive && progress == 100">
+                                        PROGRESS: {{current_row }} / {{ total_rows }} ({{progress}} %)
+                                    </div>
+
                                 </div>
                             </div>
                         </template>
@@ -371,6 +379,8 @@
 
 <script>
 
+import _ from "lodash";
+
 const rootUrl = process.env.MIX_APP_URL
 import {
     VueCollapsiblePanelGroup,
@@ -402,7 +412,12 @@ export default {
         ProgressBar
     },
     data() {
+        this.trackProgress = _.debounce(this.trackProgress, 1000);
         return {
+            current_row: null,
+            progress: null,
+            total_rows: null,
+            uploadActive: false,
             currentStep: 1,
             steps: [
                 {
@@ -445,7 +460,6 @@ export default {
             file: null,
             filesObservation: null,
             previewData: null,
-            total_rows: null,
             busy: false,
             error_data: null,
             success: null,
@@ -455,7 +469,7 @@ export default {
             error_wind: false,
             error_rain: false,
             uploadError: null,
-            uploader_id: null,
+            upload_id: null,
             scenario3: false,
             scenario3Confirmed: false,
             showUploadFile: false,
@@ -515,7 +529,7 @@ export default {
                 {key: "wind_tx", label: 'Wind Tx', thStyle: {width: '100px'}},
                 {key: "iss_recept", label: 'ISS Recept', thStyle: {width: '100px'}},
                 {key: "intervalo", label: 'Arc. Int.', thStyle: {width: '100px'}},
-            ]
+            ],
         }
     },
     props: {
@@ -690,8 +704,14 @@ export default {
                 .listen("MetDataImportStarted", payload => {
                     new Noty({
                         type: "info",
-                        text: `The import has started. All ${payload.recordCount} entries will be processed.`
+                        text: `The import has started. All ${payload.file.total_records_count} entries will be processed.`
                     }).show()
+
+                    this.upload_id = payload.file.upload_id;
+                    this.total_rows = payload.file.total_records_count
+                    this.uploadActive = true;
+                    console.log('upload_ID', this.upload_id)
+                    this.trackProgress()
                 })
                 .listen("MetDataImportCompleted", payload => {
                     new Noty({
@@ -699,10 +719,11 @@ export default {
                         text: `The import is complete!.`
                     }).show()
 
-                    console.log(payload)
+                    this.trackProgress()
+                this.uploadActive = false;
                 this.total_rows = payload.data.met_data_preview.total;
                 this.previewData = payload.data.met_data_preview.data;
-                this.uploader_id = (this.previewData[0]['uploader_id']);
+                this.upload_id = (this.previewData[0]['upload_id']);
 
                 // show advice message
                 if (payload.data.scenario == 1) {
@@ -729,6 +750,21 @@ export default {
 
                 })
 
+        },
+        async trackProgress() {
+            const {data} = await axios.get(`/import-status/${this.upload_id}`)
+
+            if(data.finished) {
+                this.current_row = this.total_rows
+                this.progress = 100
+                return;
+            }
+
+            this.current_row = data.current_row;
+            this.progress = Math.ceil(this.current_row / this.total_rows * 100);
+
+            //  continue until finished
+            this.trackProgress();
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Met\File;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -20,7 +21,7 @@ class MetDataImportStarted implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(public int $recordCount, public User $user)
+    public function __construct(public File $file, public User $user)
     {
     }
 

@@ -6,6 +6,7 @@ use App\Models\Met\File;
 use App\Models\Met\MetData;
 use App\Models\Met\MetDataPreview;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
@@ -17,19 +18,21 @@ use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use Maatwebsite\Excel\Events\AfterImport;
 use Maatwebsite\Excel\Events\BeforeImport;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use Throwable;
 
 class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue, WithStrictNullComparison
 {
 
     protected array $keyMap;
-    private string $uploaderId;
     private int $stationId;
+    private string $upload_id;
 
-    use RemembersRowNumber, RegistersEventListeners;
+    use RemembersRowNumber;
 
     /**
      * @throws \JsonException
@@ -52,8 +55,13 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
 
     }
 
+    /**
+     * @throws Throwable
+     */
     public function model(array $row)
     {
+        cache()->forever("current_row_{$this->upload_id}", $this->getRowNumber());
+
         // rename $row array keys using column map:
         try {
 
@@ -78,7 +86,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
             $newRow['station_id'] = $this->stationId;
 
             $metDataItem = MetDataPreview::create($newRow->toArray());
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             dump($row);
             dump($this->keyMap);
             dump($this->getRowNumber());
@@ -87,20 +95,42 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
 
     }
 
+    /**
+     * @throws Exception
+     */
+    public function registerEvents(): array
+    {
+        return [
+            BeforeImport::class => function (BeforeImport $event) {
 
-    public function getCsvSettings(): array
+                cache()->forever("start_date_{$this->upload_id}", now()->unix());
+            },
+
+            AfterImport::class => function (AfterImport $event) {
+                cache(["end_date_{$this->upload_id}" => now()], now()->addMinute());
+                cache()->forget("total_rows_{$this->upload_id}");
+                cache()->forget("start_date_{$this->upload_id}");
+                cache()->forget("current_row_{$this->upload_id}");
+            },];
+    }
+
+
+    public
+    function getCsvSettings(): array
     {
         return [
             'delimiter' => "\t"
         ];
     }
 
-    public function batchSize(): int
+    public
+    function batchSize(): int
     {
         return 1000;
     }
 
-    public function chunkSize(): int
+    public
+    function chunkSize(): int
     {
         return 1000;
     }

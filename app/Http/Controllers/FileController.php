@@ -12,6 +12,7 @@ use App\Models\Met\File;
 use App\Models\Met\Station;
 use DB;
 use App\Models\Met\Daily;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -55,7 +56,9 @@ class FileController extends Controller
             $processor = (new PreProcessDavisHeaders());
             [$fileWithMergedHeaders, $count] = $processor($fileRecord->data_file);
 
-            MetDataImportStarted::dispatch($count, Auth::user());
+            $fileRecord->update(['total_records_count' => $count]);
+
+            MetDataImportStarted::dispatch($fileRecord, Auth::user());
 
             Excel::queueImport(new DavisFileImport($fileRecord), $fileWithMergedHeaders, 'public', \Maatwebsite\Excel\Excel::TSV)->chain([
                 new MetDataImportCompletedJob($fileRecord, Auth::user())
@@ -63,57 +66,20 @@ class FileController extends Controller
 
         }
 
-        $metDataPreview = MetDataPreview::where('upload_id', '=', $fileRecord->upload_id)->orderBy('id')->paginate(10);
+        return response()->json(['started']);
+    }
 
-        $metDataPreviewCount = MetDataPreview::where('upload_id', $fileRecord->upload_id)->count('id');
+    /**
+     * @throws Exception
+     */
+    public function status($upload_id)
+    {
 
-        // check number of records already existed in database
-        $sqlExistedRecords = " SELECT COUNT(*) as number_of_records";
-        $sqlExistedRecords .= " FROM met_data ta, met_data_preview tb";
-        $sqlExistedRecords .= " WHERE tb.upload_id = '" . $fileRecord->upload_id . "'";
-        $sqlExistedRecords .= " AND ta.fecha_hora = tb.fecha_hora";
-        $sqlExistedRecords .= " AND ta.station_id = tb.station_id;";
-
-        // execute custom SELECT SQL
-        $existedRecordsResults = DB::select($sqlExistedRecords);
-        $numberExistedRecords = $existedRecordsResults[0]->number_of_records;
-
-        // number of not existed records = number of uploaded records - number of existed records
-        $numberNotExistedRecords = $metDataPreviewCount - $numberExistedRecords;
-
-        // update file record
-        $fileRecord->update([
-            'new_records_count' => $numberNotExistedRecords,
-            'duplicate_records_count' => $numberExistedRecords,
+        return response([
+            'started' => filled(cache("start_date_$upload_id")),
+            'finished' => filled(cache("end_date_$upload_id")),
+            'current_row' => cache("current_row_$upload_id"),
         ]);
-
-        // prepare advice message
-        $scenario = 0;
-        $adviceMessage = "";
-
-        if ($numberNotExistedRecords === $metDataPreviewCount) {
-            $scenario = 1;
-            $adviceMessage = "All " . $metDataPreviewCount . " record(s) are new records. Please kindly confirm to upload this data file.";
-        } else if ($numberExistedRecords === $metDataPreviewCount) {
-            $scenario = 2;
-            $adviceMessage = "All " . $numberExistedRecords . " record(s) are already existed in system. Please kindly cancel this upload.";
-        } else {
-            $scenario = 3;
-            $adviceMessage = $numberExistedRecords . " out of " . $metDataPreviewCount . " records are already existed in system. Please kindly tick below checkbox to confirm uploading non existed records or cancel this upload to further check data file correctness.";
-        }
-
-
-        return response()->json([
-            'met_data_preview' => $metDataPreview,
-            'number_uploaded_records' => $metDataPreviewCount,
-            'number_existed_records' => $numberExistedRecords,
-            'number_not_existed_records' => $numberNotExistedRecords,
-            'scenario' => $scenario,
-            'adviceMessage' => $adviceMessage,
-            'error_data' => null
-
-        ]);
-
     }
 
     /**

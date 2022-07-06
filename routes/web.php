@@ -87,3 +87,5 @@ Route::get('test', function(){
 Route::get('test-event', function() {
     \App\Events\HelloWorld::dispatch(Auth::user());
 });
+
+Route::get('import-status/{upload_id}', [FileController::class, 'status']);
