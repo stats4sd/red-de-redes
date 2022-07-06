@@ -11,7 +11,6 @@ use App\Jobs\MetDataImportCompletedJob;
 use App\Models\Met\File;
 use App\Models\Met\MetData;
 use App\Models\Met\Station;
-use DB;
 use App\Models\Met\Daily;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Met\MetDataPreview;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use JsonException;
 use Maatwebsite\Excel\Facades\Excel;
@@ -180,26 +180,50 @@ class FileController extends Controller
     // met_data_preview table to data table
     public function storeFile($upload_id)
     {
+        $newDataQuery = MetDataPreview::where('upload_id', $upload_id);
 
-        $newData = MetDataPreview::where('upload_id', $upload_id)->get();
+        $columns = collect($newDataQuery->first()->getAttributes())->keys()->toArray();
+
+        // replace upload_id with fileId
+        unset($columns[array_search('upload_id', $columns, true)]);
 
         $fileRecord = File::firstWhere('upload_id', $upload_id);
 
-        $fileRecord->metData()->createMany($newData->toArray());
+
+        //avoid pulling all records into memory, so do the transfer via db:
+        DB::table('met_data')
+            ->insertUsing(
+                $columns,
+                DB::table('met_data_preview')
+                    ->select($columns)
+                    ->where('upload_id', $upload_id)
+            );
+
 
         // confirm records are in database;
         $metDataCount = MetData::where('file_id', $fileRecord)->count();
 
-        if($metDataCount !== $newData->count()) {
-            ddd('darn');
-        }
 
         // update file reference to mark it as successful, for future review;
         $fileRecord->update([
             'is_success' => 1
         ]);
 
-        return response()->json(['success' => 'Los datos han sido ingresados exitosamente.']);
+        ddd('hi, ' . $metDataCount);
+
+
+        $maxDate = (new Carbon($newData->pluck('fecha_hora')->max()))->toDateString();
+        $minDate = (new Carbon($newData->pluck('fecha_hora')->min()))->toDateString();
+
+        $result = \DB::select(
+            "call generate_daily_met_data_by_date_range(?, ?, ?);",
+            [$minDate, $maxDate, $fileRecord->station_id]
+        );
+
+
+        Alert::add('success', "Upload complete. All {$metDataCount} records are stored in the database and the daily summaries have been calculated")->flash();
+
+        return Redirect::back();
     }
 
 }

@@ -51,8 +51,10 @@ Route::post('/data-download/download', [DataProductController::class, 'index']);
 //NEW Upload page
 Route::view('data-upload', 'dataupload')->middleware('auth');
 Route::post('files', [FileController::class,'store']);
-Route::post('storeFile/{uploader_id}', [FileController::class,'storeFile']);
-Route::post('cleanTable/{uploader_id}', [FileController::class,'cleanTable']);
+Route::get('import-status/{upload_id}', [FileController::class, 'status']);
+Route::post('store-file/{upload_id}', [FileController::class,'storeFile']);
+Route::post('cancel-upload/{upload_id}', [FileController::class, 'cancelUpload']);
+
 
 Route::get('data/{id}/delete', [MetDataCrudController::class,'destroy']);
 
@@ -87,6 +89,3 @@ Route::get('test', function(){
 Route::get('test-event', function() {
     \App\Events\HelloWorld::dispatch(Auth::user());
 });
-
-Route::get('import-status/{upload_id}', [FileController::class, 'status']);
-Route::post('cancel-upload/{upload_id}', [FileController::class, 'cancelUpload']);

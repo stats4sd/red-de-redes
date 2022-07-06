@@ -357,21 +357,27 @@
 
                                         <form :action="'/cancel-upload/'+ upload_id" method="POST">
                                             <input type="hidden" name="_token" :value="csrf"/>
-                                            <button class="site-btn my-4" type="submit"
-                                                    style="background: red;">
+                                            <button class="btn btn-danger my-4" type="submit">
                                                 Cancelar
                                             </button>
 
                                         </form>
                                         &nbsp;
-                                        <button type="submit" class="site-btn my-4" data-toggle="collapse"
-                                                href="#collapseThree" id="btnConfirm"
-                                                aria-expanded="false" aria-controls="collapseThree"
-                                                v-on:click="storeFile"
-                                                :disabled="error || busy || (scenario3 && !scenario3Confirmed)">
-                                            <b-spinner small v-if="busy" label="Spinning"></b-spinner>
-                                            Guardar en la base de datos
-                                        </button>
+                                        <form :action="'/store-file/'+ upload_id" method="POST">
+                                            <input type="hidden" name="_token" :value="csrf"/>
+                                            <button class="btn btn-success my-4" type="submit">
+                                                Guardar en la base de datos
+                                            </button>
+
+                                        </form>
+<!--                                        <button type="submit" class="site-btn my-4" data-toggle="collapse"-->
+<!--                                                href="#collapseThree" id="btnConfirm"-->
+<!--                                                aria-expanded="false" aria-controls="collapseThree"-->
+<!--                                                v-on:click="storeFile"-->
+<!--                                                :disabled="error || busy || (scenario3 && !scenario3Confirmed)">-->
+<!--                                            <b-spinner small v-if="busy" label="Spinning"></b-spinner>-->
+<!--                                            Guardar en la base de datos-->
+<!--                                        </button>-->
                                     </div>
 
                                 </div>
@@ -647,10 +653,10 @@ export default {
         },
 
         storeFile: function () {
-            this.busy = true;
+            // this.busy = true;
             axios({
                 method: 'post',
-                url: "/storeFile/" + this.upload_id,
+                url: "/store-file/" + this.upload_id,
             })
                 .then((result) => {
                     console.log(result.data.success);
@@ -660,7 +666,7 @@ export default {
 
                     // after moving staging records from table "data_preview" to table "data"
                     // redirect to a upload success static page
-                    window.location.assign('/uploadsuccess')
+                    // window.location.assign('/uploadsuccess')
 
                 }, (error) => {
                     console.log(error);

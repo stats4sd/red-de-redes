@@ -50,6 +50,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
             ), true, 512, JSON_THROW_ON_ERROR);
 
         $this->upload_id = $fileRecord->upload_id;
+        $this->file_id = $fileRecord->id;
         $this->stationId = $fileRecord->station_id;
 
 
@@ -67,6 +68,10 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
 
             $newRow = collect($row)->mapWithKeys(function ($value, $key) {
 
+                if(!isset($this->keyMap[$key])) {
+                    return null;
+                }
+
                 $newKey = $this->keyMap[$key];
 
                 // replace missing value entries with nulls:
@@ -77,12 +82,13 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
                 return [
                     $newKey => $value
                 ];
-            });
+            })->filter(fn($item) => $item !== null);
 
             // create merged date_time
             $newRow['fecha_hora'] = (Carbon::createFromFormat('d/m/y H:i', $newRow['fecha_hora'] . ' ' . $newRow['time']));
 
             $newRow['upload_id'] = $this->upload_id;
+            $newRow['file_id'] = $this->file_id;
             $newRow['station_id'] = $this->stationId;
 
             $metDataItem = MetDataPreview::create($newRow->toArray());
