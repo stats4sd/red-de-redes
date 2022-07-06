@@ -27,7 +27,7 @@ class FileRequest extends FormRequest
     {
         return [
             'station_id' => ['required', 'exists:stations,id'],
-            'data_file' => 'file',
+            'data_file' => ['file','mimes:csv,txt'],
             'observation_file' => ['file', 'sometimes', 'nullable'],
             'selectedUnitTemp' => ['nullable', 'string'],
             'selectedUnitPres' => ['nullable', 'string'],

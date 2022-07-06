@@ -510,16 +510,6 @@ export default {
             //check form for errors
             this.uploadError = null;
 
-            if (!this.file) {
-                this.uploadError = "Elija un archivo para subir";
-                return;
-            }
-
-            if (!this.selectedStation) {
-                this.uploadError = "Seleccione la estación de la que provienen estos datos";
-                return;
-            }
-
             this.busy = true;
             let formData = new FormData();
             formData.append('station_id', this.selectedStation.id);
@@ -543,11 +533,9 @@ export default {
                     this.busy = false;
                     console.log(error);
                     if (error.response && error.response.hasOwnProperty('data')) {
-                        this.uploadError = error.response.data.message;
 
-                        // instead of showing the full error message from Python, show a generic error message and the last few lines of error message only
-                        // P.S. error message will be simplifed as "Server Error" in live env because debug mode is turned off
-                        this.uploadError = "The met data file seems not in correct format. Please check and ensure the met data file is in correct format. " + this.uploadError.split("File").pop();
+                        this.uploadError = Object.keys(error.response.data.errors).map((key) => error.response.data.errors[key]).join('; ');
+
                     } else {
                         this.uploadError = "No se pudo subir el archivo. Verifique que esté en el formato correcto o póngase en contacto con el administrador de la plataforma para obtener más información.";
                     }
@@ -654,6 +642,9 @@ export default {
                     this.$refs.panel1.click()
                     this.$refs.panel2.click()
 
+                })
+                .listen("MetDataImportFailed", payload => {
+                    console.log('payload event', payload)
                 })
 
         },

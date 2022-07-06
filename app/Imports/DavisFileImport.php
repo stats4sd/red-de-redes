@@ -2,15 +2,18 @@
 
 namespace App\Imports;
 
+use App\Events\MetDataImportFailed;
 use App\Models\Met\File;
 use App\Models\Met\MetData;
 use App\Models\Met\MetDataPreview;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -18,17 +21,22 @@ use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
+use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Events\AfterImport;
 use Maatwebsite\Excel\Events\BeforeImport;
 use Maatwebsite\Excel\Events\BeforeSheet;
+use Maatwebsite\Excel\Events\ImportFailed;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
+use Maatwebsite\Excel\Validators\ValidationException;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Throwable;
 
-class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue, WithStrictNullComparison
+class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue, WithStrictNullComparison, SkipsEmptyRows, WithValidation
 {
 
     protected array $keyMap;
+    protected File $fileRecord;
+    protected User $user;
     private int $stationId;
     private string $upload_id;
 
@@ -37,7 +45,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
     /**
      * @throws \JsonException
      */
-    public function __construct(File $fileRecord)
+    public function __construct(File $fileRecord, User $user)
     {
         HeadingRowFormatter::default('none');
 
@@ -49,6 +57,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
             )
             ), true, 512, JSON_THROW_ON_ERROR);
 
+        $this->$fileRecord = $fileRecord;
         $this->upload_id = $fileRecord->upload_id;
         $this->file_id = $fileRecord->id;
         $this->stationId = $fileRecord->station_id;
@@ -121,7 +130,11 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
                 cache()->forget("total_rows_{$this->upload_id}");
                 cache()->forget("start_date_{$this->upload_id}");
                 cache()->forget("current_row_{$this->upload_id}");
-            },];
+            },
+
+            ImportFailed::class => function(ImportFailed $event) {
+                MetDataImportFailed::dispatch($this->fileRecord, $event->getException(), $this->user);
+            }];
     }
 
 
@@ -143,5 +156,13 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
     function chunkSize(): int
     {
         return 1000;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'date' => ['required'],
+            'time' => ['required'],
+        ];
     }
 }

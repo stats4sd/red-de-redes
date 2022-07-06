@@ -62,7 +62,7 @@ class FileController extends Controller
 
             MetDataImportStarted::dispatch($fileRecord, Auth::user());
 
-            Excel::queueImport(new DavisFileImport($fileRecord), $fileWithMergedHeaders, 'public', \Maatwebsite\Excel\Excel::TSV)->chain([
+            Excel::queueImport(new DavisFileImport($fileRecord, Auth::user()), $fileWithMergedHeaders, 'public', \Maatwebsite\Excel\Excel::TSV)->chain([
                 new MetDataImportCompletedJob($fileRecord, Auth::user())
             ]);
 
