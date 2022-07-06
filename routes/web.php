@@ -82,3 +82,8 @@ Route::get('test', function(){
 
    ddd('ok');
 });
+
+
+Route::get('test-event', function() {
+    \App\Events\HelloWorld::dispatch(Auth::user());
+});

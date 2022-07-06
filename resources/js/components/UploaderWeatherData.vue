@@ -7,20 +7,22 @@
         <div class="container my-4">
             <div class="accordion-area" role="tablist">
                 <vue-collapsible-panel-group>
-                    <vue-collapsible-panel  :expanded="true">
+                    <vue-collapsible-panel :expanded="true">
                         <template #title>
                             <span ref="panel1">Paso 1: {{ steps[0].title }}</span>
                         </template>
                         <template #content>
                             <div class="py-4 mx-4">
                                 <h3>Sube el archivo de datos</h3>
-                                <p>Sube el archivo .csv o .txt que extrajo de la estación meteorológica. Asegúrese de subir
+                                <p>Sube el archivo .csv o .txt que extrajo de la estación meteorológica. Asegúrese de
+                                    subir
                                     el archivo de datos original sin editar.</p>
                                 <div class="row mx-4 justify-content-center">
                                     <label class="control-label col-sm-6" style="color: black"><h5>Seleccione la
                                         estación</h5>
-                                        <v-select @change="modalShow = !modalShow" :options="stations" label="label_with_id"
-                                                v-model="selectedStation"></v-select>
+                                        <v-select @change="modalShow = !modalShow" :options="stations"
+                                                  label="label_with_id"
+                                                  v-model="selectedStation"></v-select>
                                     </label>
                                 </div>
                                 <div class="row mx-4 justify-content-center">
@@ -45,13 +47,19 @@
                                                 <td width="34%"><b>Pueblo cercano</b></td>
                                             </tr>
                                             <tr>
-                                                <td><img :src="'images/met_station/'+selectedStation.id+'_map.jpg'" width="150" height="100"></td>
-                                                <td><img :src="'images/met_station/'+selectedStation.id+'_met_station.jpg'" width="150" height="100"></td>
-                                                <td><img :src="'images/met_station/'+selectedStation.id+'_nearby_village.jpg'" width="150" height="100"></td>
+                                                <td><img :src="'images/met_station/'+selectedStation.id+'_map.jpg'"
+                                                         width="150" height="100"></td>
+                                                <td><img
+                                                    :src="'images/met_station/'+selectedStation.id+'_met_station.jpg'"
+                                                    width="150" height="100"></td>
+                                                <td><img
+                                                    :src="'images/met_station/'+selectedStation.id+'_nearby_village.jpg'"
+                                                    width="150" height="100"></td>
                                             </tr>
                                         </table>
 
-                                        <p class="my-4"><b>¿Está seguro de que {{ selectedStation.label }} es la estación
+                                        <p class="my-4"><b>¿Está seguro de que {{ selectedStation.label }} es la
+                                            estación
                                             correcta?</b></p>
 
                                         <!-- Action row -->
@@ -63,39 +71,49 @@
                                 </div>
 
                                 <div class="row mx-4 justify-content-center" v-show="showUploadFile">
-                                    <label class="control-label col-sm-6" style="color: black"><h5>Seleccione el archivo de
+                                    <label class="control-label col-sm-6" style="color: black"><h5>Seleccione el archivo
+                                        de
                                         datos</h5>
                                         <file-input v-model="file" placeholder="Elija un archivo o suéltelo aquí..."/>
                                     </label>
                                 </div>
                                 <div class="row mx-4 justify-content-center" v-show="showUploadFile">
-                                    <label class="control-label col-sm-6" style="color: black"><h5>Selccione el archivo con
+                                    <label class="control-label col-sm-6" style="color: black"><h5>Selccione el archivo
+                                        con
                                         comentarios sobre los datos</h5>
-                                        <file-input v-model="filesObservation" placeholder="Elija un archivo o suéltelo aquí..."/>
+                                        <file-input v-model="filesObservation"
+                                                    placeholder="Elija un archivo o suéltelo aquí..."/>
                                     </label>
                                 </div>
                                 <h3>Seleccione las unidades</h3>
-                                <p class="mt-3">Seleccione las unidades utilizadas en el archivo para los siguientes tipos
+                                <p class="mt-3">Seleccione las unidades utilizadas en el archivo para los siguientes
+                                    tipos
                                     de variables:</p>
 
                                 <div class="row py-4 mx-4 justify-content-center">
                                     <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
-                                        <v-select v-model="selectedUnitTemp" :options="unitTemp" :clearable="false"></v-select>
+                                        <v-select v-model="selectedUnitTemp" :options="unitTemp"
+                                                  :clearable="false"></v-select>
                                     </label>
                                     <label class="control-label col-sm-3" style="color: black"><h5>Presión</h5>
-                                        <v-select v-model="selectedUnitPres" :options="unitPres" :clearable="false"></v-select>
+                                        <v-select v-model="selectedUnitPres" :options="unitPres"
+                                                  :clearable="false"></v-select>
                                     </label>
-                                    <label class="control-label col-sm-3" style="color: black"><h5>Velocidad del viento</h5>
-                                        <v-select v-model="selectedUnitWind" :options="unitWind" :clearable="false"></v-select>
+                                    <label class="control-label col-sm-3" style="color: black"><h5>Velocidad del
+                                        viento</h5>
+                                        <v-select v-model="selectedUnitWind" :options="unitWind"
+                                                  :clearable="false"></v-select>
                                     </label>
                                     <label class="control-label col-sm-3" style="color: black"><h5>Precipitación</h5>
-                                        <v-select v-model="selectedUnitRain" :options="unitRain" :clearable="false"></v-select>
+                                        <v-select v-model="selectedUnitRain" :options="unitRain"
+                                                  :clearable="false"></v-select>
                                     </label>
                                 </div>
 
                                 <div style="text-align: center;">
                                     <b-alert show varient="info">Después de subir el archivo, tendrá la oportunidad de
-                                        revisar los valores de los datos y confirmar que estas son las unidades correctas
+                                        revisar los valores de los datos y confirmar que estas son las unidades
+                                        correctas
                                         antes de continuar.
                                     </b-alert>
                                     <br/>
@@ -115,15 +133,18 @@
                             <span ref="panel2">Paso 2: {{ steps[1].title }}</span>
                         </template>
 
-                        <template #content >
+                        <template #content>
                             <div class="py-4 mx-4">
                                 <h3>Vista preliminar de datos</h3>
                                 <p class="mt-3">Este es un ejemplo de sus datos</p>
-                                <div class="alert alert-success show">Verifique que las columnas que espera llenar contengan datos
-                                    y que los valores parezcan adecuados para la ubicación seleccionada, la época del año y
+                                <div class="alert alert-success show">Verifique que las columnas que espera llenar
+                                    contengan datos
+                                    y que los valores parezcan adecuados para la ubicación seleccionada, la época del
+                                    año y
                                     las unidades elegidas.
                                 </div>
-                                <div class="alert alert-secondary" v-if="previewData!=null">Hay {{ total_rows }} filas</div>
+                                <div class="alert alert-secondary" v-if="previewData!=null">Hay {{ total_rows }} filas
+                                </div>
 
                                 <div class="mx-4 justify-content-center" style="overflow-x: scroll">
 
@@ -153,27 +174,64 @@
                                         </tr>
                                         <tr v-for="row in previewData" :key="row.id">
 
-                                            <td>{{ row.fecha_hora.substring(0, 10) }} </td>
-                                            <td>{{ row.fecha_hora.substring(10) }} </td>
+                                            <td>{{ row.fecha_hora.substring(0, 10) }}</td>
+                                            <td>{{ row.fecha_hora.substring(10) }}</td>
 
-                                            <td>{{ row.temperatura_interna }} {{ row.temperatura_interna && row.temperatura_interna != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.temperatura_externa }} {{ row.temperatura_externa && row.temperatura_externa != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.sensacion_termica }} {{ row.sensacion_termica && row.sensacion_termica != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.punto_rocio }} {{ row.punto_rocio && row.punto_rocio != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.wind_chill }} {{ row.wind_chill && row.wind_chill != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.hi_temp }} {{ row.hi_temp && row.hi_temp != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.low_temp }} {{ row.low_temp && row.low_temp != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.presion_relativa }} {{ row.presion_relativa && row.presion_relativa != '' ? 'hPa' : '' }}</td>
-                                            <td>{{ row.presion_absoluta }} {{ row.presion_absoluta && row.presion_absoluta != '' ? 'hPa' : '' }}</td>
-                                            <td>{{ row.velocidad_viento }} {{ row.velocidad_viento && row.velocidad_viento != '' ? 'm/s' : '' }}</td>
+                                            <td>{{ row.temperatura_interna }} {{
+                                                    row.temperatura_interna && row.temperatura_interna != '' ? 'ºC' : ''
+                                                }}
+                                            </td>
+                                            <td>{{ row.temperatura_externa }} {{
+                                                    row.temperatura_externa && row.temperatura_externa != '' ? 'ºC' : ''
+                                                }}
+                                            </td>
+                                            <td>{{ row.sensacion_termica }}
+                                                {{ row.sensacion_termica && row.sensacion_termica != '' ? 'ºC' : '' }}
+                                            </td>
+                                            <td>{{ row.punto_rocio }}
+                                                {{ row.punto_rocio && row.punto_rocio != '' ? 'ºC' : '' }}
+                                            </td>
+                                            <td>{{ row.wind_chill }}
+                                                {{ row.wind_chill && row.wind_chill != '' ? 'ºC' : '' }}
+                                            </td>
+                                            <td>{{ row.hi_temp }} {{
+                                                    row.hi_temp && row.hi_temp != '' ? 'ºC' : ''
+                                                }}
+                                            </td>
+                                            <td>{{ row.low_temp }} {{
+                                                    row.low_temp && row.low_temp != '' ? 'ºC' : ''
+                                                }}
+                                            </td>
+                                            <td>{{ row.presion_relativa }}
+                                                {{ row.presion_relativa && row.presion_relativa != '' ? 'hPa' : '' }}
+                                            </td>
+                                            <td>{{ row.presion_absoluta }}
+                                                {{ row.presion_absoluta && row.presion_absoluta != '' ? 'hPa' : '' }}
+                                            </td>
+                                            <td>{{ row.velocidad_viento }}
+                                                {{ row.velocidad_viento && row.velocidad_viento != '' ? 'm/s' : '' }}
+                                            </td>
                                             <td>{{ row.rafaga }} {{ row.rafaga && row.rafaga != '' ? 'm/s' : '' }}</td>
-                                            <td>{{ row.hi_speed }} {{ row.hi_speed && row.hi_speed != '' ? 'm/s' : '' }}</td>
-                                            <td>{{ row.hi_dir }} </td>
-                                            <td>{{ row.lluvia_hora }} {{ row.lluvia_hora && row.lluvia_hora != '' ? 'mm' : '' }}</td>
-                                            <td>{{ row.lluvia_24_horas }} {{ row.lluvia_24_horas && row.lluvia_24_horas != '' ? 'mm' : '' }}</td>
-                                            <td>{{ row.lluvia_semana }} {{ row.lluvia_semana && row.lluvia_semana != '' ? 'mm' : '' }}</td>
-                                            <td>{{ row.lluvia_mes }} {{ row.lluvia_mes && row.lluvia_mes != '' ? 'mm' : '' }}</td>
-                                            <td>{{ row.lluvia_total }} {{ row.lluvia_total && row.lluvia_total != '' ? 'mm' : '' }}</td>
+                                            <td>{{ row.hi_speed }} {{
+                                                    row.hi_speed && row.hi_speed != '' ? 'm/s' : ''
+                                                }}
+                                            </td>
+                                            <td>{{ row.hi_dir }}</td>
+                                            <td>{{ row.lluvia_hora }}
+                                                {{ row.lluvia_hora && row.lluvia_hora != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td>{{ row.lluvia_24_horas }}
+                                                {{ row.lluvia_24_horas && row.lluvia_24_horas != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td>{{ row.lluvia_semana }}
+                                                {{ row.lluvia_semana && row.lluvia_semana != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td>{{ row.lluvia_mes }}
+                                                {{ row.lluvia_mes && row.lluvia_mes != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td>{{ row.lluvia_total }}
+                                                {{ row.lluvia_total && row.lluvia_total != '' ? 'mm' : '' }}
+                                            </td>
                                             <td>{{ row.rain }} {{ row.rain && row.rain != '' ? 'mm' : '' }}</td>
                                         </tr>
 
@@ -181,11 +239,13 @@
 
                                 </div>
 
-                                <div class="py-4 mx-4 justify-content-center" style="overflow-x: scroll" v-if="error_data!=null">
+                                <div class="py-4 mx-4 justify-content-center" style="overflow-x: scroll"
+                                     v-if="error_data!=null">
                                     <div class="alert alert-danger"
-                                            v-if="error_temp || error_press || error_wind||error_rain ">Hay algunos valores
+                                         v-if="error_temp || error_press || error_wind||error_rain ">Hay algunos valores
                                         con las unidades incorrectas, consulte la siguiente tabla y continúe con
-                                        <b>Cancelar</b> para subir un nuevo archivo o haga clic en <b>Guardar en la base de
+                                        <b>Cancelar</b> para subir un nuevo archivo o haga clic en <b>Guardar en la base
+                                            de
                                             datos</b> si los valores son correctos.
                                     </div>
 
@@ -212,25 +272,63 @@
                                             <th v-if="error_rain">rain</th>
                                         </tr>
                                         <tr v-for="row in error_data" :key="row.id">
-                                            <td v-if="error_temp">{{ row.temperatura_interna }} {{ row.temperatura_interna && row.temperatura_interna != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.temperatura_externa }} {{ row.temperatura_externa && row.temperatura_externa != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.sensacion_termica }} {{ row.sensacion_termica && row.sensacion_termica != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.punto_rocio }} {{ row.punto_rocio && row.punto_rocio != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.wind_chill }} {{ row.wind_chill && row.wind_chill != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.hi_temp }} {{ row.hi_temp && row.hi_temp != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.low_temp }} {{ row.low_temp && row.low_temp != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_press">{{ row.presion_relativa }} {{ row.presion_relativa && row.presion_relativa != '' ? 'hPa' : '' }}</td>
-                                            <td v-if="error_press">{{ row.presion_absoluta }} {{ row.presion_absoluta && row.presion_absoluta != '' ? 'hPa' : '' }}</td>
-                                            <td v-if="error_wind">{{ row.velocidad_viento }} {{ row.velocidad_viento && row.velocidad_viento != '' ? 'm/s' : '' }}</td>
-                                            <td v-if="error_wind">{{ row.rafaga }} {{ row.rafaga && row.rafaga != '' ? 'm/s' : '' }}</td>
-                                            <td v-if="error_wind">{{ row.hi_speed }} {{ row.hi_speed && row.hi_speed != '' ? 'm/s' : '' }}</td>
-                                            <td v-if="error_wind">{{ row.hi_dir }} </td>
-                                            <td v-if="error_rain">{{ row.lluvia_hora }} {{ row.lluvia_hora && row.lluvia_hora != '' ? 'mm' : '' }}</td>
-                                            <td v-if="error_rain">{{ row.lluvia_24_horas }} {{ row.lluvia_24_horas && row.lluvia_24_horas != '' ? 'mm' : '' }}</td>
-                                            <td v-if="error_rain">{{ row.lluvia_semana }} {{ row.lluvia_semana && row.lluvia_semana != '' ? 'mm' : '' }}</td>
-                                            <td v-if="error_rain">{{ row.lluvia_mes }} {{ row.lluvia_mes && row.lluvia_mes != '' ? 'mm' : '' }}</td>
-                                            <td v-if="error_rain">{{ row.lluvia_total }} {{ row.lluvia_total && row.lluvia_total != '' ? 'mm' : '' }}</td>
-                                            <td v-if="error_rain">{{ row.rain }} {{ row.rain && row.rain != '' ? 'mm' : '' }}</td>
+                                            <td v-if="error_temp">{{ row.temperatura_interna }} {{
+                                                    row.temperatura_interna && row.temperatura_interna != '' ? 'ºC' : ''
+                                                }}
+                                            </td>
+                                            <td v-if="error_temp">{{ row.temperatura_externa }} {{
+                                                    row.temperatura_externa && row.temperatura_externa != '' ? 'ºC' : ''
+                                                }}
+                                            </td>
+                                            <td v-if="error_temp">{{ row.sensacion_termica }}
+                                                {{ row.sensacion_termica && row.sensacion_termica != '' ? 'ºC' : '' }}
+                                            </td>
+                                            <td v-if="error_temp">{{ row.punto_rocio }}
+                                                {{ row.punto_rocio && row.punto_rocio != '' ? 'ºC' : '' }}
+                                            </td>
+                                            <td v-if="error_temp">{{ row.wind_chill }}
+                                                {{ row.wind_chill && row.wind_chill != '' ? 'ºC' : '' }}
+                                            </td>
+                                            <td v-if="error_temp">{{ row.hi_temp }}
+                                                {{ row.hi_temp && row.hi_temp != '' ? 'ºC' : '' }}
+                                            </td>
+                                            <td v-if="error_temp">{{ row.low_temp }}
+                                                {{ row.low_temp && row.low_temp != '' ? 'ºC' : '' }}
+                                            </td>
+                                            <td v-if="error_press">{{ row.presion_relativa }}
+                                                {{ row.presion_relativa && row.presion_relativa != '' ? 'hPa' : '' }}
+                                            </td>
+                                            <td v-if="error_press">{{ row.presion_absoluta }}
+                                                {{ row.presion_absoluta && row.presion_absoluta != '' ? 'hPa' : '' }}
+                                            </td>
+                                            <td v-if="error_wind">{{ row.velocidad_viento }}
+                                                {{ row.velocidad_viento && row.velocidad_viento != '' ? 'm/s' : '' }}
+                                            </td>
+                                            <td v-if="error_wind">{{ row.rafaga }}
+                                                {{ row.rafaga && row.rafaga != '' ? 'm/s' : '' }}
+                                            </td>
+                                            <td v-if="error_wind">{{ row.hi_speed }}
+                                                {{ row.hi_speed && row.hi_speed != '' ? 'm/s' : '' }}
+                                            </td>
+                                            <td v-if="error_wind">{{ row.hi_dir }}</td>
+                                            <td v-if="error_rain">{{ row.lluvia_hora }}
+                                                {{ row.lluvia_hora && row.lluvia_hora != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td v-if="error_rain">{{ row.lluvia_24_horas }}
+                                                {{ row.lluvia_24_horas && row.lluvia_24_horas != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td v-if="error_rain">{{ row.lluvia_semana }}
+                                                {{ row.lluvia_semana && row.lluvia_semana != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td v-if="error_rain">{{ row.lluvia_mes }}
+                                                {{ row.lluvia_mes && row.lluvia_mes != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td v-if="error_rain">{{ row.lluvia_total }}
+                                                {{ row.lluvia_total && row.lluvia_total != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td v-if="error_rain">{{ row.rain }}
+                                                {{ row.rain && row.rain != '' ? 'mm' : '' }}
+                                            </td>
                                         </tr>
 
                                     </table>
@@ -241,7 +339,10 @@
                                 <div style="text-align: center;">
                                     <b-alert show variant="danger" v-if="error!=null">{{ error }}</b-alert>
                                     <b-alert show variant="success" v-if="success!=null">{{ success }}</b-alert>
-                                    <b-alert show variant="warning" v-if="scenario3"><input type="checkbox" v-model="scenario3Confirmed"><b><font color="red"> I confirm that I understand the potential risk of uploading this data file with existing records.</font></b></b-alert>
+                                    <b-alert show variant="warning" v-if="scenario3"><input type="checkbox"
+                                                                                            v-model="scenario3Confirmed"><b><font
+                                        color="red"> I confirm that I understand the potential risk of uploading this
+                                        data file with existing records.</font></b></b-alert>
                                     <br/>
                                     <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
                                             aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable"
@@ -272,8 +373,8 @@
 
 const rootUrl = process.env.MIX_APP_URL
 import {
-  VueCollapsiblePanelGroup,
-  VueCollapsiblePanel,
+    VueCollapsiblePanelGroup,
+    VueCollapsiblePanel,
 } from '@dafcoe/vue-collapsible-panel'
 
 import '@dafcoe/vue-collapsible-panel/dist/vue-collapsible-panel.css'
@@ -284,6 +385,11 @@ import 'vue-select/dist/vue-select.css'
 import CustomModal from './Elements/CustomModal.vue'
 import FileInput from 'vue3-simple-file-input'
 import ProgressBar from './ProgressBar'
+import Noty from 'noty'
+
+Noty.overrideDefaults({
+    theme: 'bootstrap-v4'
+})
 
 export default {
     components: {
@@ -415,9 +521,15 @@ export default {
         bgColor: {
             type: String,
             default: 'red'
-        }
+        },
+        userId: {
+            type: Number,
+            default: null,
+        },
     },
     mounted() {
+
+        this.setupEchoListeners()
 
         axios.get('api/stations').then((response) => {
             this.stations = response.data;
@@ -476,7 +588,7 @@ export default {
             let formData = new FormData();
             formData.append('station_id', this.selectedStation.id);
             formData.append('data_file', this.file.file);
-            if(this.filesObservation) {
+            if (this.filesObservation) {
                 formData.append('observation_file', this.filesObservation);
             }
 
@@ -519,8 +631,6 @@ export default {
                 this.$refs.panel2.click()
 
 
-
-
             })
                 .catch((error) => {
                     this.busy = false;
@@ -530,7 +640,7 @@ export default {
 
                         // instead of showing the full error message from Python, show a generic error message and the last few lines of error message only
                         // P.S. error message will be simplifed as "Server Error" in live env because debug mode is turned off
-                        this.uploadError = "The met data file seems not in correct format. Please check and ensure the met data file is in correct format. "+ this.uploadError.split("File").pop();
+                        this.uploadError = "The met data file seems not in correct format. Please check and ensure the met data file is in correct format. " + this.uploadError.split("File").pop();
                     } else {
                         this.uploadError = "No se pudo subir el archivo. Verifique que esté en el formato correcto o póngase en contacto con el administrador de la plataforma para obtener más información.";
                     }
@@ -592,8 +702,21 @@ export default {
             this.modalShow = false
             this.selectedStation = false
             this.showUploadFile = false
-        }
+        },
 
+        setupEchoListeners() {
+            window.Echo
+                .private("App.Models.User." + this.userId)
+                .listen("HelloWorld", payload => {
+                    new Noty({
+                        type: "info",
+                        text:
+                            "<b>Hi</bi>",
+                        timeout: false
+                    }).show();
+                })
+
+        }
     }
 }
 

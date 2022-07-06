@@ -9,9 +9,10 @@
 
 @import 'progressbar';
 
+@import "~noty/src/noty";
+@import "~noty/src/themes/bootstrap-v4";
+
 /** Layout **/
-
-
 .footer-section {
     background: #011627;
     margin-top: 100px !important;
