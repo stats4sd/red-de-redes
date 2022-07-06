@@ -39,28 +39,27 @@
                                         <p class="my-4"><b>Altitud:</b> {{ selectedStation.altitude }}</p>
                                         <p class="my-4"><b>Tipo:</b> {{ selectedStation.type }}</p>
 
-                                        <!-- add small map, met station photo, nearby village photo for visual identification -->
-                                        <table border="1" width="100%">
-                                            <tr>
-                                                <td width="33%"><b>Mapa</b></td>
-                                                <td width="33%"><b>Estación</b></td>
-                                                <td width="34%"><b>Pueblo cercano</b></td>
-                                            </tr>
-                                            <tr>
-                                                <td><img :src="'images/met_station/'+selectedStation.id+'_map.jpg'"
-                                                         width="150" height="100"></td>
-                                                <td><img
-                                                    :src="'images/met_station/'+selectedStation.id+'_met_station.jpg'"
-                                                    width="150" height="100"></td>
-                                                <td><img
-                                                    :src="'images/met_station/'+selectedStation.id+'_nearby_village.jpg'"
-                                                    width="150" height="100"></td>
-                                            </tr>
-                                        </table>
+                                        <!--                                        &lt;!&ndash; add small map, met station photo, nearby village photo for visual identification &ndash;&gt;-->
+                                        <!--                                        <table border="1" width="100%">-->
+                                        <!--                                            <tr>-->
+                                        <!--                                                <td width="33%"><b>Mapa</b></td>-->
+                                        <!--                                                <td width="33%"><b>Estación</b></td>-->
+                                        <!--                                                <td width="34%"><b>Pueblo cercano</b></td>-->
+                                        <!--                                            </tr>-->
+                                        <!--                                            <tr>-->
+                                        <!--                                                <td><img :src="'images/met_station/'+selectedStation.id+'_map.jpg'"-->
+                                        <!--                                                         width="150" height="100"></td>-->
+                                        <!--                                                <td><img-->
+                                        <!--                                                    :src="'images/met_station/'+selectedStation.id+'_met_station.jpg'"-->
+                                        <!--                                                    width="150" height="100"></td>-->
+                                        <!--                                                <td><img-->
+                                        <!--                                                    :src="'images/met_station/'+selectedStation.id+'_nearby_village.jpg'"-->
+                                        <!--                                                    width="150" height="100"></td>-->
+                                        <!--                                            </tr>-->
+                                        <!--                                        </table>-->
 
                                         <p class="my-4"><b>¿Está seguro de que {{ selectedStation.label }} es la
-                                            estación
-                                            correcta?</b></p>
+                                            estación correcta?</b></p>
 
                                         <!-- Action row -->
                                         <template #actions>
@@ -119,14 +118,11 @@
                                     </div>
                                     <br/>
                                     <br/>
-                                    <div class="alert alert-danger show" v-if="uploadError!=null">{{
-                                            uploadError
-                                        }}
+                                    <div class="alert alert-danger show" v-if="uploadError!=null">{{ uploadError }}
                                     </div>
                                     <br/>
                                     <button class="site-btn my-4" v-on:click="submit();" :disabled="busy">
-                                        <i class="la la-spinner" v-if="busy" label="Spinning"></i>
-                                        Subir
+                                        <i class="la la-spinner" v-if="busy" label="Spinning"></i> Subir
                                     </button>
 
                                     <div class="alert alert-info show" v-if="uploadActive">
