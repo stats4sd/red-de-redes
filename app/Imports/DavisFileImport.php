@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -27,11 +28,12 @@ use Maatwebsite\Excel\Events\BeforeImport;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Events\ImportFailed;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
+use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Validators\ValidationException;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Throwable;
 
-class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue, WithStrictNullComparison, SkipsEmptyRows, WithValidation
+class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue, WithStrictNullComparison, SkipsEmptyRows, WithValidation, SkipsOnFailure
 {
 
     protected array $keyMap;
@@ -39,6 +41,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
     protected User $user;
     private int $stationId;
     private string $upload_id;
+    private mixed $file_id;
 
     use RemembersRowNumber;
 
@@ -57,10 +60,11 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
             )
             ), true, 512, JSON_THROW_ON_ERROR);
 
-        $this->$fileRecord = $fileRecord;
+        $this->fileRecord = $fileRecord;
         $this->upload_id = $fileRecord->upload_id;
         $this->file_id = $fileRecord->id;
         $this->stationId = $fileRecord->station_id;
+        $this->user = $user;
 
 
     }
@@ -72,12 +76,17 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
     {
         cache()->forever("current_row_{$this->upload_id}", $this->getRowNumber());
 
-        // rename $row array keys using column map:
         try {
 
+            // if Date and Time do not exist; fail entire import
+            if (!isset($row['date'], $row['time'])) {
+                throw new Exception('Cannot find date or time columns. Please check the formatting of your file.');
+            }
+
+            // rename $row array keys using column map:
             $newRow = collect($row)->mapWithKeys(function ($value, $key) {
 
-                if(!isset($this->keyMap[$key])) {
+                if (!isset($this->keyMap[$key])) {
                     return ['null' => $value];
                 }
 
@@ -93,7 +102,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
                 ];
             });
 
-            if(isset($newRow['null'])) {
+            if (isset($newRow['null'])) {
                 unset($newRow['null']);
             }
 
@@ -131,12 +140,8 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
                 cache()->forget("start_date_{$this->upload_id}");
                 cache()->forget("current_row_{$this->upload_id}");
             },
-
-            ImportFailed::class => function(ImportFailed $event) {
-                MetDataImportFailed::dispatch($this->fileRecord, $event->getException(), $this->user);
-            }];
+        ];
     }
-
 
     public
     function getCsvSettings(): array
@@ -149,13 +154,13 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
     public
     function batchSize(): int
     {
-        return 1000;
+        return 20;
     }
 
     public
     function chunkSize(): int
     {
-        return 1000;
+        return 20;
     }
 
     public function rules(): array
@@ -164,5 +169,11 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
             'date' => ['required'],
             'time' => ['required'],
         ];
+    }
+
+    public function onFailure(Failure ...$failures)
+    {
+        MetDataImportFailed::dispatch($this->fileRecord, $failures, $this->user);
+
     }
 }

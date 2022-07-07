@@ -20,7 +20,7 @@ class MetDataImportCompleted implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(public array $data, public ?User $user)
+    public function __construct(public bool $success, public array $data, public ?User $user)
     {
         //
     }

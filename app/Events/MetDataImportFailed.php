@@ -12,8 +12,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Maatwebsite\Excel\Events\ImportFailed;
+use Throwable;
 
-class MetDataImportFailed
+class MetDataImportFailed implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,7 +23,7 @@ class MetDataImportFailed
      *
      * @return void
      */
-    public function __construct(public File $file, public ImportFailed $event, public ?User $user)
+    public function __construct(public File $file, public array $failures, public ?User $user)
     {
         //
     }

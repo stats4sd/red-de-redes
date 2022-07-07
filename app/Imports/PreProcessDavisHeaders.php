@@ -31,8 +31,10 @@ class PreProcessDavisHeaders
                 : $this->formatHeader($header2Array[$index]);
         }
 
+        $headerValidationFile = fopen($fullFilePath . ".header_validation.txt", "w");
         $newFile = fopen($fullFilePath . ".with_merged_headers.txt", "w");
 
+        fwrite($headerValidationFile, implode("\t", $headerMerged) . PHP_EOL);
         fwrite($newFile, implode("\t", $headerMerged) . PHP_EOL);
 
         $recordCount = 0;
@@ -46,12 +48,18 @@ class PreProcessDavisHeaders
             }
             fwrite($newFile, $line);
 
+            // if line is first line; write to $headerValidationFile as well;
+            if($recordCount === 1) {
+                fwrite($headerValidationFile, $line);
+            }
+
         }
 
         fclose($newFile);
+        fclose($headerValidationFile);
         fclose($file);
 
-        return [$filePath . ".with_merged_headers.txt", $recordCount];
+        return [$filePath . ".with_merged_headers.txt", $filePath . ".header_validation.txt", $recordCount];
     }
 
     public function formatHeader(string $header): string

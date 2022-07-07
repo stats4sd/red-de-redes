@@ -36,9 +36,26 @@ class MetDataImportCompletedJob implements ShouldQueue
      */
     public function handle()
     {
-        $metDataPreview = MetDataPreview::where('upload_id', '=', $this->fileRecord->upload_id)->orderBy('id')->paginate(10);
+
+        // Check that the import was finished (check count of records in db vs in file)
 
         $metDataPreviewCount = MetDataPreview::where('upload_id', $this->fileRecord->upload_id)->count('id');
+
+        if ($metDataPreviewCount < $this->fileRecord->total_records_count) {
+            MetDataImportCompleted::broadcast(
+                false,
+                [
+                    'error' => 'There were errors uploading the file.',
+
+                ],
+                $this->user,
+            );
+
+            return;
+        }
+
+        $metDataPreview = MetDataPreview::where('upload_id', '=', $this->fileRecord->upload_id)->orderBy('id')->paginate(10);
+
 
         // check number of records already existed in database
         $sqlExistedRecords = " SELECT COUNT(*) as number_of_records";
@@ -79,6 +96,7 @@ class MetDataImportCompletedJob implements ShouldQueue
         }
 
         MetDataImportCompleted::broadcast(
+            true,
             [
                 'met_data_preview' => $metDataPreview,
                 'number_uploaded_records' => $metDataPreviewCount,
@@ -90,7 +108,6 @@ class MetDataImportCompletedJob implements ShouldQueue
                 'min_temp' => $minTemp,
                 'max_temp' => $maxTemp,
                 'max_daily_rain' => $maxDailyRain,
-
             ],
             $this->user,
         );

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\MetDataImportCompleted;
+use App\Events\MetDataImportFailed;
 use App\Events\MetDataImportStarted;
 use App\Http\Requests\FileRequest;
+use App\Imports\DavisFileHeaderValidation;
 use App\Imports\DavisFileImport;
 use App\Imports\PreProcessDavisHeaders;
 use App\Jobs\MetDataImportCompletedJob;
@@ -22,6 +24,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use JsonException;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 use Prologue\Alerts\Facades\Alert;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Redirect;
@@ -56,12 +59,22 @@ class FileController extends Controller
         // upload data to met_data_preview table
         if (Station::find($fileRecord['station_id'])->type === 'davis') {
             $processor = (new PreProcessDavisHeaders());
-            [$fileWithMergedHeaders, $count] = $processor($fileRecord->data_file);
+            [$fileWithMergedHeaders, $headerValidationFile, $count] = $processor($fileRecord->data_file);
 
             $fileRecord->update(['total_records_count' => $count]);
 
-            MetDataImportStarted::dispatch($fileRecord, Auth::user());
 
+            // check headers are valid **before** running the entire import process queue.
+            try {
+                Excel::import(new DavisFileHeaderValidation(), $headerValidationFile, 'public', \Maatwebsite\Excel\Excel::TSV);
+
+            } catch (ValidationException $exception) {
+                $failures = $exception->failures();
+
+                throw $exception;
+            }
+
+            MetDataImportStarted::dispatch($fileRecord, Auth::user());
             Excel::queueImport(new DavisFileImport($fileRecord, Auth::user()), $fileWithMergedHeaders, 'public', \Maatwebsite\Excel\Excel::TSV)->chain([
                 new MetDataImportCompletedJob($fileRecord, Auth::user())
             ]);

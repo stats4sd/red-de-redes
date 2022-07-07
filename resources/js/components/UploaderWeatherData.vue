@@ -110,13 +110,8 @@
                                 </div>
 
                                 <div style="text-align: center;">
-                                    <div class="alert alert-info show">Después de subir el archivo, tendrá la
-                                        oportunidad de
-                                        revisar los valores de los datos y confirmar que estas son las unidades
-                                        correctas
-                                        antes de continuar.
+                                    <div class="alert alert-info show">Después de subir el archivo, tendrá la oportunidad de revisar los valores de los datos y confirmar que estas son las unidades correctas antes de continuar.
                                     </div>
-                                    <br/>
                                     <br/>
                                     <div class="alert alert-danger show" v-if="uploadError!=null">{{ uploadError }}
                                     </div>
@@ -125,12 +120,14 @@
                                         <i class="la la-spinner" v-if="busy" label="Spinning"></i> Subir
                                     </button>
 
-                                    <div class="alert alert-info show" v-if="uploadActive">
+                                    <div
+                                        v-if="uploadActive || progress === 100"
+                                        class="alert show"
+                                        :class="success ? 'alert-success' : (error ? 'alert-danger' : 'alert-info')"
+                                        >
                                         PROGRESS: {{ current_row }} / {{ total_rows }} ({{ progress }} %)
                                     </div>
-                                    <div class="alert alert-success show" v-if="!uploadActive && progress == 100">
-                                        PROGRESS: {{ current_row }} / {{ total_rows }} ({{ progress }} %)
-                                    </div>
+                                    <div class="alert alert-danger show" v-if="error">{{ error }}</div>
 
                                 </div>
                             </div>
@@ -536,9 +533,17 @@ export default {
 
                         this.uploadError = Object.keys(error.response.data.errors).map((key) => error.response.data.errors[key]).join('; ');
 
+                    new Noty({
+                        type: "error",
+                        text: "There were errors importing the file - see below for details. Please check that the file is correctly formatted",
+                        timeout: false,
+                    }).show();
+
+
                     } else {
                         this.uploadError = "No se pudo subir el archivo. Verifique que esté en el formato correcto o póngase en contacto con el administrador de la plataforma para obtener más información.";
                     }
+
                 })
                 .then(() => {
                     this.busy = false;
@@ -605,6 +610,14 @@ export default {
                     this.trackProgress()
                 })
                 .listen("MetDataImportCompleted", payload => {
+
+                    if(!payload.success) {
+                        this.uploadActive = false;
+                        this.success = null;
+                        this.error = payload.data.error;
+                        return;
+                    }
+
                     new Noty({
                         type: "success",
                         text: `The import is complete!.`
@@ -620,24 +633,9 @@ export default {
                     this.max_daily_rain = payload.data.max_daily_rain;
 
                     // show advice message
-                    if (payload.data.scenario == 1) {
-                        this.success = payload.data.adviceMessage;
-                        this.scenario3 = false;
-                    } else if (payload.data.scenario == 2) {
-                        this.error = payload.data.adviceMessage;
-                        this.scenario3 = false;
-                    } else if (payload.data.scenario == 3) {
-                        this.success = result.data.adviceMessage;
-                        this.scenario3 = true;
-                    }
-
-
-                    // this.error_data = result.data.error_data.original.error_data;
-                    // this.error_temp = result.data.error_data.original.error_temp;
-                    // this.error_press = result.data.error_data.original.error_press;
-                    // this.error_wind = result.data.error_data.original.error_wind;
-                    // this.error_rain = result.data.error_data.original.error_rain;
-
+                    this.error = null;
+                    this.success = payload.data.adviceMessage;
+                    this.scenario3 = payload.data.scenario === 3;
 
                     this.$refs.panel1.click()
                     this.$refs.panel2.click()
@@ -645,6 +643,14 @@ export default {
                 })
                 .listen("MetDataImportFailed", payload => {
                     console.log('payload event', payload)
+
+                    this.error += '<br/>' + payload.failures.map(failure => {
+
+                        return '<b>' + failure.attribute + '</b> ' + failure.errors.join('; ');
+                    }).join(';<br> ')
+
+
+
                 })
 
         },

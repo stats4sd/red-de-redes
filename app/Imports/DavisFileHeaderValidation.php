@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Imports;
+
+use App\Events\MetDataImportFailed;
+use App\Models\Met\File;
+use App\Models\User;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Imports\HeadingRowFormatter;
+
+class DavisFileHeaderValidation implements ToModel, WithValidation
+{
+
+
+    /**
+     * @throws \JsonException
+     */
+    public function __construct()
+    {
+        HeadingRowFormatter::default('none');
+    }
+
+    public function model(array $row)
+    {
+        // this file will not import any data. It is only used to validate the column headers for a specially prepared file containing a single entry.
+    }
+
+    public function rules(): array
+    {
+        return [
+            'date' => 'required',
+            'time' => 'required',
+        ];
+    }
+
+}
