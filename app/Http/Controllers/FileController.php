@@ -10,6 +10,7 @@ use App\Imports\DavisFileHeaderValidation;
 use App\Imports\DavisFileImport;
 use App\Imports\PreProcessDavisHeaders;
 use App\Jobs\MetDataImportCompletedJob;
+use App\Jobs\StartMetDataImport;
 use App\Models\Met\File;
 use App\Models\Met\MetData;
 use App\Models\Met\Station;
@@ -65,19 +66,13 @@ class FileController extends Controller
 
 
             // check headers are valid **before** running the entire import process queue.
-            try {
-                Excel::import(new DavisFileHeaderValidation(), $headerValidationFile, 'public', \Maatwebsite\Excel\Excel::TSV);
+            Excel::import(new DavisFileHeaderValidation(), $headerValidationFile, 'public', \Maatwebsite\Excel\Excel::TSV);
 
-            } catch (ValidationException $exception) {
-                $failures = $exception->failures();
+            // for some reason, running Excel::import followed by Excel::queueImport on the same thread causes an error:
+            // ("serialize(): &quot;spreadsheet&quot; returned as member variable from __sleep() but does not exist")
 
-                throw $exception;
-            }
-
-            MetDataImportStarted::dispatch($fileRecord, Auth::user());
-            Excel::queueImport(new DavisFileImport($fileRecord, Auth::user()), $fileWithMergedHeaders, 'public', \Maatwebsite\Excel\Excel::TSV)->chain([
-                new MetDataImportCompletedJob($fileRecord, Auth::user())
-            ]);
+            // to get around this, we dispatch a new job that handles the setup of the Excel::queueImport() process...
+            StartMetDataImport::dispatch($fileRecord, $fileWithMergedHeaders, Auth::user());
 
         }
 

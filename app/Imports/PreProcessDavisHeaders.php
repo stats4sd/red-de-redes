@@ -31,7 +31,7 @@ class PreProcessDavisHeaders
                 : $this->formatHeader($header2Array[$index]);
         }
 
-        $headerValidationFile = fopen($fullFilePath . ".header_validation.txt", "w");
+    $headerValidationFile = fopen($fullFilePath . ".header_validation.txt", "w");
         $newFile = fopen($fullFilePath . ".with_merged_headers.txt", "w");
 
         fwrite($headerValidationFile, implode("\t", $headerMerged) . PHP_EOL);

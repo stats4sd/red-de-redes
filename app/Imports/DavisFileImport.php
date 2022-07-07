@@ -33,11 +33,11 @@ use Maatwebsite\Excel\Validators\ValidationException;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use Throwable;
 
-class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue, WithStrictNullComparison, SkipsEmptyRows, WithValidation, SkipsOnFailure
+class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue, WithStrictNullComparison, SkipsEmptyRows, WithValidation
 {
 
     protected array $keyMap;
-    protected File $fileRecord;
+    //protected File $fileRecord;
     protected User $user;
     private int $stationId;
     private string $upload_id;
@@ -60,7 +60,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
             )
             ), true, 512, JSON_THROW_ON_ERROR);
 
-        $this->fileRecord = $fileRecord;
+        //$this->fileRecord = $fileRecord;
         $this->upload_id = $fileRecord->upload_id;
         $this->file_id = $fileRecord->id;
         $this->stationId = $fileRecord->station_id;
@@ -154,13 +154,13 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
     public
     function batchSize(): int
     {
-        return 20;
+        return 1000;
     }
 
     public
     function chunkSize(): int
     {
-        return 20;
+        return 1000;
     }
 
     public function rules(): array
@@ -171,9 +171,4 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
         ];
     }
 
-    public function onFailure(Failure ...$failures)
-    {
-        MetDataImportFailed::dispatch($this->fileRecord, $failures, $this->user);
-
-    }
 }

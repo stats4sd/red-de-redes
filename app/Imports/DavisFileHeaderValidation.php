@@ -6,12 +6,16 @@ use App\Events\MetDataImportFailed;
 use App\Models\Met\File;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 
-class DavisFileHeaderValidation implements ToModel, WithValidation
+class DavisFileHeaderValidation implements ToModel, WithValidation, WithHeadingRow, SkipsEmptyRows, WithStrictNullComparison, WithCustomCsvSettings
 {
 
 
@@ -31,9 +35,18 @@ class DavisFileHeaderValidation implements ToModel, WithValidation
     public function rules(): array
     {
         return [
-            'date' => 'required',
-            'time' => 'required',
+            'Date' => 'required',
+            'Time' => 'required',
         ];
     }
+
+        public
+    function getCsvSettings(): array
+    {
+        return [
+            'delimiter' => "\t"
+        ];
+    }
+
 
 }
