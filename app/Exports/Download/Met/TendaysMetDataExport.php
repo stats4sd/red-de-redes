@@ -80,6 +80,7 @@ class TendaysMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
             $tendaysMetData->max_humedad_interna,
             $tendaysMetData->min_humedad_interna,
             $tendaysMetData->avg_humedad_interna,
+            $tendaysMetData->max_temperatura_externa,
             $tendaysMetData->min_temperatura_externa,
             $tendaysMetData->avg_temperatura_externa,
             $tendaysMetData->max_humedad_externa,

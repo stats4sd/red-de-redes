@@ -7,20 +7,22 @@
         <div class="container my-4">
             <div class="accordion-area" role="tablist">
                 <vue-collapsible-panel-group>
-                    <vue-collapsible-panel  :expanded="true">
+                    <vue-collapsible-panel :expanded="true">
                         <template #title>
                             <span ref="panel1">Paso 1: {{ steps[0].title }}</span>
                         </template>
                         <template #content>
                             <div class="py-4 mx-4">
                                 <h3>Sube el archivo de datos</h3>
-                                <p>Sube el archivo .csv o .txt que extrajo de la estación meteorológica. Asegúrese de subir
+                                <p>Sube el archivo .csv o .txt que extrajo de la estación meteorológica. Asegúrese de
+                                    subir
                                     el archivo de datos original sin editar.</p>
                                 <div class="row mx-4 justify-content-center">
                                     <label class="control-label col-sm-6" style="color: black"><h5>Seleccione la
                                         estación</h5>
-                                        <v-select @change="modalShow = !modalShow" :options="stations" label="label_with_id"
-                                                v-model="selectedStation"></v-select>
+                                        <v-select @change="modalShow = !modalShow" :options="stations"
+                                                  label="label_with_id"
+                                                  v-model="selectedStation"></v-select>
                                     </label>
                                 </div>
                                 <div class="row mx-4 justify-content-center">
@@ -37,22 +39,27 @@
                                         <p class="my-4"><b>Altitud:</b> {{ selectedStation.altitude }}</p>
                                         <p class="my-4"><b>Tipo:</b> {{ selectedStation.type }}</p>
 
-                                        <!-- add small map, met station photo, nearby village photo for visual identification -->
-                                        <table border="1" width="100%">
-                                            <tr>
-                                                <td width="33%"><b>Mapa</b></td>
-                                                <td width="33%"><b>Estación</b></td>
-                                                <td width="34%"><b>Pueblo cercano</b></td>
-                                            </tr>
-                                            <tr>
-                                                <td><img :src="'images/met_station/'+selectedStation.id+'_map.jpg'" width="150" height="100"></td>
-                                                <td><img :src="'images/met_station/'+selectedStation.id+'_met_station.jpg'" width="150" height="100"></td>
-                                                <td><img :src="'images/met_station/'+selectedStation.id+'_nearby_village.jpg'" width="150" height="100"></td>
-                                            </tr>
-                                        </table>
+                                        <!--                                        &lt;!&ndash; add small map, met station photo, nearby village photo for visual identification &ndash;&gt;-->
+                                        <!--                                        <table border="1" width="100%">-->
+                                        <!--                                            <tr>-->
+                                        <!--                                                <td width="33%"><b>Mapa</b></td>-->
+                                        <!--                                                <td width="33%"><b>Estación</b></td>-->
+                                        <!--                                                <td width="34%"><b>Pueblo cercano</b></td>-->
+                                        <!--                                            </tr>-->
+                                        <!--                                            <tr>-->
+                                        <!--                                                <td><img :src="'images/met_station/'+selectedStation.id+'_map.jpg'"-->
+                                        <!--                                                         width="150" height="100"></td>-->
+                                        <!--                                                <td><img-->
+                                        <!--                                                    :src="'images/met_station/'+selectedStation.id+'_met_station.jpg'"-->
+                                        <!--                                                    width="150" height="100"></td>-->
+                                        <!--                                                <td><img-->
+                                        <!--                                                    :src="'images/met_station/'+selectedStation.id+'_nearby_village.jpg'"-->
+                                        <!--                                                    width="150" height="100"></td>-->
+                                        <!--                                            </tr>-->
+                                        <!--                                        </table>-->
 
-                                        <p class="my-4"><b>¿Está seguro de que {{ selectedStation.label }} es la estación
-                                            correcta?</b></p>
+                                        <p class="my-4"><b>¿Está seguro de que {{ selectedStation.label }} es la
+                                            estación correcta?</b></p>
 
                                         <!-- Action row -->
                                         <template #actions>
@@ -63,49 +70,65 @@
                                 </div>
 
                                 <div class="row mx-4 justify-content-center" v-show="showUploadFile">
-                                    <label class="control-label col-sm-6" style="color: black"><h5>Seleccione el archivo de
+                                    <label class="control-label col-sm-6" style="color: black"><h5>Seleccione el archivo
+                                        de
                                         datos</h5>
                                         <file-input v-model="file" placeholder="Elija un archivo o suéltelo aquí..."/>
                                     </label>
                                 </div>
                                 <div class="row mx-4 justify-content-center" v-show="showUploadFile">
-                                    <label class="control-label col-sm-6" style="color: black"><h5>Selccione el archivo con
+                                    <label class="control-label col-sm-6" style="color: black"><h5>Selccione el archivo
+                                        con
                                         comentarios sobre los datos</h5>
-                                        <file-input v-model="filesObservation" placeholder="Elija un archivo o suéltelo aquí..."/>
+                                        <file-input v-model="filesObservation"
+                                                    placeholder="Elija un archivo o suéltelo aquí..."/>
                                     </label>
                                 </div>
                                 <h3>Seleccione las unidades</h3>
-                                <p class="mt-3">Seleccione las unidades utilizadas en el archivo para los siguientes tipos
+                                <p class="mt-3">Seleccione las unidades utilizadas en el archivo para los siguientes
+                                    tipos
                                     de variables:</p>
 
                                 <div class="row py-4 mx-4 justify-content-center">
                                     <label class="control-label col-sm-3" style="color: black"><h5>Temperatura</h5>
-                                        <v-select v-model="selectedUnitTemp" :options="unitTemp" :clearable="false"></v-select>
+                                        <v-select v-model="selectedUnitTemp" :options="unitTemp"
+                                                  :clearable="false"></v-select>
                                     </label>
                                     <label class="control-label col-sm-3" style="color: black"><h5>Presión</h5>
-                                        <v-select v-model="selectedUnitPres" :options="unitPres" :clearable="false"></v-select>
+                                        <v-select v-model="selectedUnitPres" :options="unitPres"
+                                                  :clearable="false"></v-select>
                                     </label>
-                                    <label class="control-label col-sm-3" style="color: black"><h5>Velocidad del viento</h5>
-                                        <v-select v-model="selectedUnitWind" :options="unitWind" :clearable="false"></v-select>
+                                    <label class="control-label col-sm-3" style="color: black"><h5>Velocidad del
+                                        viento</h5>
+                                        <v-select v-model="selectedUnitWind" :options="unitWind"
+                                                  :clearable="false"></v-select>
                                     </label>
                                     <label class="control-label col-sm-3" style="color: black"><h5>Precipitación</h5>
-                                        <v-select v-model="selectedUnitRain" :options="unitRain" :clearable="false"></v-select>
+                                        <v-select v-model="selectedUnitRain" :options="unitRain"
+                                                  :clearable="false"></v-select>
                                     </label>
                                 </div>
 
                                 <div style="text-align: center;">
-                                    <b-alert show varient="info">Después de subir el archivo, tendrá la oportunidad de
-                                        revisar los valores de los datos y confirmar que estas son las unidades correctas
-                                        antes de continuar.
-                                    </b-alert>
+                                    <div class="alert alert-info show">Después de subir el archivo, tendrá la oportunidad de revisar los valores de los datos y confirmar que estas son las unidades correctas antes de continuar.
+                                    </div>
                                     <br/>
-                                    <br/>
-                                    <b-alert show variant="danger" v-if="uploadError!=null">{{ uploadError }}</b-alert>
+                                    <div class="alert alert-danger show" v-if="uploadError!=null">{{ uploadError }}
+                                    </div>
                                     <br/>
                                     <button class="site-btn my-4" v-on:click="submit();" :disabled="busy">
-                                        <b-spinner small v-if="busy" label="Spinning"></b-spinner>
-                                        Subir
+                                        <i class="la la-spinner" v-if="busy" label="Spinning"></i> Subir
                                     </button>
+
+                                    <div
+                                        v-if="uploadActive || progress === 100"
+                                        class="alert show"
+                                        :class="success ? 'alert-success' : (error ? 'alert-danger' : 'alert-info')"
+                                        >
+                                        PROGRESS: {{ current_row }} / {{ total_rows }} ({{ progress }} %)
+                                    </div>
+                                    <div class="alert alert-danger show" v-if="error">{{ error }}</div>
+
                                 </div>
                             </div>
                         </template>
@@ -115,16 +138,27 @@
                             <span ref="panel2">Paso 2: {{ steps[1].title }}</span>
                         </template>
 
-                        <template #content >
+                        <template #content>
                             <div class="py-4 mx-4">
                                 <h3>Vista preliminar de datos</h3>
                                 <p class="mt-3">Este es un ejemplo de sus datos</p>
-                                <div class="alert alert-success show">Verifique que las columnas que espera llenar contengan datos
-                                    y que los valores parezcan adecuados para la ubicación seleccionada, la época del año y
+                                <div class="alert alert-success show">Verifique que las columnas que espera llenar
+                                    contengan datos
+                                    y que los valores parezcan adecuados para la ubicación seleccionada, la época del
+                                    año y
                                     las unidades elegidas.
                                 </div>
-                                <div class="alert alert-secondary" v-if="previewData!=null">Hay {{ total_rows }} filas</div>
+                                <div class="alert alert-secondary" v-if="previewData!=null">
+                                    <ul>
+                                        <li>Hay {{ total_rows }} filas</li>
+                                        <li>Temperatura mínima de los registros:<b> {{ min_temp }} ºC</b></li>
+                                        <li>Temperatura máxima de los registros:<b> {{ max_temp }} ºC</b></li>
+                                        <li>Precipitación máxima diaria de registros:<b> {{ max_daily_rain }} mm</b></li>
+                                    </ul>
+                                </div>
 
+                                <h5>Preview</h5>
+                                <p>A continuación se muestra una vista previa de los datos que se almacenarán. Incluye los primeros 10 registros del archivo cargado.</p>
                                 <div class="mx-4 justify-content-center" style="overflow-x: scroll">
 
                                     <table class="table table-striped" style="max-height: 600px;">
@@ -153,84 +187,65 @@
                                         </tr>
                                         <tr v-for="row in previewData" :key="row.id">
 
-                                            <td>{{ row.fecha_hora.substring(0, 10) }} </td>
-                                            <td>{{ row.fecha_hora.substring(10) }} </td>
+                                            <td>{{ row.fecha_hora.substring(0, 10) }}</td>
+                                            <td>{{ row.fecha_hora.substring(10) }}</td>
 
-                                            <td>{{ row.temperatura_interna }} {{ row.temperatura_interna && row.temperatura_interna != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.temperatura_externa }} {{ row.temperatura_externa && row.temperatura_externa != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.sensacion_termica }} {{ row.sensacion_termica && row.sensacion_termica != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.punto_rocio }} {{ row.punto_rocio && row.punto_rocio != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.wind_chill }} {{ row.wind_chill && row.wind_chill != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.hi_temp }} {{ row.hi_temp && row.hi_temp != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.low_temp }} {{ row.low_temp && row.low_temp != '' ? 'ºC' : '' }}</td>
-                                            <td>{{ row.presion_relativa }} {{ row.presion_relativa && row.presion_relativa != '' ? 'hPa' : '' }}</td>
-                                            <td>{{ row.presion_absoluta }} {{ row.presion_absoluta && row.presion_absoluta != '' ? 'hPa' : '' }}</td>
-                                            <td>{{ row.velocidad_viento }} {{ row.velocidad_viento && row.velocidad_viento != '' ? 'm/s' : '' }}</td>
+                                            <td>{{ row.temperatura_interna }} {{
+                                                    row.temperatura_interna && row.temperatura_interna != '' ? 'ºC' : ''
+                                                }}
+                                            </td>
+                                            <td>{{ row.temperatura_externa }} {{
+                                                    row.temperatura_externa && row.temperatura_externa != '' ? 'ºC' : ''
+                                                }}
+                                            </td>
+                                            <td>{{ row.sensacion_termica }}
+                                                {{ row.sensacion_termica && row.sensacion_termica != '' ? 'ºC' : '' }}
+                                            </td>
+                                            <td>{{ row.punto_rocio }}
+                                                {{ row.punto_rocio && row.punto_rocio != '' ? 'ºC' : '' }}
+                                            </td>
+                                            <td>{{ row.wind_chill }}
+                                                {{ row.wind_chill && row.wind_chill != '' ? 'ºC' : '' }}
+                                            </td>
+                                            <td>{{ row.hi_temp }} {{
+                                                    row.hi_temp && row.hi_temp != '' ? 'ºC' : ''
+                                                }}
+                                            </td>
+                                            <td>{{ row.low_temp }} {{
+                                                    row.low_temp && row.low_temp != '' ? 'ºC' : ''
+                                                }}
+                                            </td>
+                                            <td>{{ row.presion_relativa }}
+                                                {{ row.presion_relativa && row.presion_relativa != '' ? 'hPa' : '' }}
+                                            </td>
+                                            <td>{{ row.presion_absoluta }}
+                                                {{ row.presion_absoluta && row.presion_absoluta != '' ? 'hPa' : '' }}
+                                            </td>
+                                            <td>{{ row.velocidad_viento }}
+                                                {{ row.velocidad_viento && row.velocidad_viento != '' ? 'm/s' : '' }}
+                                            </td>
                                             <td>{{ row.rafaga }} {{ row.rafaga && row.rafaga != '' ? 'm/s' : '' }}</td>
-                                            <td>{{ row.hi_speed }} {{ row.hi_speed && row.hi_speed != '' ? 'm/s' : '' }}</td>
-                                            <td>{{ row.hi_dir }} </td>
-                                            <td>{{ row.lluvia_hora }} {{ row.lluvia_hora && row.lluvia_hora != '' ? 'mm' : '' }}</td>
-                                            <td>{{ row.lluvia_24_horas }} {{ row.lluvia_24_horas && row.lluvia_24_horas != '' ? 'mm' : '' }}</td>
-                                            <td>{{ row.lluvia_semana }} {{ row.lluvia_semana && row.lluvia_semana != '' ? 'mm' : '' }}</td>
-                                            <td>{{ row.lluvia_mes }} {{ row.lluvia_mes && row.lluvia_mes != '' ? 'mm' : '' }}</td>
-                                            <td>{{ row.lluvia_total }} {{ row.lluvia_total && row.lluvia_total != '' ? 'mm' : '' }}</td>
+                                            <td>{{ row.hi_speed }} {{
+                                                    row.hi_speed && row.hi_speed != '' ? 'm/s' : ''
+                                                }}
+                                            </td>
+                                            <td>{{ row.hi_dir }}</td>
+                                            <td>{{ row.lluvia_hora }}
+                                                {{ row.lluvia_hora && row.lluvia_hora != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td>{{ row.lluvia_24_horas }}
+                                                {{ row.lluvia_24_horas && row.lluvia_24_horas != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td>{{ row.lluvia_semana }}
+                                                {{ row.lluvia_semana && row.lluvia_semana != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td>{{ row.lluvia_mes }}
+                                                {{ row.lluvia_mes && row.lluvia_mes != '' ? 'mm' : '' }}
+                                            </td>
+                                            <td>{{ row.lluvia_total }}
+                                                {{ row.lluvia_total && row.lluvia_total != '' ? 'mm' : '' }}
+                                            </td>
                                             <td>{{ row.rain }} {{ row.rain && row.rain != '' ? 'mm' : '' }}</td>
-                                        </tr>
-
-                                    </table>
-
-                                </div>
-
-                                <div class="py-4 mx-4 justify-content-center" style="overflow-x: scroll" v-if="error_data!=null">
-                                    <div class="alert alert-danger"
-                                            v-if="error_temp || error_press || error_wind||error_rain ">Hay algunos valores
-                                        con las unidades incorrectas, consulte la siguiente tabla y continúe con
-                                        <b>Cancelar</b> para subir un nuevo archivo o haga clic en <b>Guardar en la base de
-                                            datos</b> si los valores son correctos.
-                                    </div>
-
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <th v-if="error_temp">temperatura_interna</th>
-                                            <th v-if="error_temp">temperatura_externa</th>
-                                            <th v-if="error_temp">sensacion_termica</th>
-                                            <th v-if="error_temp">punto_rocio</th>
-                                            <th v-if="error_temp">wind_chill</th>
-                                            <th v-if="error_temp">hi_temp</th>
-                                            <th v-if="error_temp">low_temp</th>
-                                            <th v-if="error_press">presion_relativa</th>
-                                            <th v-if="error_press">presion_absoluta</th>
-                                            <th v-if="error_wind">velocidad_viento</th>
-                                            <th v-if="error_wind">rafaga</th>
-                                            <th v-if="error_wind">hi_speed</th>
-                                            <th v-if="error_wind">hi_dir</th>
-                                            <th v-if="error_rain">lluvia_hora</th>
-                                            <th v-if="error_rain">lluvia_24_horas</th>
-                                            <th v-if="error_rain">lluvia_semana</th>
-                                            <th v-if="error_rain">lluvia_mes</th>
-                                            <th v-if="error_rain">lluvia_total</th>
-                                            <th v-if="error_rain">rain</th>
-                                        </tr>
-                                        <tr v-for="row in error_data" :key="row.id">
-                                            <td v-if="error_temp">{{ row.temperatura_interna }} {{ row.temperatura_interna && row.temperatura_interna != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.temperatura_externa }} {{ row.temperatura_externa && row.temperatura_externa != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.sensacion_termica }} {{ row.sensacion_termica && row.sensacion_termica != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.punto_rocio }} {{ row.punto_rocio && row.punto_rocio != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.wind_chill }} {{ row.wind_chill && row.wind_chill != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.hi_temp }} {{ row.hi_temp && row.hi_temp != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_temp">{{ row.low_temp }} {{ row.low_temp && row.low_temp != '' ? 'ºC' : '' }}</td>
-                                            <td v-if="error_press">{{ row.presion_relativa }} {{ row.presion_relativa && row.presion_relativa != '' ? 'hPa' : '' }}</td>
-                                            <td v-if="error_press">{{ row.presion_absoluta }} {{ row.presion_absoluta && row.presion_absoluta != '' ? 'hPa' : '' }}</td>
-                                            <td v-if="error_wind">{{ row.velocidad_viento }} {{ row.velocidad_viento && row.velocidad_viento != '' ? 'm/s' : '' }}</td>
-                                            <td v-if="error_wind">{{ row.rafaga }} {{ row.rafaga && row.rafaga != '' ? 'm/s' : '' }}</td>
-                                            <td v-if="error_wind">{{ row.hi_speed }} {{ row.hi_speed && row.hi_speed != '' ? 'm/s' : '' }}</td>
-                                            <td v-if="error_wind">{{ row.hi_dir }} </td>
-                                            <td v-if="error_rain">{{ row.lluvia_hora }} {{ row.lluvia_hora && row.lluvia_hora != '' ? 'mm' : '' }}</td>
-                                            <td v-if="error_rain">{{ row.lluvia_24_horas }} {{ row.lluvia_24_horas && row.lluvia_24_horas != '' ? 'mm' : '' }}</td>
-                                            <td v-if="error_rain">{{ row.lluvia_semana }} {{ row.lluvia_semana && row.lluvia_semana != '' ? 'mm' : '' }}</td>
-                                            <td v-if="error_rain">{{ row.lluvia_mes }} {{ row.lluvia_mes && row.lluvia_mes != '' ? 'mm' : '' }}</td>
-                                            <td v-if="error_rain">{{ row.lluvia_total }} {{ row.lluvia_total && row.lluvia_total != '' ? 'mm' : '' }}</td>
-                                            <td v-if="error_rain">{{ row.rain }} {{ row.rain && row.rain != '' ? 'mm' : '' }}</td>
                                         </tr>
 
                                     </table>
@@ -239,24 +254,32 @@
 
 
                                 <div style="text-align: center;">
-                                    <b-alert show variant="danger" v-if="error!=null">{{ error }}</b-alert>
-                                    <b-alert show variant="success" v-if="success!=null">{{ success }}</b-alert>
-                                    <b-alert show variant="warning" v-if="scenario3"><input type="checkbox" v-model="scenario3Confirmed"><b><font color="red"> I confirm that I understand the potential risk of uploading this data file with existing records.</font></b></b-alert>
+                                    <div class="alert alert-danger show" v-if="error!=null">{{ error }}</div>
+                                    <div class="alert alert-success show" v-if="success!=null">{{ success }}</div>
+                                    <div class="alert alert-warning show" v-if="scenario3">
+                                        <input type="checkbox" v-model="scenario3Confirmed">
+                                        <b>I confirm that I understand the potential risk of uploading this
+                                            data file with existing records.</b></div>
                                     <br/>
-                                    <button class="site-btn my-4" data-toggle="collapse" href="#collapseThree"
-                                            aria-expanded="false" aria-controls="collapseThree" v-on:click="cleanTable"
-                                            style="background: red;">
-                                        <b-spinner small v-if="busy" label="Spinning"></b-spinner>
-                                        Cancelar
-                                    </button>
-                                    &nbsp;
-                                    <button type="submit" class="site-btn my-4" data-toggle="collapse"
-                                            href="#collapseThree" id="btnConfirm"
-                                            aria-expanded="false" aria-controls="collapseThree" v-on:click="storeFile"
-                                            :disabled="error || busy || (scenario3 && !scenario3Confirmed)">
-                                        <b-spinner small v-if="busy" label="Spinning"></b-spinner>
-                                        Guardar en la base de datos
-                                    </button>
+
+                                    <div class="d-flex justify-content-center">
+
+                                        <form :action="'/cancel-upload/'+ upload_id" method="POST">
+                                            <input type="hidden" name="_token" :value="csrf"/>
+                                            <button class="btn btn-danger my-4" type="submit">
+                                                Cancelar
+                                            </button>
+
+                                        </form>
+                                        &nbsp;
+                                        <form :action="'/store-file/'+ upload_id" method="POST">
+                                            <input type="hidden" name="_token" :value="csrf"/>
+                                            <button class="btn btn-success my-4" type="submit">
+                                                Guardar en la base de datos
+                                            </button>
+
+                                        </form>
+                                    </div>
 
                                 </div>
                             </div>
@@ -270,10 +293,12 @@
 
 <script>
 
+import _ from "lodash";
+
 const rootUrl = process.env.MIX_APP_URL
 import {
-  VueCollapsiblePanelGroup,
-  VueCollapsiblePanel,
+    VueCollapsiblePanelGroup,
+    VueCollapsiblePanel,
 } from '@dafcoe/vue-collapsible-panel'
 
 import '@dafcoe/vue-collapsible-panel/dist/vue-collapsible-panel.css'
@@ -283,6 +308,13 @@ import 'vue-select/dist/vue-select.css'
 
 import CustomModal from './Elements/CustomModal.vue'
 import FileInput from 'vue3-simple-file-input'
+import ProgressBar from './ProgressBar'
+import Noty from 'noty'
+import axios from 'axios'
+
+Noty.overrideDefaults({
+    theme: 'bootstrap-v4',
+})
 
 export default {
     components: {
@@ -291,9 +323,19 @@ export default {
         vSelect,
         CustomModal,
         FileInput,
+        ProgressBar
     },
     data() {
+        this.trackProgress = _.debounce(this.trackProgress, 1000);
         return {
+            max_temp: null,
+            min_temp: null,
+            max_daily_rain: null,
+            csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            current_row: null,
+            progress: null,
+            total_rows: null,
+            uploadActive: false,
             currentStep: 1,
             steps: [
                 {
@@ -336,7 +378,6 @@ export default {
             file: null,
             filesObservation: null,
             previewData: null,
-            total_rows: null,
             busy: false,
             error_data: null,
             success: null,
@@ -346,7 +387,7 @@ export default {
             error_wind: false,
             error_rain: false,
             uploadError: null,
-            uploader_id: null,
+            upload_id: null,
             scenario3: false,
             scenario3Confirmed: false,
             showUploadFile: false,
@@ -406,16 +447,22 @@ export default {
                 {key: "wind_tx", label: 'Wind Tx', thStyle: {width: '100px'}},
                 {key: "iss_recept", label: 'ISS Recept', thStyle: {width: '100px'}},
                 {key: "intervalo", label: 'Arc. Int.', thStyle: {width: '100px'}},
-            ]
+            ],
         }
     },
     props: {
         bgColor: {
             type: String,
             default: 'red'
-        }
+        },
+        userId: {
+            type: Number,
+            default: null,
+        },
     },
     mounted() {
+
+        this.setupEchoListeners()
 
         axios.get('api/stations').then((response) => {
             this.stations = response.data;
@@ -460,21 +507,13 @@ export default {
             //check form for errors
             this.uploadError = null;
 
-            if (!this.file) {
-                this.uploadError = "Elija un archivo para subir";
-                return;
-            }
-
-            if (!this.selectedStation) {
-                this.uploadError = "Seleccione la estación de la que provienen estos datos";
-                return;
-            }
-
             this.busy = true;
             let formData = new FormData();
-            formData.append('data-file', this.file.file);
-            formData.append('data-filesObservation', this.filesObservation ? this.filesObservation.file : null);
-            formData.append('selectedStation', this.selectedStation.id);
+            formData.append('station_id', this.selectedStation.id);
+            formData.append('data_file', this.file.file);
+            if (this.filesObservation) {
+                formData.append('observation_file', this.filesObservation);
+            }
 
             // after upgrading from Vue 2 to Vue 3:
             // 1. needs to pass v-model.value instead of passing v-model
@@ -485,64 +524,44 @@ export default {
             formData.append('selectedUnitRain', this.selectedUnitRain.value ?? 'mm');
 
             axios.post(rootUrl + '/files', formData, {}).then((result) => {
-
-                console.log(result)
-                this.total_rows = result.data.met_data_preview.total;
-                this.previewData = result.data.met_data_preview.data;
-                this.uploader_id = (this.previewData[0]['uploader_id']);
-
-                // show advice message
-                if (result.data.scenario == 1) {
-                    this.success = result.data.adviceMessage;
-                    this.scenario3 = false;
-                } else if (result.data.scenario == 2) {
-                    this.error = result.data.adviceMessage;
-                    this.scenario3 = false;
-                } else if (result.data.scenario == 3) {
-                    this.success = result.data.adviceMessage;
-                    this.scenario3 = true;
-                }
-
-
-                // this.error_data = result.data.error_data.original.error_data;
-                // this.error_temp = result.data.error_data.original.error_temp;
-                // this.error_press = result.data.error_data.original.error_press;
-                // this.error_wind = result.data.error_data.original.error_wind;
-                // this.error_rain = result.data.error_data.original.error_rain;
-
-
-                this.$refs.panel1.click()
-                this.$refs.panel2.click()
-
-
-
-
+                console.log('done');
             })
                 .catch((error) => {
                     this.busy = false;
                     console.log(error);
                     if (error.response && error.response.hasOwnProperty('data')) {
-                        this.uploadError = error.response.data.message;
 
-                        // instead of showing the full error message from Python, show a generic error message and the last few lines of error message only
-                        // P.S. error message will be simplifed as "Server Error" in live env because debug mode is turned off
-                        this.uploadError = "The met data file seems not in correct format. Please check and ensure the met data file is in correct format. "+ this.uploadError.split("File").pop();
+                        this.uploadError = Object.keys(error.response.data.errors).map((key) => error.response.data.errors[key]).join('; ');
+
+                    new Noty({
+                        type: "error",
+                        text: "Hubo errores al importar el archivo; consulte los detalles a continuación. Por favor, compruebe que el archivo tiene el formato correcto.",
+                        timeout: false,
+                    }).show();
+
+
                     } else {
                         this.uploadError = "No se pudo subir el archivo. Verifique que esté en el formato correcto o póngase en contacto con el administrador de la plataforma para obtener más información.";
                     }
+
                 })
                 .then(() => {
-                    this.busy = false;
+                    new Noty({
+                        type: "info",
+                        text: "El archivo se está cargando y validando. Una vez completado, los datos se importarán a la base de datos.",
+                        timeout: false,
+                    }).show();
+                    // this.busy = false;
                 })
 
 
         },
 
         storeFile: function () {
-            this.busy = true;
+            // this.busy = true;
             axios({
                 method: 'post',
-                url: "/storeFile/" + this.uploader_id,
+                url: "/store-file/" + this.upload_id,
             })
                 .then((result) => {
                     console.log(result.data.success);
@@ -552,31 +571,13 @@ export default {
 
                     // after moving staging records from table "data_preview" to table "data"
                     // redirect to a upload success static page
-                    window.location.assign('/uploadsuccess')
+                    // window.location.assign('/uploadsuccess')
 
                 }, (error) => {
                     console.log(error);
                     this.error = error
                     this.busy = false;
                 });
-        },
-
-        cleanTable: function () {
-            this.busy = true;
-            axios({
-                method: 'post',
-                url: "/cleanTable/" + this.uploader_id,
-            })
-                .then((result) => {
-                    console.log(result);
-                    this.busy = false;
-                    window.location.reload();
-
-                }, (error) => {
-                    console.log(error);
-                    this.busy = false;
-                });
-
         },
 
         stationConfirmed() {
@@ -588,8 +589,91 @@ export default {
             this.modalShow = false
             this.selectedStation = false
             this.showUploadFile = false
-        }
+        },
 
+        setupEchoListeners() {
+            window.Echo
+                .private("App.Models.User." + this.userId)
+                .listen("HelloWorld", payload => {
+                    new Noty({
+                        type: "info",
+                        text:
+                            "<b>Hi</bi>",
+                        timeout: false
+                    }).show();
+                })
+                .listen("MetDataImportStarted", payload => {
+                    new Noty({
+                        type: "info",
+                        text: `La importación ha comenzado. Se procesarán todas las entradas de ${payload.file.total_records_count}`
+                    }).show()
+
+                    this.upload_id = payload.file.upload_id;
+                    this.total_rows = payload.file.total_records_count
+                    this.uploadActive = true;
+                    console.log('upload_ID', this.upload_id)
+                    this.trackProgress()
+                })
+                .listen("MetDataImportCompleted", payload => {
+                    this.busy = false;
+                    if(!payload.success) {
+                        this.uploadActive = false;
+                        this.success = null;
+                        this.error = payload.data.error;
+                        return;
+                    }
+
+                    new Noty({
+                        type: "success",
+                        text: `¡La importación está completa!`
+                    }).show()
+
+                    this.trackProgress()
+                    this.uploadActive = false;
+                    this.total_rows = payload.data.met_data_preview.total;
+                    this.previewData = payload.data.met_data_preview.data;
+                    this.upload_id = (this.previewData[0]['upload_id']);
+                    this.min_temp = payload.data.min_temp;
+                    this.max_temp = payload.data.max_temp;
+                    this.max_daily_rain = payload.data.max_daily_rain;
+
+                    // show advice message
+                    this.error = null;
+                    this.success = payload.data.adviceMessage;
+                    this.scenario3 = payload.data.scenario === 3;
+
+                    this.$refs.panel1.click()
+                    this.$refs.panel2.click()
+
+                })
+                .listen("MetDataImportFailed", payload => {
+                    console.log('payload event', payload)
+
+                    this.error += '<br/>' + payload.failures.map(failure => {
+
+                        return '<b>' + failure.attribute + '</b> ' + failure.errors.join('; ');
+                    }).join(';<br> ')
+
+
+
+                })
+
+        },
+        async trackProgress() {
+            const {data} = await axios.get(`/import-status/${this.upload_id}`)
+
+            if (data.finished) {
+                this.current_row = this.total_rows
+                this.progress = 100
+                return;
+            }
+
+            this.current_row = data.current_row;
+            this.progress = Math.ceil(this.current_row / this.total_rows * 100);
+
+            //  continue until finished
+            this.trackProgress();
+        }
     }
 }
 

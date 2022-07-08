@@ -12,15 +12,16 @@ import sys
 # including data file full path, user selected station id,
 # user selected unit for temperature, pressure, wind, rainfall,
 # uploader id, observeration id
-path = sys.argv[1]
-station_id = sys.argv[2]
-selected_unit_temp = sys.argv[3]
-selected_unit_pres = sys.argv[4]
-selected_unit_wind = sys.argv[5]
-selected_unit_rain = sys.argv[6]
-uploader_id = sys.argv[7]
-is_windows = sys.argv[8]
-newObservation_id = sys.argv[9]
+env = sys.argv[1]
+path = sys.argv[2]
+station_id = sys.argv[3]
+selected_unit_temp = sys.argv[4]
+selected_unit_pres = sys.argv[5]
+selected_unit_wind = sys.argv[6]
+selected_unit_rain = sys.argv[7]
+uploader_id = sys.argv[8]
+is_windows = sys.argv[9]
+newObservation_id = sys.argv[10]
 
 
 
@@ -42,7 +43,7 @@ def openFile():
         # specify row 0 and row 1 to as column headers
         # do not specify low_memory = False, internally process the file in chunks,
         # resulting in lower memory use while parsing, but possibly mixed type inference
-        df = pd.read_csv(path, na_values=['--.-', '--', '---', '------'], sep="\t", header=[0,1])
+        df = pd.read_csv(path, na_values=['--.-', '--', '---', '------',999], sep="\t", header=[0,1])
 
 
         # option to print out all columns in a data frame
@@ -121,6 +122,7 @@ def openFile():
         # define date_time as a new array for processing measurement date time
         date_time = []
 
+        print(df)
 
         # handle all fecha_hora, time data in data frame
         for fecha_hora, time in zip(df.fecha_hora, df.time):
@@ -232,7 +234,7 @@ def openFile():
         # specify separater as comma ,
         # do not specify which row is header, default row 0 as column names
         # specify low_memory = False, to ensure no mixed types, the entire file is read into a single DataFrame
-        data = pd.read_csv(path, na_values=['--.-',' --.-', '--',' --', '---',' ---', '------', ' ------'], sep=",", low_memory=False)
+        data = pd.read_csv(path, na_values=['--.-',' --.-', '--',' --', '---',' ---', '------', ' ------',999], sep=",", low_memory=False)
 
 
         # option to print out all columns in a data frame
@@ -393,7 +395,11 @@ def openFile():
 
 
 # connects to MySQL database
-conn = mysql.connect(**config.dbConfig)
+
+if(env == "testing"):
+   conn = mysql.connect(**config.dbConfigTest)
+else:
+    conn = mysql.connect(**config.dbConfig)
 
 
 # create cursor object to execute SQL statements

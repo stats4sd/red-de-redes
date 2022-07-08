@@ -75,6 +75,7 @@ class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
             $monthlyMetData->max_humedad_interna,
             $monthlyMetData->min_humedad_interna,
             $monthlyMetData->avg_humedad_interna,
+            $monthlyMetData->max_temperatura_externa,
             $monthlyMetData->min_temperatura_externa,
             $monthlyMetData->avg_temperatura_externa,
             $monthlyMetData->max_humedad_externa,

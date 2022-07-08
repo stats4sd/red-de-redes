@@ -17,6 +17,7 @@ use App\Http\Controllers\DataController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\Admin\Met\MetDataCrudController;
 use App\Http\Controllers\DataProductController;
+use App\Imports\PreProcessDavisHeaders;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -50,8 +51,10 @@ Route::post('/data-download/download', [DataProductController::class, 'index']);
 //NEW Upload page
 Route::view('data-upload', 'dataupload')->middleware('auth');
 Route::post('files', [FileController::class,'store']);
-Route::post('storeFile/{uploader_id}', [FileController::class,'storeFile']);
-Route::post('cleanTable/{uploader_id}', [FileController::class,'cleanTable']);
+Route::get('import-status/{upload_id}', [FileController::class, 'status']);
+Route::post('store-file/{upload_id}', [FileController::class,'storeFile']);
+Route::post('cancel-upload/{upload_id}', [FileController::class, 'cancelUpload']);
+
 
 Route::get('data/{id}/delete', [MetDataCrudController::class,'destroy']);
 
@@ -66,15 +69,23 @@ Route::get('qr-print', [QrController::class,'printView'])->name('qr-print');
 
 
 
-Route::get('rtest', function(){
-    $process = new Process(['/Program Files/R/R-3.6.1/bin/Rscript.exe', 'updated_test.R']);
-        $process->setWorkingDirectory(base_path('scripts/R'));
+Route::get('test', function(){
 
-        $process->run();
+    $processor = (new PreProcessDavisHeaders);
 
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
+    $fileWithMergedHeaders = $processor(base_path('tests/Files/large-davis.txt'));
 
-        ddd('ok');
+
+   \Maatwebsite\Excel\Facades\Excel::import(
+       new \App\Imports\DavisFileImport('large-test', 1),
+       $fileWithMergedHeaders,
+   null,
+   \Maatwebsite\Excel\Excel::TSV);
+
+   ddd('ok');
+});
+
+
+Route::get('test-event', function() {
+    \App\Events\HelloWorld::dispatch(Auth::user());
 });
