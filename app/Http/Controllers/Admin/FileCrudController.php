@@ -43,7 +43,7 @@ class FileCrudController extends CrudController
                 'label' => 'Nombre original',
                 'wrapper' => [
                     'href' => function ($crud, $column, $entry) {
-                        return Storage::url($entry->path);
+                        return Storage::url($entry->data_file);
                     },
                 ]
             ],
