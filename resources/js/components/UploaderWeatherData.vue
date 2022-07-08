@@ -548,7 +548,7 @@ export default {
                 .then(() => {
                     new Noty({
                         type: "info",
-                        text: "The file has been uploaded and is being validated",
+                        text: "The file is being uploaded and validated. Once complete, the data will be imported into the database.",
                         timeout: false,
                     }).show();
                     // this.busy = false;
