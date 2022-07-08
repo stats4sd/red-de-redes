@@ -188,27 +188,26 @@ class FileController extends Controller
     // met_data_preview table to data table
     public function storeFile($upload_id)
     {
-        $newDataQuery = MetDataPreview::where('upload_id', $upload_id);
+        $columns = collect(
+            MetDataPreview::where('upload_id', $upload_id)
+                ->first()
+                ->getAttributes()
+        )->keys();
 
-        $columns = collect($newDataQuery->first()->getAttributes())->keys()->toArray();
 
-        // replace upload_id with fileId
-        unset($columns[array_search('upload_id', $columns, true)]);
+        // remove upload_id from column list
+        $columns = $columns->filter(fn($value, $key) => $value !=="upload_id");
 
-        $fileRecord = File::firstWhere('upload_id', $upload_id);
+        $newDataQuery = MetDataPreview::select($columns->toArray())->where('upload_id', $upload_id);
 
 
         //avoid pulling all records into memory, so do the transfer via db:
-        DB::table('met_data')
-            ->insertUsing(
-                $columns,
-                DB::table('met_data_preview')
-                    ->select($columns)
-                    ->where('upload_id', $upload_id)
-            );
+        // need to use raw SQL for the "IGNORE" part...
+        DB::insert("INSERT IGNORE INTO met_data (" . $columns->join(', ') . ") " . $newDataQuery->toSql(), $newDataQuery->getBindings());
 
 
         // confirm records are in database;
+        $fileRecord = File::firstWhere('upload_id', $upload_id);
         $metDataCount = MetData::where('file_id', $fileRecord->id)->count();
 
 
