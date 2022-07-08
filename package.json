@@ -31,7 +31,7 @@
         "laravel-echo": "^1.8.0",
         "noty": "^3.2.0-beta-deprecated",
         "popper": "^1.0.1",
-        "pusher-js": "^5.1.1",
+        "pusher-js": "^7.0.0",
         "sweetalert": "^2.1.2",
         "vue": "^3.2.26",
         "vue-echo": "^1.0.2",

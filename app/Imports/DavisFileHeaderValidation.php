@@ -35,8 +35,8 @@ class DavisFileHeaderValidation implements ToModel, WithValidation, WithHeadingR
     public function rules(): array
     {
         return [
-            'Date' => 'required',
-            'Time' => 'required',
+            'date' => 'required',
+            'time' => 'required',
         ];
     }
 
