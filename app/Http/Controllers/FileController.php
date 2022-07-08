@@ -196,7 +196,7 @@ class FileController extends Controller
 
 
         // remove upload_id from column list
-        $columns = $columns->filter(fn($value, $key) => $value !=="upload_id");
+        $columns = $columns->filter(fn($value, $key) => $value !=="upload_id" && $value !== "id");
 
         $newDataQuery = MetDataPreview::select($columns->toArray())->where('upload_id', $upload_id);
 
