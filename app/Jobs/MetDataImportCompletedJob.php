@@ -45,7 +45,7 @@ class MetDataImportCompletedJob implements ShouldQueue
             MetDataImportCompleted::broadcast(
                 false,
                 [
-                    'error' => 'There were errors uploading the file.',
+                    'error' => 'Hubo errores al cargar el archivo.',
 
                 ],
                 $this->user,
@@ -86,13 +86,13 @@ class MetDataImportCompletedJob implements ShouldQueue
 
         if ($numberNotExistedRecords === $metDataPreviewCount) {
             $scenario = 1;
-            $adviceMessage = "All " . $metDataPreviewCount . " record(s) are new records. Please kindly confirm to upload this data file.";
+            $adviceMessage = "Todos los registros " . $metDataPreviewCount . " son registros nuevos. Confirme para cargar este archivo de datos.";
         } else if ($numberExistedRecords === $metDataPreviewCount) {
             $scenario = 2;
-            $adviceMessage = "All " . $numberExistedRecords . " record(s) are already existed in system. Please kindly cancel this upload.";
+            $adviceMessage = "Todos los registros " . $numberExistedRecords . " ya existen en el sistema. Cancele esta carga.";
         } else {
             $scenario = 3;
-            $adviceMessage = $numberExistedRecords . " out of " . $metDataPreviewCount . " records are already existed in system. Please kindly tick below checkbox to confirm uploading non existed records or cancel this upload to further check data file correctness.";
+            $adviceMessage = $numberExistedRecords . " fuera de " . $metDataPreviewCount. " los registros ya existen en el sistema. Si esto es lo esperado, marque la casilla de verificación a continuación para confirmar la carga o cancele esta carga para verificar el archivo de datos y los datos existentes en la plataforma.";
         }
 
         MetDataImportCompleted::broadcast(

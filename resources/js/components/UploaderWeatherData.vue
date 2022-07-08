@@ -151,14 +151,14 @@
                                 <div class="alert alert-secondary" v-if="previewData!=null">
                                     <ul>
                                         <li>Hay {{ total_rows }} filas</li>
-                                        <li>Minumum temperature from records:<b> {{ min_temp }} ºC</b></li>
-                                        <li>Maximum temperature from records:<b> {{ max_temp }} ºC</b></li>
-                                        <li>Maximum daily rainfall from records:<b> {{ max_daily_rain }} mm</b></li>
+                                        <li>Temperatura mínima de los registros:<b> {{ min_temp }} ºC</b></li>
+                                        <li>Temperatura máxima de los registros:<b> {{ max_temp }} ºC</b></li>
+                                        <li>Precipitación máxima diaria de registros:<b> {{ max_daily_rain }} mm</b></li>
                                     </ul>
                                 </div>
 
                                 <h5>Preview</h5>
-                                <p>Below is a preview of the data that will be stored. It includes the first 10 records from the uploaded file.</p>
+                                <p>A continuación se muestra una vista previa de los datos que se almacenarán. Incluye los primeros 10 registros del archivo cargado.</p>
                                 <div class="mx-4 justify-content-center" style="overflow-x: scroll">
 
                                     <table class="table table-striped" style="max-height: 600px;">
@@ -535,7 +535,7 @@ export default {
 
                     new Noty({
                         type: "error",
-                        text: "There were errors importing the file - see below for details. Please check that the file is correctly formatted",
+                        text: "Hubo errores al importar el archivo; consulte los detalles a continuación. Por favor, compruebe que el archivo tiene el formato correcto.",
                         timeout: false,
                     }).show();
 
@@ -548,7 +548,7 @@ export default {
                 .then(() => {
                     new Noty({
                         type: "info",
-                        text: "The file is being uploaded and validated. Once complete, the data will be imported into the database.",
+                        text: "El archivo se está cargando y validando. Una vez completado, los datos se importarán a la base de datos.",
                         timeout: false,
                     }).show();
                     // this.busy = false;
@@ -605,7 +605,7 @@ export default {
                 .listen("MetDataImportStarted", payload => {
                     new Noty({
                         type: "info",
-                        text: `The import has started. All ${payload.file.total_records_count} entries will be processed.`
+                        text: `La importación ha comenzado. Se procesarán todas las entradas de ${payload.file.total_records_count}`
                     }).show()
 
                     this.upload_id = payload.file.upload_id;
@@ -625,7 +625,7 @@ export default {
 
                     new Noty({
                         type: "success",
-                        text: `The import is complete!.`
+                        text: `¡La importación está completa!`
                     }).show()
 
                     this.trackProgress()

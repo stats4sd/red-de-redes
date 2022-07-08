@@ -177,7 +177,7 @@ class FileController extends Controller
             DB::table('met_data_preview')->where('upload_id', '=', $upload_id)->delete();
         }
 
-        Alert::add('info', 'Upload Cancelled - all previewed data has been deleted from the database')->flash();
+        Alert::add('info', 'Carga cancelada: todos los datos de la vista previa se han eliminado de la base de datos')->flash();
 
         return Redirect::back();
 
@@ -228,7 +228,7 @@ class FileController extends Controller
         );
 
 
-        Alert::add('success', "Upload complete. All {$metDataCount} records are stored in the database and the daily summaries have been calculated.")->flash();
+        Alert::add('success', "Carga completa. Todos los registros {$metDataCount} se almacenan en la base de datos y se han calculado los resúmenes diarios.")->flash();
 
         return Redirect::back();
     }
