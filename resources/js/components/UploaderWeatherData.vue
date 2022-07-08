@@ -546,7 +546,12 @@ export default {
 
                 })
                 .then(() => {
-                    this.busy = false;
+                    new Noty({
+                        type: "info",
+                        text: "The file is being uploaded and validated. Once complete, the data will be imported into the database.",
+                        timeout: false,
+                    }).show();
+                    // this.busy = false;
                 })
 
 
@@ -610,7 +615,7 @@ export default {
                     this.trackProgress()
                 })
                 .listen("MetDataImportCompleted", payload => {
-
+                    this.busy = false;
                     if(!payload.success) {
                         this.uploadActive = false;
                         this.success = null;
