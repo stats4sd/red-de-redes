@@ -7,9 +7,11 @@ use App\Models\Met\File;
 use App\Models\Met\MetData;
 use App\Models\Met\MetDataPreview;
 use App\Models\User;
+use App\Services\UnitConversions;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
@@ -42,13 +44,15 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
     private int $stationId;
     private string $upload_id;
     private mixed $file_id;
+    private UnitConversions $unitConvertor;
+    private Collection $neededConversions;
 
     use RemembersRowNumber;
 
     /**
      * @throws \JsonException
      */
-    public function __construct(File $fileRecord, User $user)
+    public function __construct(File $fileRecord, Collection $neededConversions, User $user)
     {
         HeadingRowFormatter::default('none');
 
@@ -65,6 +69,9 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
         $this->file_id = $fileRecord->id;
         $this->stationId = $fileRecord->station_id;
         $this->user = $user;
+
+        $this->neededConversions = $neededConversions;
+        $this->unitConvertor = new UnitConversions();
 
 
     }
@@ -97,9 +104,9 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
                     $value = null;
                 }
 
-                return [
-                    $newKey => $value
-                ];
+                // convert the value if required
+                return $this->handleUnitConversions($newKey, $value);
+
             });
 
             if (isset($newRow['null'])) {
@@ -168,6 +175,49 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
         return [
             'date' => ['required'],
             'time' => ['required'],
+        ];
+    }
+
+    public function handleUnitConversions($key, $value): array
+    {
+        if ($this->neededConversions->contains('farenheitToCelcius') && $this->unitConvertor::getTempColumns()->contains($key)) {
+            return [
+                $key => $this->unitConvertor::farenheitToCelcius($value)
+            ];
+        }
+
+        if ($this->neededConversions->contains('inhgToHpa') && $this->unitConvertor::getPressureColumns()->contains($key)) {
+            return [
+                $key => $this->unitConvertor::inhgToHpa($value)
+            ];
+        }
+
+        if ($this->neededConversions->contains('mmhgToHpa') && $this->unitConvertor::getPressureColumns()->contains($key)) {
+            return [
+                $key => $this->unitConvertor::mmhgToHpa($value)
+            ];
+        }
+
+        if ($this->neededConversions->contains('kmhToMs') && $this->unitConvertor::getWindSpeedColumns()->contains($key)) {
+            return [
+                $key => $this->unitConvertor::kmhToMs($value)
+            ];
+        }
+
+        if ($this->neededConversions->contains('mphToMs') && $this->unitConvertor::getWindSpeedColumns()->contains($key)) {
+            return [
+                $key => $this->unitConvertor::mphToMs($value)
+            ];
+        }
+
+        if ($this->neededConversions->contains('inchToMm') && $this->unitConvertor::getRainfallColumns()->contains($key)) {
+            return [
+                $key => $this->unitConvertor::inchToMm($value)
+            ];
+        }
+
+        return [
+            $key => $value
         ];
     }
 

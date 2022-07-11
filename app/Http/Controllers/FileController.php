@@ -20,6 +20,7 @@ use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Met\MetDataPreview;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -57,6 +58,9 @@ class FileController extends Controller
             'upload_id' => $this->generateRandomString(),
         ]);
 
+        $conversionsNeeded = $this->checkForNeededConversions($validated);
+
+
         // upload data to met_data_preview table
         if (Station::find($fileRecord['station_id'])->type === 'davis') {
             $processor = (new PreProcessDavisHeaders());
@@ -72,7 +76,7 @@ class FileController extends Controller
             // ("serialize(): &quot;spreadsheet&quot; returned as member variable from __sleep() but does not exist")
 
             // to get around this, we dispatch a new job that handles the setup of the Excel::queueImport() process...
-            StartMetDataImport::dispatch($fileRecord, $fileWithMergedHeaders, Auth::user());
+            StartMetDataImport::dispatch($fileRecord, $fileWithMergedHeaders, $conversionsNeeded, Auth::user());
 
         }
 
@@ -231,6 +235,45 @@ class FileController extends Controller
         Alert::add('success', "Carga completa. Todos los registros {$metDataCount} se almacenan en la base de datos y se han calculado los resúmenes diarios.")->flash();
 
         return Redirect::back();
+    }
+
+    /**
+     * Checks through the selected units and lists the required conversions needed for the data in the file.
+     * @param array $validated
+     * @return array
+     */
+    private function checkForNeededConversions(array $validated): Collection
+    {
+        $neededConversions = collect([]);
+        // check if units need converting
+        if(isset($validated['selectedUnitTemp']) && $validated['selectedUnitTemp'] === "ºF") {
+            $neededConversions[] = "farenheitToCelcius";
+        }
+
+        // check if units need converting
+        if(isset($validated['selectedUnitPres']) && $validated['selectedUnitPres'] === "inhg") {
+            $neededConversions[] = "inhgToHpa";
+        }
+
+        // check if units need converting
+        if(isset($validated['selectedUnitPres']) && $validated['selectedUnitPres'] === "mmhg") {
+            $neededConversions[] = "mmhgToHpa";
+        }
+
+        // check if units need converting
+        if(isset($validated['selectedUnitWind']) && $validated['selectedUnitWind'] === "km/h") {
+            $neededConversions[] = "kmhToMs";
+        }
+        // check if units need converting
+        if(isset($validated['selectedUnitWind']) && $validated['selectedUnitWind'] === "mph") {
+            $neededConversions[] = "mphToMs";
+        }
+        // check if units need converting
+        if(isset($validated['selectedUnitRain']) && $validated['selectedUnitRain'] === "inch") {
+            $neededConversions[] = "inchToMm";
+        }
+
+        return $neededConversions;
     }
 
 }
