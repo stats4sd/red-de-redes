@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-class UnitConversions
+class UnitConversionService
 {
 
     public static function getTempColumns()

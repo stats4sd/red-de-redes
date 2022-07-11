@@ -7,7 +7,7 @@ use App\Models\Met\File;
 use App\Models\Met\MetData;
 use App\Models\Met\MetDataPreview;
 use App\Models\User;
-use App\Services\UnitConversions;
+use App\Services\UnitConversionService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -44,7 +44,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
     private int $stationId;
     private string $upload_id;
     private mixed $file_id;
-    private UnitConversions $unitConvertor;
+    private UnitConversionService $unitConvertor;
     private Collection $neededConversions;
 
     use RemembersRowNumber;
@@ -71,7 +71,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
         $this->user = $user;
 
         $this->neededConversions = $neededConversions;
-        $this->unitConvertor = new UnitConversions();
+        $this->unitConvertor = new UnitConversionService();
 
 
     }
