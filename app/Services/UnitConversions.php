@@ -11,7 +11,15 @@ class UnitConversions
             'temperatura_externa',
             'hi_temp',
             'low_temp',
-            'temperatura_interna'
+            'temperatura_interna',
+            'leaf_temp_1',
+            'leaf_temp_2',
+            'leaf_temp_3',
+            'leaf_temp_4',
+            'soil_temp_1',
+            'soil_temp_2',
+            'soil_temp_3',
+            'soil_temp_4',
         ]);
     }
 
@@ -34,7 +42,7 @@ class UnitConversions
     {
         return collect([
             'rain',
-            'lluvia_hora'
+            'lluvia_hora',
         ]);
     }
 
