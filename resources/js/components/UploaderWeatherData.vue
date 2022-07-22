@@ -151,6 +151,8 @@
                                 <div class="alert alert-secondary" v-if="previewData!=null">
                                     <ul>
                                         <li>Hay {{ total_rows }} filas</li>
+                                        <li>Fecha hora mínima de los registros:<b> {{ min_fecha_hora }} </b></li>
+                                        <li>Fecha hora máxima de los registros:<b> {{ max_fecha_hora }} </b></li>
                                         <li>Temperatura mínima de los registros:<b> {{ min_temp }} ºC</b></li>
                                         <li>Temperatura máxima de los registros:<b> {{ max_temp }} ºC</b></li>
                                         <li>Precipitación máxima diaria de registros:<b> {{ max_daily_rain }} mm</b></li>
@@ -328,6 +330,8 @@ export default {
     data() {
         this.trackProgress = _.debounce(this.trackProgress, 1000);
         return {
+            min_fecha_hora: null,
+            max_fecha_hora: null,
             max_temp: null,
             min_temp: null,
             max_daily_rain: null,
@@ -633,6 +637,8 @@ export default {
                     this.total_rows = payload.data.met_data_preview.total;
                     this.previewData = payload.data.met_data_preview.data;
                     this.upload_id = (this.previewData[0]['upload_id']);
+                    this.min_fecha_hora = payload.data.min_fecha_hora;
+                    this.max_fecha_hora = payload.data.max_fecha_hora;
                     this.min_temp = payload.data.min_temp;
                     this.max_temp = payload.data.max_temp;
                     this.max_daily_rain = payload.data.max_daily_rain;
