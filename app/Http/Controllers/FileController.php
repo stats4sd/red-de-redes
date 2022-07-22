@@ -173,9 +173,8 @@ class FileController extends Controller
     public function cancelUpload($upload_id)
     {
 
-        if ($upload_id) {
-            DB::table('met_data_preview')->where('upload_id', '=', $upload_id)->delete();
-        }
+        // For traceability and consistency, do not remove met_data_preview records no matter user click "Cancel" or "Confirm" button
+        // For housekeeping and performance concern, met_data_preview records older than 14 days will be removed by daily schedule job
 
         Alert::add('info', 'Carga cancelada: todos los datos de la vista previa se han eliminado de la base de datos')->flash();
 
