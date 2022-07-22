@@ -30,6 +30,9 @@ class Kernel extends ConsoleKernel
             $schedule->job(new UpdateFormCsvFiles($xlsform))
             ->daily();
         }
+
+        // daily schedule job to remove met_data_preview records older than 14 days
+        $schedule->command('metdatapreview_housekeeping')->dailyAt('08:19');
     }
 
     /**
