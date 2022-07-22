@@ -10,8 +10,11 @@ selected_start_year <- args[3]
 selected_end_year <- ifelse(selected_aggregation=="senamhi_daily", selected_start_year, args[4])
 selected_variable <- args[5]
 
+# Chart shows month "01" of next year when end date on or after 15 Dec of this year.
+# Tried to set end date as 31 December of this year, data between 31 December 00:00:00 and 23:59:59 are not included.
+# In order to show data on 31 December, we need to set end data as 1 Jan of next year.
 date_start <- as.Date(paste0(selected_start_year,"-1-1"))
-date_end <- as.Date(paste0(selected_end_year,"-12-1"))
+date_end <- as.Date(paste0(strtoi(selected_end_year) + 1,"-1-1"))
 
 dotenv::load_dot_env("../../.env")
 
