@@ -85,10 +85,10 @@ stopmissing <- c(50,50,50)
 for(i in 1:length(stations)) {
   
   station_data <- data %>%
-                    filter(Station.Number==i)
+                    filter(Station.Number==stations[i])
   
   station_constants <- as.list(stations_constants %>%
-                                filter(Station.Number==i))
+                                filter(Station.Number==stations[i]))
   
   constants <- c(station_constants, defaultconstants)                       
   
