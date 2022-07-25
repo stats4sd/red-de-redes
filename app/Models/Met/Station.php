@@ -19,12 +19,6 @@ class Station extends Model
     protected $table = 'stations';
     protected $guarded = ['id'];
 
-    protected $fakeColumns = ['constants'];
-
-    protected $casts = [
-        'constants' => 'array'
-    ];
-
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

@@ -68,10 +68,10 @@ stations_table <- tbl(con, "stations")
 
 stations_constants <- stations_table %>%
                         filter(id %in% stations) %>%
-                        select(id, latitude, altitude, constants) %>%
-                        collect() %>%
                         mutate(lat_rad = latitude*pi/180) %>%
-                        rename(lat = latitude, Elev = altitude, Station.Number = id)
+                        select(id, lat_rad, altitude, height_wind) %>%
+                        collect() %>%
+                        rename(Elev = altitude, z = height_wind, Station.Number = id)
 
 
 ## Required for processing inputs
@@ -87,16 +87,10 @@ for(i in 1:length(stations)) {
   station_data <- data %>%
                     filter(Station.Number==i)
   
-  station_constants <- stations_constants %>%
-                          filter(Station.Number==i)
+  station_constants <- as.list(stations_constants %>%
+                                filter(Station.Number==i))
   
-  station_constants_list <- as.list(as.data.frame(fromJSON(station_constants$constants)) %>%
-                             add_column(lat=station_constants$lat,
-                                        lat_rad=station_constants$lat_rad,
-                                        Elev=station_constants$Elev) %>%
-                             lapply(as.numeric))
-  
-  constants <- c(station_constants_list, defaultconstants)                       
+  constants <- c(station_constants, defaultconstants)                       
   
   processed_station_data <- ReadInputs(varnames,
                                        station_data,
