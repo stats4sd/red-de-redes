@@ -34,7 +34,7 @@ daily_data <- daily_data_table %>%
 station_dates <- daily_data$station_date
 
 
-## Get the required sub daily data and process for calculation
+## Get the required sub daily data
 
 met_data_table <- tbl(con, "met_data")
 
@@ -49,42 +49,20 @@ data <- met_data_table %>%
           filter(station_date %in% station_dates) %>%
           select(station_id, Hour, Day, Month, Year, temperatura_externa,
                  punto_rocio, humedad_externa, velocidad_viento, solar_rad) %>%
-          collect()
-
-tmax <- data %>% 
-          group_by(station_id, Year, Month, Day) %>%
-          summarise(Tmax=max(temperatura_externa))
-
-tmin <- data %>% 
-          group_by(station_id, Year, Month, Day) %>%
-          summarise(Tmin=min(temperatura_externa))
-
-rhmax <- data %>% 
-          group_by(station_id, Year, Month, Day) %>%
-          summarise(RHmax=max(humedad_externa))
-
-rhmin <- data %>% 
-          group_by(station_id, Year, Month, Day) %>%
-          summarise(RHmin=max(humedad_externa))
-
-processed_data <- data %>%
-                    left_join(tmax, by=c("station_id", "Year", "Month", "Day")) %>%
-                    left_join(tmin, by=c("station_id", "Year", "Month", "Day")) %>%
-                    left_join(rhmax, by=c("station_id", "Year", "Month", "Day")) %>%
-                    left_join(rhmin, by=c("station_id", "Year", "Month", "Day")) %>%
-                    rename(Station.Number = station_id,
-                           Temp = temperatura_externa,
-                           Tdew = punto_rocio,
-                           RH = humedad_externa,
-                           uz = velocidad_viento,
-                           Rs = solar_rad
-                    ) %>%
-                    drop_na()
+          collect() %>%
+          rename(Station.Number = station_id,
+                 Temp = temperatura_externa,
+                 Tdew = punto_rocio,
+                 RH = humedad_externa,
+                 uz = velocidad_viento,
+                 Rs = solar_rad
+          ) %>%
+          drop_na()
 
 
 ## Get station data
 
-stations <- unique(processed_data$station_id)
+stations <- unique(data$Station.Number)
 
 stations_table <- tbl(con, "stations")
 
@@ -93,20 +71,26 @@ stations_constants <- stations_table %>%
                         select(id, latitude, altitude, constants) %>%
                         collect() %>%
                         mutate(lat_rad = latitude*pi/180) %>%
-                        rename(lat = latitude, Elev = altitude, station_id = id)
+                        rename(lat = latitude, Elev = altitude, Station.Number = id)
+
+
+## Required for processing inputs
+
+varnames <- colnames(data)
+stopmissing <- c(50,50,50)
 
 
 ## Loop through stations, calculate ET, send results to database
 
 for(i in 1:length(stations)) {
   
-  station_data <- as.list(processed_data %>%
-                            filter(Station.Number==i))
+  station_data <- data %>%
+                    filter(Station.Number==i)
   
   station_constants <- stations_constants %>%
                           filter(Station.Number==i)
   
-  station_constants_list <- as.list(as.data.frame(fromJSON(stations_constants$constants)) %>%
+  station_constants_list <- as.list(as.data.frame(fromJSON(station_constants$constants)) %>%
                              add_column(lat=station_constants$lat,
                                         lat_rad=station_constants$lat_rad,
                                         Elev=station_constants$Elev) %>%
@@ -114,10 +98,22 @@ for(i in 1:length(stations)) {
   
   constants <- c(station_constants_list, defaultconstants)                       
   
-  results <- ET.PenmanMonteith(station_data,
+  processed_station_data <- ReadInputs(varnames,
+                                       station_data,
+                                       constants,
+                                       stopmissing, 
+                                       timestep = "subdaily",
+                                       interp_missing_days = FALSE,
+                                       interp_missing_entries = FALSE,
+                                       interp_abnormal = FALSE,
+                                       missing_method = NULL,
+                                       abnormal_method = NULL,
+                                       message = "yes")
+  
+  results <- ET.PenmanMonteith(processed_station_data,
                                constants,
                                ts="daily",
-                               solar="sunshine hours",
+                               solar="data",
                                wind="yes",
                                crop = "short",
                                message="yes",
