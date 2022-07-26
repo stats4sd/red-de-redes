@@ -74,12 +74,6 @@ stations_constants <- stations_table %>%
                         rename(Elev = altitude, z = height_wind, Station.Number = id)
 
 
-## Required for processing inputs
-
-varnames <- colnames(data)
-stopmissing <- c(50,50,50)
-
-
 ## Loop through stations, calculate ET, send results to database
 
 for(i in 1:length(stations)) {
@@ -92,10 +86,10 @@ for(i in 1:length(stations)) {
   
   constants <- c(station_constants, defaultconstants)                       
   
-  processed_station_data <- ReadInputs(varnames,
+  processed_station_data <- ReadInputs(varnames = colnames(data),
                                        station_data,
                                        constants,
-                                       stopmissing, 
+                                       stopmissing = c(50,50,50), 
                                        timestep = "subdaily",
                                        interp_missing_days = FALSE,
                                        interp_missing_entries = FALSE,
@@ -106,17 +100,17 @@ for(i in 1:length(stations)) {
   
   results <- ET.PenmanMonteith(processed_station_data,
                                constants,
-                               ts="daily",
-                               solar="data",
-                               wind="yes",
+                               ts = "daily",
+                               solar = "data",
+                               wind = "yes",
                                crop = "short",
-                               message="yes",
-                               AdditionalStats="yes",
-                               save.csv="no")
+                               message = "yes",
+                               AdditionalStats = "yes",
+                               save.csv = "no")
   
   evapo_results <- data.frame(results$ET.Daily) %>%
                       rownames_to_column("fecha") %>%
-                      rename("evapo"="results.ET.Daily")
+                      rename("evapo" = "results.ET.Daily")
   
   for(row in 1:nrow(evapo_results)) {
     query <- paste0("UPDATE daily_met_data SET evapotran = ", evapo_results$evapo[row], " WHERE station_id = '", stations[i], "' AND fecha = '", evapo_results$fecha[row], "';")
