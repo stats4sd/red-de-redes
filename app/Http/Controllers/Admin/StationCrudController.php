@@ -75,6 +75,11 @@ class StationCrudController extends CrudController
                 'label' => 'Altitud',
                 'type' => 'decimal',
             ],
+            [
+                'name' => 'height_wind',
+                'label' => 'Altura del instrumento de viento',
+                'type' => 'decimal',
+            ],
         ]);
 
         $this->crud->addFields([
@@ -82,13 +87,11 @@ class StationCrudController extends CrudController
                 'name' => 'hardware_id',
                 'label' => 'Hardware ID',
                 'type' => 'text',
-                'tab' => 'Información básica',
             ],
             [
                 'name' => 'label',
                 'label' => 'Label',
                 'type' => 'text',
-                'tab' => 'Información básica',
             ],
             [
                 'name' => 'type',
@@ -97,36 +100,31 @@ class StationCrudController extends CrudController
                 'options' => ['davis' => 'Davis', 'chinas' => 'Chinas'],
                 'allows_null' => false,
                 'default' => 'davis',
-                'tab' => 'Información básica',
             ],
             [
                 'name' => 'latitude',
                 'label' => 'Latitud',
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
-                'tab' => 'Información básica',
             ],
             [
                 'name' => 'longitude',
                 'label' => 'Longitud',
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
-                'tab' => 'Información básica',
             ],
             [
                 'name' => 'altitude',
                 'label' => 'Altitud',
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
-                'tab' => 'Información básica',
             ],
             [
-                'name' => 'wind_height',
+                'name' => 'height_wind',
                 'label' => 'Altura del instrumento de viento',
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
                 'hint' => 'Medida en metros',
-                'tab' => 'Evapotranspiración',
             ],
         ]);
         // add asterisk for fields that are required in StationRequest
