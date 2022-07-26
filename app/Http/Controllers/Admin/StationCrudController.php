@@ -86,6 +86,16 @@ class StationCrudController extends CrudController
                 'label' => 'Altitud',
                 'type' => 'decimal',
             ],
+            [
+                'name' => 'weatherunderground_url',
+                'label' => 'URL Weather Underground ',
+                'type' => 'url',
+                'wrapper'   => [
+                    'href' => function ($crud, $column, $entry) {
+                        return $entry->weatherunderground_url;
+                    },
+                ]
+            ],
 
         ]);
 
@@ -135,6 +145,11 @@ class StationCrudController extends CrudController
                 'label' => 'Altitud',
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
+            ],
+            [
+                'name' => 'weatherunderground_url',
+                'label' => 'URL Weather Underground ',
+                'type' => 'url',
             ],
 
         ]);
