@@ -87,6 +87,11 @@ class StationCrudController extends CrudController
                 'type' => 'decimal',
             ],
             [
+                'name' => 'height_wind',
+                'label' => 'Altura del instrumento de viento',
+                'type' => 'decimal',
+            ],
+            [
                 'name' => 'weatherunderground_url',
                 'label' => 'URL Weather Underground ',
                 'type' => 'url',
@@ -96,7 +101,6 @@ class StationCrudController extends CrudController
                     },
                 ]
             ],
-
         ]);
 
         $this->crud->addFields([
@@ -130,9 +134,7 @@ class StationCrudController extends CrudController
                 'name' => 'latitude',
                 'label' => 'Latitud',
                 'type' => 'number',
-                // optionals
                 'attributes' => ["step" => "any"], // allow decimals
-
             ],
             [
                 'name' => 'longitude',
@@ -147,11 +149,17 @@ class StationCrudController extends CrudController
                 'attributes' => ["step" => "any"], // allow decimals
             ],
             [
+                'name' => 'height_wind',
+                'label' => 'Altura del instrumento de viento',
+                'type' => 'number',
+                'attributes' => ["step" => "any"], // allow decimals
+                'hint' => 'Medida en metros',
+            ],
+            [
                 'name' => 'weatherunderground_url',
                 'label' => 'URL Weather Underground ',
                 'type' => 'url',
             ],
-
         ]);
         // add asterisk for fields that are required in StationRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
