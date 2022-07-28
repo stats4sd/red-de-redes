@@ -86,7 +86,11 @@ class StationCrudController extends CrudController
                 'label' => 'Altitud',
                 'type' => 'decimal',
             ],
-
+            [
+                'name' => 'height_wind',
+                'label' => 'Altura del instrumento de viento',
+                'type' => 'decimal',
+            ],
         ]);
 
         $this->crud->addFields([
@@ -120,9 +124,7 @@ class StationCrudController extends CrudController
                 'name' => 'latitude',
                 'label' => 'Latitud',
                 'type' => 'number',
-                // optionals
                 'attributes' => ["step" => "any"], // allow decimals
-
             ],
             [
                 'name' => 'longitude',
@@ -136,7 +138,13 @@ class StationCrudController extends CrudController
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
             ],
-
+            [
+                'name' => 'height_wind',
+                'label' => 'Altura del instrumento de viento',
+                'type' => 'number',
+                'attributes' => ["step" => "any"], // allow decimals
+                'hint' => 'Medida en metros',
+            ],
         ]);
         // add asterisk for fields that are required in StationRequest
         $this->crud->setRequiredFields(StoreRequest::class, 'create');
