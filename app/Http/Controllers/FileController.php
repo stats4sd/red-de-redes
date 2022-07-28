@@ -2,207 +2,102 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MetDataImportCompleted;
+use App\Events\MetDataImportFailed;
+use App\Events\MetDataImportStarted;
+use App\Http\Requests\FileRequest;
+use App\Imports\DavisFileHeaderValidation;
+use App\Imports\DavisFileImport;
+use App\Imports\PreProcessDavisHeaders;
+use App\Jobs\MetDataImportCompletedJob;
+use App\Jobs\StartMetDataImport;
 use App\Models\Met\File;
-use DB;
+use App\Models\Met\MetData;
+use App\Models\Met\Station;
 use App\Models\Met\Daily;
-use App\Models\Met\Observation;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use \GuzzleHttp\Client;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Met\MetDataPreview;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use JsonException;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
+use Prologue\Alerts\Facades\Alert;
 use Symfony\Component\Process\Process;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class FileController extends Controller
 {
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return JsonResponse
+     * @throws JsonException
      */
-    public function store(Request $request): JsonResponse
+    public function store(FileRequest $request): JsonResponse
     {
-        // TODO: Update with proper validation
-        $newObservation_id = "null";
-        $station = $request->selectedStation ?? null ;
+        // create File Record
+        $validated = $request->validated();
+
+        // get observation file details
+        $observationFile = $validated['observationFile'] ?? null;
+        $observationFileName = isset($validated['observationFile']) ? $validated['observationFile']->getClientOriginalName() : null;
+
+        $fileRecord = File::create([
+            'data_file' => $validated['data_file'],
+            'name' => $validated['data_file']->getClientOriginalName(),
+            // original name is now (potentially) legacy?
+            'original_name' => $validated['data_file']->getClientOriginalName(),
+            'observation_file' => $observationFile,
+            'observation_file_name' => $observationFileName,
+            'station_id' => $validated['station_id'],
+            'uploader_id' => Auth::id(),
+            'upload_id' => $this->generateRandomString(),
+        ]);
+
+        $conversionsNeeded = $this->checkForNeededConversions($validated);
 
 
-        $station = $request->selectedStation;
-        if ($request->hasFile('data-filesObservation')) {
-            // handle file and store it for prosperity
-            $filesObservation = $request->file('data-filesObservation');
-            $filesObservation_name = str_replace(" ", "_", $filesObservation->getClientOriginalName());
-            $observation_name = time() . '_' . $filesObservation_name;
-            $path = $filesObservation->storeAs('observationFiles', $observation_name);
-            $newObservation = new Observation;
-            $newObservation->files = $path;
-            $newObservation->save();
+        // upload data to met_data_preview table
+        if (Station::find($fileRecord['station_id'])->type === 'davis') {
+            $processor = (new PreProcessDavisHeaders());
+            [$fileWithMergedHeaders, $headerValidationFile, $count] = $processor($fileRecord->data_file);
 
-            // refresh it from the database to retrieve ID
-            $newObservation->refresh();
-            $newObservation_id = $newObservation->id;
+            $fileRecord->update(['total_records_count' => $count]);
+
+
+            // check headers are valid **before** running the entire import process queue.
+            Excel::import(new DavisFileHeaderValidation(), $headerValidationFile, 'public', \Maatwebsite\Excel\Excel::TSV);
+
+            // for some reason, running Excel::import followed by Excel::queueImport on the same thread causes an error:
+            // ("serialize(): &quot;spreadsheet&quot; returned as member variable from __sleep() but does not exist")
+
+            // to get around this, we dispatch a new job that handles the setup of the Excel::queueImport() process...
+            StartMetDataImport::dispatch($fileRecord, $fileWithMergedHeaders, $conversionsNeeded, Auth::user());
 
         }
 
-
-        if ($request->hasFile('data-file')) {
-            // handle file and store it for prosperity
-            $file = $request->file('data-file');
-            $file_name = str_replace(" ", "_", $file->getClientOriginalName());
-            $name = time() . '_' . $file_name;
-            $path = $file->storeAs('rawfiles', $name);
-            $newFile = new File;
-            $newFile->path = $path;
-            $newFile->name = $name;
-            $newFile->station_id = $station;
-            $newFile->save();
-            $scriptName = 'uploadDatapreview.py';
-            $scriptPath = base_path() . '/scripts/' . $scriptName;
-            $path_name = Storage::path("/") . $path;
-            $uploader_id = $this->generateRandomString();
-
-            //python script accepts 3 arguments in this order: scriptPath, path_name, station_id
-            if ($request->hasFile('data-filesObservation')) {
-                $newObservation_id = $newObservation->id;
-            } else {
-                $newObservation_id = "null";
-            }
-
-
-            if (config('app.pipenv')) {
-                $isWindows = 0;
-                //dd(collect(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $isWindows, $newObservation_id])->join(" "));
-                $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $isWindows, $newObservation_id]);
-            } else {
-                $isWindows = 1;
-                $process = new Process(['python', $scriptPath, $path_name, $station, $request->selectedUnitTemp, $request->selectedUnitPres, $request->selectedUnitWind, $request->selectedUnitRain, $uploader_id, $isWindows, $newObservation_id]);
-            }
-
-            $process->setWorkingDirectory(base_path());
-
-            $process->run();
-
-            Log::info($process->getOutput());
-
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
-            }
-
-            $metDataPreview = MetDataPreview::where('uploader_id', '=', $uploader_id)->orderBy('id')->paginate(10);
-
-            // $error_data = $this->checkValues($uploader_id);
-
-
-            // check number of uploaded records
-            $sqlUploadedRecords = " SELECT COUNT(*) as number_of_records FROM met_data_preview WHERE uploader_id = '" . $uploader_id . "';";
-
-            // execute custom SELECT SQL
-            $uploadedRecordsResults = DB::select($sqlUploadedRecords);
-            $numberUploadedRecords = $uploadedRecordsResults[0]->number_of_records;
-
-
-            // check number of records already existed in database
-            $sqlExistedRecords = " SELECT COUNT(*) as number_of_records";
-            $sqlExistedRecords .= " FROM met_data ta, met_data_preview tb";
-            $sqlExistedRecords .= " WHERE tb.uploader_id = '" . $uploader_id . "'";
-            $sqlExistedRecords .= " AND ta.fecha_hora = tb.fecha_hora";
-            $sqlExistedRecords .= " AND ta.station_id = tb.station_id;";
-
-            // execute custom SELECT SQL
-            $existedRecordsResults = DB::select($sqlExistedRecords);
-            $numberExistedRecords = $existedRecordsResults[0]->number_of_records;
-
-
-            // number of not existed records = number of uploaded records - number of existed records
-            $numberNotExistedRecords = $numberUploadedRecords - $numberExistedRecords;
-
-
-            // prepare advice message
-            $scenario = 0;
-            $adviceMessage = "";
-
-            if ($numberNotExistedRecords == $numberUploadedRecords) {
-                $scenario = 1;
-                $adviceMessage = "All " . $numberUploadedRecords . " record(s) are new records. Please kindly confirm to upload this data file.";
-            } else if ($numberExistedRecords == $numberUploadedRecords) {
-                $scenario = 2;
-                $adviceMessage = "All " . $numberExistedRecords . " record(s) are already existed in system. Please kindly cancel this upload.";
-            } else {
-                $scenario = 3;
-                $adviceMessage = $numberExistedRecords . " out of " . $numberUploadedRecords . " records are already existed in system. Please kindly tick below checkbox to confirm uploading non existed records or cancel this upload to further check data file correctness.";
-            }
-
-
-            return response()->json([
-                'met_data_preview' => $metDataPreview,
-                'number_uploaded_records' => $numberUploadedRecords,
-                'number_existed_records' => $numberExistedRecords,
-                'number_not_existed_records' => $numberNotExistedRecords,
-                'scenario' => $scenario,
-                'adviceMessage' => $adviceMessage,
-                'error_data' => null
-
-            ]);
-        }
-
-        abort(500, 'request did not contain a file - please check that the file was correctly attached');
-
-
-        // Send file onto cloud function
+        return response()->json(['started']);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @throws Exception
      */
-    public function show($id)
+    public function status($upload_id)
     {
-        //
+
+        return response([
+            'started' => filled(cache("start_date_$upload_id")),
+            'finished' => filled(cache("end_date_$upload_id")),
+            'current_row' => cache("current_row_$upload_id"),
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function checkValues($uploader_id)
+    public function checkValues($upload_id)
     {
         $error_date = [];
         $error_temp = false;
@@ -211,7 +106,7 @@ class FileController extends Controller
         $error_rain = false;
 
 
-        $daily_preview = DB::table('daily_data_preview')->where('uploader_id', '=', $uploader_id)->get();
+        $daily_preview = DB::table('daily_data_preview')->where('uploader_id', '=', $upload_id)->get();
 
         foreach ($daily_preview as $key => $value) {
 
@@ -249,7 +144,7 @@ class FileController extends Controller
             }
         }
 
-        $error_data = MetDataPreview::whereIn('fecha_hora',$error_date)->where('uploader_id', '=', $uploader_id)->get();
+        $error_data = MetDataPreview::whereIn('fecha_hora', $error_date)->where('uploader_id', '=', $upload_id)->get();
 
         return response([
 
@@ -279,9 +174,14 @@ class FileController extends Controller
 
 
     // when user click "Cancel" button, remove staging records in table met_data_preview
-    public function cleanTable($uploader_id)
+    public function cancelUpload($upload_id)
     {
-        DB::table('met_data_preview')->where('uploader_id', '=', $uploader_id)->delete();
+
+        if ($upload_id) {
+            DB::table('met_data_preview')->where('upload_id', '=', $upload_id)->delete();
+        }
+
+        Alert::add('info', 'Carga cancelada: todos los datos de la vista previa se han eliminado de la base de datos')->flash();
 
         return Redirect::back();
 
@@ -290,41 +190,90 @@ class FileController extends Controller
 
     // when user click "Confirm" button, run Python program to "move" staging records from
     // met_data_preview table to data table
-    public function storeFile($uploader_id)
+    public function storeFile($upload_id)
     {
-
-        $scriptPath = base_path() . '/scripts/storeData.py';
-
-        if (config('app.pipenv')) {
-            $process = new Process(['pipenv', 'run', 'python3', $scriptPath, $uploader_id]);
-        } else {
-            $process = new Process(['python', $scriptPath, $uploader_id]);
-        }
-
-        $process->run();
-
-        // write Python log message to Laravel log file
-        Log::info($process->getOutput());
+        $columns = collect(
+            MetDataPreview::where('upload_id', $upload_id)
+                ->first()
+                ->getAttributes()
+        )->keys();
 
 
-        if (!$process->isSuccessful()) {
+        // remove upload_id from column list
+        $columns = $columns->filter(fn($value, $key) => $value !=="upload_id" && $value !== "id");
 
-            throw new ProcessFailedException($process);
+        $newDataQuery = MetDataPreview::select($columns->toArray())->where('upload_id', $upload_id);
 
-            return response()->json(['error' => 'Los datos no se pueden guardar en la base de datos. Recomendamos verificar si hay duplicados']);
 
-        } else {
+        //avoid pulling all records into memory, so do the transfer via db:
+        // need to use raw SQL for the "IGNORE" part...
+        DB::insert("INSERT IGNORE INTO met_data (" . $columns->join(', ') . ") " . $newDataQuery->toSql(), $newDataQuery->getBindings());
 
-            $process->getOutput();
 
-            return response()->json(['success' => 'Los datos han sido ingresados exitosamente.']);
-        }
-        Log::info("python done.");
-        Log::info($process->getOutput());
+        // confirm records are in database;
+        $fileRecord = File::firstWhere('upload_id', $upload_id);
+        $metDataCount = MetData::where('file_id', $fileRecord->id)->count();
 
+
+        // update file reference to mark it as successful, for future review;
+        $fileRecord->update([
+            'is_success' => 1
+        ]);
+
+        $maxDate = MetData::where('file_id', $fileRecord->id)->max('fecha_hora');
+        $minDate = MetData::where('file_id', $fileRecord->id)->min('fecha_hora');
+
+        $maxDate = (new Carbon($maxDate))->toDateString();
+        $minDate = (new Carbon($minDate))->toDateString();
+
+        $result = \DB::select(
+            "call generate_daily_met_data_by_date_range(?, ?, ?);",
+            [$minDate, $maxDate, $fileRecord->station_id]
+        );
+
+
+        Alert::add('success', "Carga completa. Todos los registros {$metDataCount} se almacenan en la base de datos y se han calculado los resúmenes diarios.")->flash();
 
         return Redirect::back();
+    }
 
+    /**
+     * Checks through the selected units and lists the required conversions needed for the data in the file.
+     * @param array $validated
+     * @return array
+     */
+    private function checkForNeededConversions(array $validated): Collection
+    {
+        $neededConversions = collect([]);
+        // check if units need converting
+        if(isset($validated['selectedUnitTemp']) && $validated['selectedUnitTemp'] === "ºF") {
+            $neededConversions[] = "farenheitToCelcius";
+        }
+
+        // check if units need converting
+        if(isset($validated['selectedUnitPres']) && $validated['selectedUnitPres'] === "inhg") {
+            $neededConversions[] = "inhgToHpa";
+        }
+
+        // check if units need converting
+        if(isset($validated['selectedUnitPres']) && $validated['selectedUnitPres'] === "mmhg") {
+            $neededConversions[] = "mmhgToHpa";
+        }
+
+        // check if units need converting
+        if(isset($validated['selectedUnitWind']) && $validated['selectedUnitWind'] === "km/h") {
+            $neededConversions[] = "kmhToMs";
+        }
+        // check if units need converting
+        if(isset($validated['selectedUnitWind']) && $validated['selectedUnitWind'] === "mph") {
+            $neededConversions[] = "mphToMs";
+        }
+        // check if units need converting
+        if(isset($validated['selectedUnitRain']) && $validated['selectedUnitRain'] === "inch") {
+            $neededConversions[] = "inchToMm";
+        }
+
+        return $neededConversions;
     }
 
 }

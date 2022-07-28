@@ -31,10 +31,12 @@ stations_table <- tbl(con, "stations") %>%
 Encoding(stations_table$label) <- "UTF-8"
 stations_table$id <- as.character(stations_table$id)
 
-daily_met_data_table <- tbl(con, "daily_met_data")
+daily_met_data_table <- tbl(con, "daily_met_data") %>%
+    filter(actual_no_of_records != 0)
+
 
 if(selected_aggregation%in%c("senamhi_daily", "senamhi_monthly")){
-  
+
     variable <- c("max_temperatura_interna", "min_temperatura_interna", "avg_temperatura_interna",
                 "max_temperatura_externa","min_temperatura_externa", "avg_temperatura_externa",
                 "max_humedad_interna", "min_humedad_interna", "avg_humedad_interna",
@@ -44,7 +46,7 @@ if(selected_aggregation%in%c("senamhi_daily", "senamhi_monthly")){
                 "max_velocidad_viento", "min_velocidad_viento", "avg_velocidad_viento",
                 "max_sensacion_termica", "min_sensacion_termica","avg_sensacion_termica",
                 "lluvia_24_horas_total")
-  
+
     label <- c("Temperatura M\U00E1xima Interna (\u00b0C)", "Temperatura M\U00EDnima Interna (\u00b0C)", "Temperatura Media Interna (\u00b0C)",
              "Temperatura M\U00E1xima Externa (\u00b0C)", "Temperatura M\U00EDnima Interna (\u00b0C)", "Temperatura Media Interna (\u00b0C)",
              "Humedad M\U00E1xima Interna %", "Humedad M\U00EDnima Interna %", "Humedad Media Interna %",
@@ -54,11 +56,11 @@ if(selected_aggregation%in%c("senamhi_daily", "senamhi_monthly")){
              "Velocidad Viento M\U00E1xima (m/s)", "Velocidad Viento M\U00EDnima (m/s)", "Velocidad Viento Media (m/s)",
              "Sensaci\U00F3n T\U00E9rmica M\U00E1xima (\u00b0C)", "Sensaci\U00F3n T\U00E9rmica M\U00EDnima (\u00b0C)", "Sensaci\U00F3n T\U00E9rmica Media (\u00b0C)",
              "Precipitaci\U00F3n Diaria (mm)")
-  
+
     selected_variable_label <- data.frame(variable,label) %>%
                                 filter(variable==selected_variable) %>%
                                 select(2)
-    
+
     data <- daily_met_data_table %>%
               mutate(year=sql(YEAR(fecha))) %>%
               filter(station_id%in%selected_station) %>%
@@ -97,7 +99,7 @@ if(selected_aggregation%in%c("senamhi_daily", "senamhi_monthly")){
 png(filename="inventario.png", width = 1000, height = 500, units = "px")
 
 if(selected_aggregation=="senamhi_daily"){
-  
+
     data %>%
         ggplot(aes(x = fecha, y = station, fill = variable_na)) +
         geom_raster(alpha = 0.9) +
@@ -121,7 +123,7 @@ if(selected_aggregation=="senamhi_daily"){
         theme(legend.position = "bottom")
 
 } else if (selected_aggregation=="senamhi_monthly" && selected_start_year!=selected_end_year){
-  
+
     data %>%
       ggplot(aes(x = fecha, y = station, fill = variable_na)) +
       geom_raster(alpha = 0.9) +
@@ -131,9 +133,9 @@ if(selected_aggregation=="senamhi_daily"){
       theme_minimal() +
       theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 12), axis.title = element_text(size = 12), legend.text=element_text(size = 12)) +
       theme(legend.position = "bottom")
-  
+
 } else if (selected_aggregation%in%c("daily_data", "tendays_data", "monthly_data", "yearly_data") && selected_start_year==selected_end_year){
-  
+
   data %>%
     ggplot(aes(x = fecha, y = factor(station, levels = rev(levels(factor(station)))), fill = data_na)) +
     geom_raster(alpha = 0.9) +
@@ -143,7 +145,7 @@ if(selected_aggregation=="senamhi_daily"){
     theme_minimal() +
     theme(plot.title = element_text(hjust = 0, size = 15, margin=margin(0,0,30,0)), axis.text = element_text(size = 12), axis.title = element_text(size = 12), legend.text=element_text(size = 12)) +
     theme(legend.position = "bottom")
-  
+
 } else {
 
     data %>%

@@ -20,8 +20,6 @@ class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
     // constructor to set HTTP request object to private variable
     public function __construct(array $query = null)
     {
-        logger("MonthlyMetDataExport.construct() starts...");
-
         $this->query = $query;
 
         $this->fields = [
@@ -77,6 +75,7 @@ class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
             $monthlyMetData->max_humedad_interna,
             $monthlyMetData->min_humedad_interna,
             $monthlyMetData->avg_humedad_interna,
+            $monthlyMetData->max_temperatura_externa,
             $monthlyMetData->min_temperatura_externa,
             $monthlyMetData->avg_temperatura_externa,
             $monthlyMetData->max_humedad_externa,
@@ -138,7 +137,7 @@ class MonthlyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
 
     public function title(): string
     {
-        return 'Monthly Met Data';
+        return 'Datos';
     }
 
     public function headings(): array

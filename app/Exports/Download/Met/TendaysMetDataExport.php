@@ -23,8 +23,6 @@ class TendaysMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
     // constructor to set HTTP request object to private variable
     public function __construct(array $query = null)
     {
-        logger("TendaysMetDataExport.construct() starts...");
-
         $this->query = $query;
 
         $this->fields = [
@@ -82,6 +80,7 @@ class TendaysMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
             $tendaysMetData->max_humedad_interna,
             $tendaysMetData->min_humedad_interna,
             $tendaysMetData->avg_humedad_interna,
+            $tendaysMetData->max_temperatura_externa,
             $tendaysMetData->min_temperatura_externa,
             $tendaysMetData->avg_temperatura_externa,
             $tendaysMetData->max_humedad_externa,
@@ -144,7 +143,7 @@ class TendaysMetDataExport implements FromQuery, WithTitle, WithHeadings, WithSt
 
     public function title(): string
     {
-        return 'Tendays Met Data';
+        return 'Datos';
     }
 
     public function headings(): array

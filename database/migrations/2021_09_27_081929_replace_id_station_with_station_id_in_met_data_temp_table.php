@@ -13,9 +13,11 @@ class ReplaceIdStationWithStationIdInMetDataTempTable extends Migration
      */
     public function up()
     {
-        Schema::table('met_data_preview', function (Blueprint $table) {
-            $table->renameColumn('id_station', 'station_id');
-        });
+        if (Schema::hasColumn('met_data_preview', 'id_station')) {
+            Schema::table('met_data_preview', function (Blueprint $table) {
+                $table->renameColumn('id_station', 'station_id');
+            });
+        }
     }
 
     /**

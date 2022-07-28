@@ -1,12 +1,15 @@
 <!-- This file is used to store sidebar items, starting with Backpack\Base 0.9.0 -->
 
-<li class='nav-item'><a class='nav-link' href="{{ backpack_url('dashboard') }}"><i class="nav-icon fa fa-dashboard"></i> {{ trans('backpack::base.dashboard') }}</a></li>
+<!-- <li class='nav-item'><a class='nav-link' href="{{ backpack_url('dashboard') }}"><i class="nav-icon fa fa-dashboard"></i> {{ trans('backpack::base.dashboard') }}</a></li> -->
 
-<h4 class='nav-item nav-link text-white mt-3'>Datos Meteorlógicos</h4>
-<li class='nav-item'><a class='nav-link' href="{{ backpack_url('station') }}"><i class="nav-icon fas fa-broadcast-tower"></i> Estaciones</a></li>
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('met_raw_data') }}'><i class='nav-icon fas fa-cloud-sun-rain'></i> Datos Meteorlógicos</a></li>
 
-<li class='nav-item nav-dropdown'>
+<h4 class='nav-item nav-link text-white mt-3'>Datos meteorlógicos</h4>
+<li class='nav-item'><a class='nav-link' href="{{ backpack_url('station') }}"><i class="nav-icon fa fa-mobile"></i> Estaciones</a></li>
+<li class='nav-item'><a class='nav-link' href="{{ backpack_url('file') }}"><i class='nav-icon fa fa-files-o'></i> Archivos</a></li>
+
+<!-- <li class='nav-item'><a class='nav-link' href='{{ backpack_url('met_raw_data') }}'><i class='nav-icon fas fa-cloud-sun-rain'></i> Datos Meteorlógicos</a></li> -->
+
+<!-- <li class='nav-item nav-dropdown'>
     <a class='nav-link nav-dropdown-toggle' href="#"><i class="nav-icon fa fa-newspaper-o"></i>Resúmenes</a>
     <ul class="nav-dropdown-items">
         <li class='nav-item'><a class='nav-link' href="{{ backpack_url('daily') }}"><i class="nav-icon fa fa-calendar"></i>Diario</a></li>
@@ -14,9 +17,9 @@
         <li class='nav-item'><a class='nav-link' href="{{ backpack_url('monthly') }}"><i class="nav-icon fa fa-calendar"></i>Mensual</a></li>
         <li class='nav-item'><a class='nav-link' href="{{ backpack_url('yearly') }}"><i class="nav-icon fa fa-calendar"></i>Anual</a></li>
     </ul>
-</li>
+</li> -->
 
-<h4 class='nav-item nav-link text-white mt-3'>Datos Agronómicos</h4>
+<!-- <h4 class='nav-item nav-link text-white mt-3'>Datos Agronómicos</h4>
 
 <li class='nav-item nav-dropdown'>
     <a class='nav-link nav-dropdown-toggle' href="#"><i class="nav-icon fa fa-newspaper-o"></i>Módulos: Parcela</a>
@@ -45,10 +48,13 @@
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lkpcultivo') }}'><i class='nav-icon fa fa-question'></i> Cultivos</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lkpvariedad') }}'><i class='nav-icon fa fa-question'></i> Variedades</a></li>
     </ul>
-</li>
+</li> -->
 
-<h4 class='nav-item nav-link text-white mt-3'>Administración de la Plataforma</h4>
-<li class='nav-item'><a class='nav-link' href="{{ backpack_url('user') }}"><i class="nav-icon fa fa-users"></i> Usuarios</a></li>
+<h4 class='nav-item nav-link text-white mt-3'>Administración de la plataforma</h4>
+<li class='nav-item'><a class='nav-link' href="{{ backpack_url('user') }}"><i class="nav-icon fa fa-user"></i> Usuarios</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('organisation') }}'><i class='nav-icon fa fa-users'></i> Organizaciones</a></li>
+
+
 
 <li class='nav-item nav-dropdown'>
     <a class='nav-link nav-dropdown-toggle' href="#"><i class="fa fa-cog"></i> Sistema Kobo</a>
@@ -68,5 +74,3 @@
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('comunidad') }}'><i class='nav-icon fa fa-question'></i> Comunidades</a></li>
     </ul>
 </li>
-
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('observation') }}'><i class='nav-icon fa fa-files-o'></i> Observaciones</a></li>

@@ -16,8 +16,10 @@ class CreateScheduleJobForRemoveUnnecessaryStagingRecords extends Migration
         // For correct indentation in MySQL stored procedure to be created,
         // MySQL program source code needs to be stored in below format
 
-        $procedure =         
+        $procedure =
 "
+DROP EVENT IF EXISTS event_recurring_remove_unnecessary_staging_records;
+
 CREATE EVENT event_recurring_remove_unnecessary_staging_records
 ON SCHEDULE EVERY 1 DAY
 STARTS '2021-11-01 00:00:00'

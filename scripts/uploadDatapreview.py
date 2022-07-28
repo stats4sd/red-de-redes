@@ -1,25 +1,10 @@
-# import mysql database driver, call it as "mysql"
 import mysql.connector as mysql
-
-# import database connection configuration from file "dbConfig.py", call it as "config"
 import dbConfig as config
-
-# import column names settings from file "listColumnsName.py", call it as "columns_name"
 import listColumnsName as columns_name
-
-# import popular Python-based data analysis library "pandas", call it as "pd"
 import pandas as pd
-
-# import numpy library, call it as "np"
 import numpy as np
-
-# import unit conversion custom library from file "convertorUnits.py", call it as "convertor"
 import convertorUnits as convertor
-
-# import date time library, call it as "datetime"
 from datetime import datetime
-
-# import system library, to access system-specific parameters and functions
 import sys
 
 
@@ -27,15 +12,16 @@ import sys
 # including data file full path, user selected station id,
 # user selected unit for temperature, pressure, wind, rainfall,
 # uploader id, observeration id
-path = sys.argv[1]
-station_id = sys.argv[2]
-selected_unit_temp = sys.argv[3]
-selected_unit_pres = sys.argv[4]
-selected_unit_wind = sys.argv[5]
-selected_unit_rain = sys.argv[6]
-uploader_id = sys.argv[7]
-is_windows = sys.argv[8]
-newObservation_id = sys.argv[9]
+env = sys.argv[1]
+path = sys.argv[2]
+station_id = sys.argv[3]
+selected_unit_temp = sys.argv[4]
+selected_unit_pres = sys.argv[5]
+selected_unit_wind = sys.argv[6]
+selected_unit_rain = sys.argv[7]
+uploader_id = sys.argv[8]
+is_windows = sys.argv[9]
+newObservation_id = sys.argv[10]
 
 
 
@@ -57,7 +43,7 @@ def openFile():
         # specify row 0 and row 1 to as column headers
         # do not specify low_memory = False, internally process the file in chunks,
         # resulting in lower memory use while parsing, but possibly mixed type inference
-        df = pd.read_csv(path, na_values=['--.-', '--', '---', '------'], sep="\t", header=[0,1])
+        df = pd.read_csv(path, na_values=['--.-', '--', '---', '------',999], sep="\t", header=[0,1])
 
 
         # option to print out all columns in a data frame
@@ -136,6 +122,7 @@ def openFile():
         # define date_time as a new array for processing measurement date time
         date_time = []
 
+        print(df)
 
         # handle all fecha_hora, time data in data frame
         for fecha_hora, time in zip(df.fecha_hora, df.time):
@@ -247,7 +234,7 @@ def openFile():
         # specify separater as comma ,
         # do not specify which row is header, default row 0 as column names
         # specify low_memory = False, to ensure no mixed types, the entire file is read into a single DataFrame
-        data = pd.read_csv(path, na_values=['--.-',' --.-', '--',' --', '---',' ---', '------', ' ------'], sep=",", low_memory=False)
+        data = pd.read_csv(path, na_values=['--.-',' --.-', '--',' --', '---',' ---', '------', ' ------',999], sep=",", low_memory=False)
 
 
         # option to print out all columns in a data frame
@@ -408,7 +395,11 @@ def openFile():
 
 
 # connects to MySQL database
-conn = mysql.connect(**config.dbConfig)
+
+if(env == "testing"):
+   conn = mysql.connect(**config.dbConfigTest)
+else:
+    conn = mysql.connect(**config.dbConfig)
 
 
 # create cursor object to execute SQL statements
@@ -436,7 +427,7 @@ try:
 
 
     # define data_value as an empty array
-    data_value = []
+    #data_value = []
 
 
     # iterate each row in data frome
@@ -449,11 +440,15 @@ try:
 
         # append INSERT SQL statement to data_value array for later execution
         # prepare INSERT SQL statement VALUES clause with data of multiple records
-        data_value.append(tuple(row))
+        # data_value.append(tuple(row))
+
+        # MySQL connection is gone when INSERT SQL is too long (i.e. when data file > 2.5 MB)
+        # run one short INSERT SQL for each record, instead of running one very long INSERT SQL for all records
+        cursor.execute(sql, tuple(row))
 
 
     # no error handling if SQL excption occured (e.g. unique constraint violated due to two records with same date time)
-    cursor.executemany(sql, data_value)
+    #cursor.executemany(sql, data_value)
 
 
     # commit changes to database

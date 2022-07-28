@@ -14,7 +14,7 @@ class AddAltitudeToStations extends Migration
     public function up()
     {
         Schema::table('stations', function (Blueprint $table) {
-            $table->decimal('altitude', 9,6)->after('longitude');
+            $table->decimal('altitude', 20,2)->after('longitude');
         });
     }
 

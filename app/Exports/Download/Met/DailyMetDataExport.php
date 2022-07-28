@@ -138,7 +138,7 @@ class DailyMetDataExport implements FromQuery, WithTitle, WithHeadings, WithStri
 
     public function title(): string
     {
-        return 'Daily Met Data';
+        return 'Datos';
     }
 
     public function headings(): array

@@ -13,9 +13,11 @@ class UpdateStationIdInDataTable extends Migration
      */
     public function up()
     {
-        Schema::table('data', function (Blueprint $table) {
-            $table->renameColumn('id_station', 'station_id');
-        });
+        if (Schema::hasColumn('data', 'id_station')) {
+            Schema::table('data', function (Blueprint $table) {
+                $table->renameColumn('id_station', 'station_id');
+            });
+        }
     }
 
     /**
