@@ -120,7 +120,7 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
             $newRow['file_id'] = $this->file_id;
             $newRow['station_id'] = $this->stationId;
 
-            $metDataItem = MetDataPreview::create($newRow->toArray());
+            return new MetDataPreview($newRow->toArray());
         } catch (Throwable $exception) {
             dump($row);
             dump($this->keyMap);
@@ -161,13 +161,13 @@ class DavisFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wit
     public
     function batchSize(): int
     {
-        return 1000;
+        return 300;
     }
 
     public
     function chunkSize(): int
     {
-        return 1000;
+        return 300;
     }
 
     public function rules(): array
