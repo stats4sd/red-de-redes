@@ -91,6 +91,16 @@ class StationCrudController extends CrudController
                 'label' => 'Altura del instrumento de viento',
                 'type' => 'decimal',
             ],
+            [
+                'name' => 'weatherunderground_url',
+                'label' => 'URL Weather Underground ',
+                'type' => 'url',
+                'wrapper'   => [
+                    'href' => function ($crud, $column, $entry) {
+                        return $entry->weatherunderground_url;
+                    },
+                ]
+            ],
         ]);
 
         $this->crud->addFields([
@@ -144,6 +154,11 @@ class StationCrudController extends CrudController
                 'type' => 'number',
                 'attributes' => ["step" => "any"], // allow decimals
                 'hint' => 'Medida en metros',
+            ],
+            [
+                'name' => 'weatherunderground_url',
+                'label' => 'URL Weather Underground ',
+                'type' => 'url',
             ],
         ]);
         // add asterisk for fields that are required in StationRequest
