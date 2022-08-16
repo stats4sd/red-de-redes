@@ -7,10 +7,13 @@ use App\Events\MetDataImportFailed;
 use App\Events\MetDataImportStarted;
 use App\Http\Requests\FileRequest;
 use App\Imports\DavisFileHeaderValidation;
+use App\Imports\ChinasFileHeaderValidation;
 use App\Imports\DavisFileImport;
 use App\Imports\PreProcessDavisHeaders;
+use App\Imports\PreProcessChinasHeaders;
 use App\Jobs\MetDataImportCompletedJob;
 use App\Jobs\StartMetDataImport;
+use App\Jobs\StartChinasMetDataImport;
 use App\Models\Met\File;
 use App\Models\Met\MetData;
 use App\Models\Met\Station;
@@ -57,6 +60,7 @@ class FileController extends Controller
             'upload_id' => $this->generateRandomString(),
         ]);
 
+        // handle data upload for davis met station
         // upload data to met_data_preview table
         if (Station::find($fileRecord['station_id'])->type === 'davis') {
             $processor = (new PreProcessDavisHeaders());
@@ -73,9 +77,28 @@ class FileController extends Controller
 
             // to get around this, we dispatch a new job that handles the setup of the Excel::queueImport() process...
             StartMetDataImport::dispatch($fileRecord, $fileWithMergedHeaders, Auth::user());
-
         }
 
+
+        // handle data upload for chinas met station
+        if (Station::find($fileRecord['station_id'])->type === 'chinas') {
+            $processor = (new PreProcessChinasHeaders());
+            [$fileWithMergedHeaders, $headerValidationFile, $count] = $processor($fileRecord->data_file);
+
+            $fileRecord->update(['total_records_count' => $count]);
+
+
+            // check headers are valid **before** running the entire import process queue.
+            Excel::import(new ChinasFileHeaderValidation(), $headerValidationFile, 'public', \Maatwebsite\Excel\Excel::TSV);
+
+            // for some reason, running Excel::import followed by Excel::queueImport on the same thread causes an error:
+            // ("serialize(): &quot;spreadsheet&quot; returned as member variable from __sleep() but does not exist")
+
+            // to get around this, we dispatch a new job that handles the setup of the Excel::queueImport() process...
+            StartChinasMetDataImport::dispatch($fileRecord, $fileWithMergedHeaders, Auth::user());
+        }
+
+        
         return response()->json(['started']);
     }
 
