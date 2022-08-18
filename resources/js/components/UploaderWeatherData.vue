@@ -260,8 +260,7 @@
                                     <div class="alert alert-success show" v-if="success!=null">{{ success }}</div>
                                     <div class="alert alert-warning show" v-if="scenario3">
                                         <input type="checkbox" v-model="scenario3Confirmed">
-                                        <b>I confirm that I understand the potential risk of uploading this
-                                            data file with existing records.</b></div>
+                                        <b> Confirmo que entiendo el riesgo potencial de cargar este archivo de datos con registros existentes.</b></div>
                                     <br/>
 
                                     <div class="d-flex justify-content-center">
@@ -276,10 +275,16 @@
                                         &nbsp;
                                         <form :action="'/store-file/'+ upload_id" method="POST">
                                             <input type="hidden" name="_token" :value="csrf"/>
-                                            <button class="btn btn-success my-4" type="submit">
+                                            <!-- 
+                                                Disable "Confirm" button when:
+                                                1. The uploaded file does not contain any new record OR
+                                                2. The uploaded file contains some existing records and some new records, i.e. scenario 3. 
+                                                   And user has not ticked the confirmation checkbox yet
+                                            -->
+                                            <button class="btn btn-success my-4" type="submit"
+                                                    :disabled="(number_uploaded_records == number_existed_records) || (scenario3 && !scenario3Confirmed)">
                                                 Guardar en la base de datos
                                             </button>
-
                                         </form>
                                     </div>
 
@@ -392,6 +397,9 @@ export default {
             error_rain: false,
             uploadError: null,
             upload_id: null,
+            number_uploaded_records: null,
+            number_existed_records: null,
+            number_not_existed_records: null,
             scenario3: false,
             scenario3Confirmed: false,
             showUploadFile: false,
@@ -642,6 +650,10 @@ export default {
                     this.min_temp = payload.data.min_temp;
                     this.max_temp = payload.data.max_temp;
                     this.max_daily_rain = payload.data.max_daily_rain;
+
+                    this.number_uploaded_records = payload.data.number_uploaded_records;
+                    this.number_existed_records = payload.data.number_existed_records;
+                    this.number_not_existed_records = payload.data.number_not_existed_records;
 
                     // show advice message
                     this.error = null;
