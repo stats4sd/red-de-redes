@@ -24,7 +24,6 @@ class ChinasFileHeaderValidation implements ToModel, WithValidation, WithHeading
      */
     public function __construct()
     {
-        HeadingRowFormatter::default('none');
     }
 
     public function model(array $row)
@@ -36,7 +35,7 @@ class ChinasFileHeaderValidation implements ToModel, WithValidation, WithHeading
     {
         return [
             // use handled header column name here
-            'fecha-hora' => 'required',
+            'fecha_hora' => 'required',
         ];
     }
 

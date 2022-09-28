@@ -50,7 +50,6 @@ class ChinasFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wi
      */
     public function __construct(File $fileRecord, User $user)
     {
-        HeadingRowFormatter::default('none');
 
         // load in Keymap for Davis files
         $this->keyMap = json_decode(
@@ -91,7 +90,8 @@ class ChinasFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wi
                 $newKey = $this->keyMap[$key];
 
                 // replace missing value entries with nulls:
-                if ($value === 999 || collect(['-', '--', '---', '----', '-----', '------'])->contains($value)) {
+                // 'missing' values are represented either by '999' or by some combination of spaces, dashes and dots.
+                if ($value === 999 || Str::of($value)->test('/^[\-\,\.\s]+$/')) {
                     $value = null;
                 }
 
@@ -99,7 +99,7 @@ class ChinasFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wi
                     $newKey => $value
                 ];
             });
-            
+
             if (isset($newRow['null'])) {
                 unset($newRow['null']);
             }
@@ -122,6 +122,7 @@ class ChinasFileImport implements ToModel, WithEvents, WithCustomCsvSettings, Wi
             $metDataItem = MetDataPreview::create($newRow->toArray());
         } catch (Throwable $exception) {
             dump($row);
+            dump($newRow);
             dump($this->keyMap);
             dump($this->getRowNumber());
 
