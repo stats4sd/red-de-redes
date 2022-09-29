@@ -151,6 +151,8 @@
                                 <div class="alert alert-secondary" v-if="previewData!=null">
                                     <ul>
                                         <li>Hay {{ total_rows }} filas</li>
+                                        <li>Fecha hora mínima de los registros:<b> {{ min_fecha_hora }} </b></li>
+                                        <li>Fecha hora máxima de los registros:<b> {{ max_fecha_hora }} </b></li>
                                         <li>Temperatura mínima de los registros:<b> {{ min_temp }} ºC</b></li>
                                         <li>Temperatura máxima de los registros:<b> {{ max_temp }} ºC</b></li>
                                         <li>Precipitación máxima diaria de registros:<b> {{ max_daily_rain }} mm</b></li>
@@ -258,8 +260,7 @@
                                     <div class="alert alert-success show" v-if="success!=null">{{ success }}</div>
                                     <div class="alert alert-warning show" v-if="scenario3">
                                         <input type="checkbox" v-model="scenario3Confirmed">
-                                        <b>I confirm that I understand the potential risk of uploading this
-                                            data file with existing records.</b></div>
+                                        <b> Confirmo que entiendo el riesgo potencial de cargar este archivo de datos con registros existentes.</b></div>
                                     <br/>
 
                                     <div class="d-flex justify-content-center">
@@ -274,10 +275,16 @@
                                         &nbsp;
                                         <form :action="'/store-file/'+ upload_id" method="POST">
                                             <input type="hidden" name="_token" :value="csrf"/>
-                                            <button class="btn btn-success my-4" type="submit">
+                                            <!-- 
+                                                Disable "Confirm" button when:
+                                                1. The uploaded file does not contain any new record OR
+                                                2. The uploaded file contains some existing records and some new records, i.e. scenario 3. 
+                                                   And user has not ticked the confirmation checkbox yet
+                                            -->
+                                            <button class="btn btn-success my-4" type="submit"
+                                                    :disabled="(number_uploaded_records == number_existed_records) || (scenario3 && !scenario3Confirmed)">
                                                 Guardar en la base de datos
                                             </button>
-
                                         </form>
                                     </div>
 
@@ -328,6 +335,8 @@ export default {
     data() {
         this.trackProgress = _.debounce(this.trackProgress, 1000);
         return {
+            min_fecha_hora: null,
+            max_fecha_hora: null,
             max_temp: null,
             min_temp: null,
             max_daily_rain: null,
@@ -388,6 +397,9 @@ export default {
             error_rain: false,
             uploadError: null,
             upload_id: null,
+            number_uploaded_records: null,
+            number_existed_records: null,
+            number_not_existed_records: null,
             scenario3: false,
             scenario3Confirmed: false,
             showUploadFile: false,
@@ -633,9 +645,15 @@ export default {
                     this.total_rows = payload.data.met_data_preview.total;
                     this.previewData = payload.data.met_data_preview.data;
                     this.upload_id = (this.previewData[0]['upload_id']);
+                    this.min_fecha_hora = payload.data.min_fecha_hora;
+                    this.max_fecha_hora = payload.data.max_fecha_hora;
                     this.min_temp = payload.data.min_temp;
                     this.max_temp = payload.data.max_temp;
                     this.max_daily_rain = payload.data.max_daily_rain;
+
+                    this.number_uploaded_records = payload.data.number_uploaded_records;
+                    this.number_existed_records = payload.data.number_existed_records;
+                    this.number_not_existed_records = payload.data.number_not_existed_records;
 
                     // show advice message
                     this.error = null;

@@ -71,10 +71,15 @@ class MetDataImportCompletedJob implements ShouldQueue
         // number of not existed records = number of uploaded records - number of existed records
         $numberNotExistedRecords = $metDataPreviewCount - $numberExistedRecords;
 
+        $minFechaHora = MetDataPreview::where('upload_id', $this->fileRecord->upload_id)->min('fecha_hora');
+        $maxFechaHora = MetDataPreview::where('upload_id', $this->fileRecord->upload_id)->max('fecha_hora');
+        
         // update file record
         $this->fileRecord->update([
             'new_records_count' => $numberNotExistedRecords,
             'duplicate_records_count' => $numberExistedRecords,
+            'min_fecha_hora' => $minFechaHora,
+            'max_fecha_hora' => $maxFechaHora,
         ]);
 
         $maxTemp = MetDataPreview::where('upload_id', $this->fileRecord->upload_id)->max('hi_temp');
@@ -102,6 +107,8 @@ class MetDataImportCompletedJob implements ShouldQueue
                 'number_uploaded_records' => $metDataPreviewCount,
                 'number_existed_records' => $numberExistedRecords,
                 'number_not_existed_records' => $numberNotExistedRecords,
+                'min_fecha_hora' => $minFechaHora,
+                'max_fecha_hora' => $maxFechaHora,
                 'scenario' => $scenario,
                 'adviceMessage' => $adviceMessage,
                 'error_data' => null,
