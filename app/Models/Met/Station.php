@@ -42,4 +42,11 @@ class Station extends Model
         return $this->belongsTo(Organisation::class);
     }
 
+    public function getLatestRecordAttribute()
+    {
+        return $this->data()
+            ->select('fecha_hora', 'station_id')
+            ->orderByDesc('fecha_hora')
+            ->first()?->fecha_hora;
+    }
 }

@@ -72,6 +72,11 @@ class StationCrudController extends CrudController
                 'type' => 'relationship',
             ],
             [
+                'name' => 'latest_record',
+                'label' => 'Último registro',
+                'type' => 'datetime',
+            ],
+            [
                 'name' => 'latitude',
                 'label' => 'Latitud',
                 'type' => 'decimal',
