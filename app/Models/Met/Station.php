@@ -44,6 +44,9 @@ class Station extends Model
 
     public function getLatestRecordAttribute()
     {
-        return $this->data()->orderByDesc('fecha_hora')->first()?->fecha_hora;
+        return $this->data()
+            ->select('fecha_hora', 'station_id')
+            ->orderByDesc('fecha_hora')
+            ->first()?->fecha_hora;
     }
 }
