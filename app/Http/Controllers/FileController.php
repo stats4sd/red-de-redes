@@ -177,9 +177,8 @@ class FileController extends Controller
     public function cancelUpload($upload_id)
     {
 
-        if ($upload_id) {
-            DB::table('met_data_preview')->where('upload_id', '=', $upload_id)->delete();
-        }
+        // For traceability and consistency, do not remove met_data_preview records no matter user click "Cancel" or "Confirm" button
+        // For housekeeping and performance concern, met_data_preview records older than 14 days will be removed by daily schedule job
 
         Alert::add('info', 'Carga cancelada: todos los datos de la vista previa se han eliminado de la base de datos')->flash();
 
@@ -226,11 +225,32 @@ class FileController extends Controller
         $maxDate = (new Carbon($maxDate))->toDateString();
         $minDate = (new Carbon($minDate))->toDateString();
 
-        $result = \DB::select(
+        $maxMonth = substr($maxDate, 5, 2);
+        $minMonth = substr($minDate, 5, 2);
+
+        $maxYear = substr($maxDate, 0, 4);
+        $minYear = substr($minDate, 0, 4);
+
+
+        $dailyResult = \DB::select(
             "call generate_daily_met_data_by_date_range(?, ?, ?);",
             [$minDate, $maxDate, $fileRecord->station_id]
         );
 
+        $tendaysResult = \DB::select(
+            "call generate_tendays_met_data_by_year_range(?, ?, ?);",
+            [$minYear, $maxYear, $fileRecord->station_id]
+        );
+
+        $monthlyResult = \DB::select(
+            "call generate_monthly_met_data_by_month_range(?, ?, ?, ?, ?);",
+            [$minYear, $minMonth, $maxYear, $maxMonth, $fileRecord->station_id]
+        );
+
+        $yearlyResult = \DB::select(
+            "call generate_yearly_met_data_by_year_range(?, ?, ?);",
+            [$minYear, $maxYear, $fileRecord->station_id]
+        );
 
         Alert::add('success', "Carga completa. Todos los registros {$metDataCount} se almacenan en la base de datos y se han calculado los resúmenes diarios.")->flash();
 
