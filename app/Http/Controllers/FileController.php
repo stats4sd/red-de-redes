@@ -231,6 +231,7 @@ class FileController extends Controller
         $maxYear = substr($maxDate, 0, 4);
         $minYear = substr($minDate, 0, 4);
 
+
         $dailyResult = \DB::select(
             "call generate_daily_met_data_by_date_range(?, ?, ?);",
             [$minDate, $maxDate, $fileRecord->station_id]
