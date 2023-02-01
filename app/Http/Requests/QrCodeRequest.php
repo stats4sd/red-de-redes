@@ -26,6 +26,8 @@ class QrCodeRequest extends FormRequest
         return [
             'prefix' => ['required'],
             'code_number' => ['required', 'integer'],
+            'suffix' => ['nullable'],
+            'label_number' => ['required', 'integer'],
         ];
     }
 }

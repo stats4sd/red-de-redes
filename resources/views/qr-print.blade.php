@@ -1,45 +1,49 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <div class="book">
-    @foreach($qrcodes as $qrcode)
-        <div class="page justify-content-center p-4">
-            {{-- top box --}}
-            <div class="card w-75 ml-auto mr-auto mb-4">
-                    @include('qr_label')
-                    <p class="d-inline-block ml-auto mr-auto pt-2">Copia para el dueño de la parcela</p>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex p-0">
-                        <div class="w-25 pl-3 py-3 font-weight-bold border border-gray border-top-0 border-bottom-0 border-left-0 ">Nombre del productor</div>
-                        <div class="w-75 pr-3 py-3"></div>
-                    </li>
-                    <li class="list-group-item d-flex p-0 ">
-                        <div class="w-25 pl-3 py-3 font-weight-bold border border-gray border-top-0 border-bottom-0 border-left-0 ">Región</div>
-                        <div class="w-75 pr-3 py-3"></div>
-                    </li>
-                    <li class="list-group-item d-flex p-0 ">
-                        <div class="w-25 pl-3 py-3 font-weight-bold border border-gray border-top-0 border-bottom-0 border-left-0 ">Departamento</div>
-                        <div class="w-75 pr-3 py-3"></div>
-                    </li>
-                    <li class="list-group-item d-flex p-0 ">
-                        <div class="w-25 pl-3 py-3 font-weight-bold border border-gray border-top-0 border-bottom-0 border-left-0 ">Municipio</div>
-                        <div class="w-75 pr-3 py-3"></div>
-                    </li>
-                    <li class="list-group-item d-flex p-0 ">
-                        <div class="w-25 pl-3 py-3 font-weight-bold border border-gray border-top-0 border-bottom-0 border-left-0 ">Comunidad</div>
-                        <div class="w-75 pr-3 py-3"></div>
-                    </li>
-                    <li class="list-group-item d-flex p-0 ">
-                    </li>
-                </ul>
-            {{-- End top box --}}
-            </div>
-                @for ($i = 0; $i < 3; $i++)
-            <div class="d-flex justify-content-center my-4">
-                    @include('qr_label')
-                    @include('qr_label')
-            </div>
-                @endfor
+    <div class="page justify-content-center">
+        <div class="d-flex justify-content-center">
+
+            @foreach($qrcodes as $qrcode)
+
+            {{-- <div class="card" style="width:100%; margin-top: 0px"> --}}
+                @if($labelSize == 50)
+                  <div class="card d-flex justify-content-center" style="width:45mm;  height:30mm;">
+                    {!! QrCode::size(160)->generate($qrcode->code) !!}
+                    <div class="card-footer justify-content-center">
+                        <div class="font-weight-bold" style="text-align: center;">{{ $qrcode->code }}</div>
+                    </div>
+                </div>
+            
+                @else
+                  <div class="card d-flex justify-content-center" style="width:70mm;  height:40mm;">
+                    {!! QrCode::size(250)->generate($qrcode->code) !!}
+                    <div class="card-footer justify-content-center">
+                        <div class="font-weight-bold" style="text-align: center;">{{ $qrcode->code }}</div>
+                    </div>
+                </div>
+                
+                @endif
+            {{-- </div> --}}
+              @if($loop->iteration % $labelSize == 0 & $loop->iteration != $labelNum)
+                      {{-- End Row --}}
+                      </div>
+                      {{-- End page --}}
+                      </div>
+                      {{-- Start New Page --}}
+                      <div class="page">
+                          {{-- Start New Row --}}
+                          <div class="d-flex justify-content-center">
+
+                  @elseif($loop->iteration % $colNumbers == 0)
+                      {{-- End Row --}}
+                      </div>
+                      {{-- Start New Row --}}
+                      <div class="d-flex justify-content-center">
+                  @endif
+
+            @endforeach
         </div>
-    @endforeach
+    </div>
 </div>
 
 
