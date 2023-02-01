@@ -24,11 +24,41 @@
 					</div>
 					<div class="form-group row {{ $errors->has('code_number') ? 'has-error' : '' }}">
 
-						<label for="code_numberber" class="col-sm-4">¿Cuántos códigos QR necesitas?</label>
+						<label for="code_number" class="col-sm-4">¿Cuántos códigos necesitas?</label>
 						<div class="col-sm-4">
 							<input type="number" class="form-control" id="code_number" name="code_number">
-							<small id="passwordHelpBlock" class="form-text text-muted">Recibirás una página imprimible por cada código generado</small>
+							<small id="passwordHelpBlock" class="form-text text-muted">Los códigos QR se dividirán en varias hojas si es necesario</small>
                             <span class="text-danger">{{ $errors->first('code_number') }}</span>
+
+						</div>
+					</div>
+					<div class="form-group row {{ $errors->has('suffix') ? 'has-error' : '' }}">
+						<label for="suffix" class="col-sm-4">Ingrese el sufijo a usar para los códigos</label>
+						<div class="col-sm-4">
+						<input type="text" class="form-control" id="suffix" name="suffix" onkeyup="standardCode()">
+						<small id="passwordHelpBlock" class="form-text text-muted">Opcional</small>
+                        <span class="text-danger">{{ $errors->first('suffix') }}</span>
+						</div>
+					</div>
+					<div class="form-group row {{ $errors->has('label_number') ? 'has-error' : '' }}">
+						<label for="sheetSize" class="col-sm-4">Seleccione el número de códigos por hoja</label>
+						<div class="col-sm-6">
+						<div class="form-check-inline">
+						  <label class="form-check-label">
+						    <input type="radio" class="form-check-input" value="14" name="label_number" selected>14
+						  </label>
+						</div>
+						<div class="form-check-inline">
+						  <label class="form-check-label">
+						    <input type="radio" class="form-check-input" value="21" name="label_number" selected>21
+						  </label>
+						</div>
+						<div class="form-check-inline">
+						  <label class="form-check-label">
+						    <input type="radio" class="form-check-input" value="50" name="label_number">50
+						  </label>
+						</div>
+                        <span class="text-danger">{{ $errors->first('label_number') }}</span>
 
 						</div>
 					</div>

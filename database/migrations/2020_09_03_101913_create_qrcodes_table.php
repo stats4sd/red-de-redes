@@ -17,6 +17,7 @@ class CreateQrcodesTable extends Migration
             $table->bigIncrements('id');
             $table->string('prefix', 50);
             $table->string('code', 100);
+            $table->string('suffix', 50)->nullable();
             $table->timestamps();
         });
     }
