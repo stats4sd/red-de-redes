@@ -28,6 +28,7 @@ class QrCodeRequest extends FormRequest
             'code_number' => ['required', 'integer'],
             'suffix' => ['nullable'],
             'label_number' => ['required', 'integer'],
+            'start_number' => ['nullable', 'integer', 'min:1', 'max:999'],
         ];
     }
 }

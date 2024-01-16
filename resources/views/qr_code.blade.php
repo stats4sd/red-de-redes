@@ -22,6 +22,16 @@
                         <span class="text-danger">{{ $errors->first('prefix') }}</span>
 						</div>
 					</div>
+					<div class="form-group row {{ $errors->has('start_number') ? 'has-error' : '' }}">
+
+						<label for="start_number" class="col-sm-4">¿Desde qué número quieres iniciar?</label>
+						<div class="col-sm-4">
+							<input type="number" class="form-control" id="start_number" name="start_number">
+							<small id="passwordHelpBlock" class="form-text text-muted">Opcional</small>
+							<span class="text-danger">{{ $errors->first('start_number') }}</span>
+
+						</div>
+					</div>
 					<div class="form-group row {{ $errors->has('code_number') ? 'has-error' : '' }}">
 
 						<label for="code_number" class="col-sm-4">¿Cuántos códigos necesitas?</label>
