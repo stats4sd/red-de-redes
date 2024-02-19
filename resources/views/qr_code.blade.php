@@ -13,13 +13,23 @@
 		<div class="card card-primary">
 			<div class="card-body">
 
-				<form method="post" action="{{ route('qr-newcodes') }}">
+				<form method="post" target="_blank" action="{{ route('qr-newcodes') }}">
 					@csrf
 					<div class="form-group row {{ $errors->has('prefix') ? 'has-error' : '' }}">
 						<label for="prefix" class="col-sm-4">Ingrese el prefijo a usar para los códigos</label>
 						<div class="col-sm-4">
 						<input type="text" class="form-control" id="prefix" name="prefix" onkeyup="standardCode()">
                         <span class="text-danger">{{ $errors->first('prefix') }}</span>
+						</div>
+					</div>
+					<div class="form-group row {{ $errors->has('start_number') ? 'has-error' : '' }}">
+
+						<label for="start_number" class="col-sm-4">¿Desde qué número quieres iniciar?</label>
+						<div class="col-sm-4">
+							<input type="number" class="form-control" id="start_number" name="start_number">
+							<small id="passwordHelpBlock" class="form-text text-muted">Opcional</small>
+							<span class="text-danger">{{ $errors->first('start_number') }}</span>
+
 						</div>
 					</div>
 					<div class="form-group row {{ $errors->has('code_number') ? 'has-error' : '' }}">
@@ -40,25 +50,26 @@
                         <span class="text-danger">{{ $errors->first('suffix') }}</span>
 						</div>
 					</div>
-					<div class="form-group row {{ $errors->has('label_number') ? 'has-error' : '' }}">
-						<label for="sheetSize" class="col-sm-4">Seleccione el número de códigos por hoja</label>
+					<div class="form-group row {{ $errors->has('code_size') ? 'has-error' : '' }}">
+						<label for="sheetSize" class="col-sm-4">Seleccione el tamaño del código</label>
 						<div class="col-sm-6">
 						<div class="form-check-inline">
 						  <label class="form-check-label">
-						    <input type="radio" class="form-check-input" value="14" name="label_number" selected>14
+						    <input type="radio" class="form-check-input" value=50 name="code_size" selected>Pequeño
 						  </label>
 						</div>
 						<div class="form-check-inline">
 						  <label class="form-check-label">
-						    <input type="radio" class="form-check-input" value="21" name="label_number" selected>21
+						    <input type="radio" class="form-check-input" value=21 name="code_size" selected>Mediano
 						  </label>
 						</div>
 						<div class="form-check-inline">
 						  <label class="form-check-label">
-						    <input type="radio" class="form-check-input" value="50" name="label_number">50
+						    <input type="radio" class="form-check-input" value=10 name="code_size" selected>Grande
 						  </label>
 						</div>
-                        <span class="text-danger">{{ $errors->first('label_number') }}</span>
+
+                        <span class="text-danger">{{ $errors->first('code_size') }}</span>
 
 						</div>
 					</div>

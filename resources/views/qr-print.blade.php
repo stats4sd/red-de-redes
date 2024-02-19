@@ -6,18 +6,26 @@
             @foreach($qrcodes as $qrcode)
 
             {{-- <div class="card" style="width:100%; margin-top: 0px"> --}}
-                @if($labelSize == 50)
-                  <div class="card d-flex justify-content-center" style="width:45mm;  height:30mm;">
-                    {!! QrCode::size(160)->generate($qrcode->code) !!}
-                    <div class="card-footer justify-content-center">
+                @if($labelSize == 10)
+                  <div class="card d-flex justify-content-center" style="width:90mm;  height:60mm; padding-top: 5px;">
+                    {!! QrCode::size(350)->generate($qrcode->code) !!}
+                    <div class="card-footer justify-content-center border-top-0">
+                        <div class="font-weight-bold" style="text-align: center;">{{ $qrcode->code }}</div>
+                    </div>
+                  </div>
+            
+                @elseif($labelSize ==21)
+                  <div class="card d-flex justify-content-center" style="width:70mm;  height:40mm; padding-top: 5px;">
+                    {!! QrCode::size(250)->generate($qrcode->code) !!}
+                    <div class="card-footer justify-content-center border-top-0">
                         <div class="font-weight-bold" style="text-align: center;">{{ $qrcode->code }}</div>
                     </div>
                 </div>
-            
-                @else
-                  <div class="card d-flex justify-content-center" style="width:70mm;  height:40mm;">
-                    {!! QrCode::size(250)->generate($qrcode->code) !!}
-                    <div class="card-footer justify-content-center">
+
+                @elseif($labelSize ==50)
+                  <div class="card d-flex justify-content-center" style="width:45mm;  height:30mm; padding-top: 5px;">
+                    {!! QrCode::size(150)->generate($qrcode->code) !!}
+                    <div class="card-footer justify-content-center border-top-0">
                         <div class="font-weight-bold" style="text-align: center;">{{ $qrcode->code }}</div>
                     </div>
                 </div>
