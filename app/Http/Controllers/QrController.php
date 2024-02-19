@@ -11,15 +11,16 @@ class QrController extends Controller
     {
         $validatedData = $request->validated();
 
-        $num = $validatedData['code_number'];
-        $label_number = $validatedData['label_number'];
+        $num = $validatedData['start_number'] ? $validatedData['code_number'] + $validatedData['start_number'] - 1 : $validatedData['code_number'];
+        $code_size = $validatedData['code_size'];
+        $start_number = $validatedData['start_number'] ?: 1;
 
-        if($label_number==50){
+        if($code_size==50){
             
             $colNumbers=5;
 
         }
-        elseif($label_number==21){
+        elseif($code_size==21){
 
             $colNumbers=3;
 
@@ -32,20 +33,20 @@ class QrController extends Controller
         //create new QR code entries
         $qrcodes = [];
 
-        for ($i = 0; $i < $num; $i++) {
+        for ($i = $start_number; $i <= $num; $i++) {
             $qrcode = QrCode::create([
                 'prefix'  => $validatedData['prefix'],
                 'code' => $validatedData['prefix'],
                 'suffix' => $validatedData['suffix'],
                 ]);
 
-            $qrcode->code = $validatedData['prefix'] . '-' . sprintf('%03d', $i+1) . $validatedData['suffix'];
+            $qrcode->code = $validatedData['prefix'] . '-' . sprintf('%03d', $i) . $validatedData['suffix'];
             $qrcode->save();
 
             $qrcodes[] = $qrcode;
         }
 
-        return view('qr-print', ['qrcodes'=>$qrcodes, 'labelNum'=>$num, 'labelSize'=>$label_number, 'colNumbers'=>$colNumbers]);
+        return view('qr-print', ['qrcodes'=>$qrcodes, 'labelNum'=>$num, 'labelSize'=>$code_size, 'colNumbers'=>$colNumbers]);
     }
 
     public function printView()
