@@ -34,6 +34,9 @@ class Kernel extends ConsoleKernel
         // daily schedule job to remove met_data_preview records older than 14 days
         $schedule->command('metdatapreview_housekeeping')->dailyAt('00:01');
         $schedule->command('processmetdata')->dailyAt('06:15');
+
+        // purge telescope entries older than 1 week
+        $schedule->command('app:purge-telescope-entries')->weeklyOn(dayOfWeek: Schedule::TUESDAY);
     }
 
     /**
