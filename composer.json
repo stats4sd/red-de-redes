@@ -27,7 +27,7 @@
         "predis/predis": "^1.1",
         "prologue/alerts": "^0.4.3",
         "pusher/pusher-php-server": "^4.0",
-        "sentry/sentry-laravel": "^4.6",
+        "sentry/sentry-laravel": "^4.7",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-translatable": "^4.0",
         "stats4sd/laravel-file-util": "^0.1.2",

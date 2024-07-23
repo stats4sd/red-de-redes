@@ -7,7 +7,6 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Sentry\Laravel\Integration;
 
-
 class Handler extends ExceptionHandler
 {
     /**
