@@ -2,7 +2,7 @@ SELECT
 MAX(`met_data_preview`.`id`) AS `id`,
 LEFT(`met_data_preview`.`fecha_hora`,10) AS `fecha`,
 `met_data_preview`.`station_id` AS `station_id`,
-`met_data_preview`.`uploader_id` AS `uploader_id`,
+`met_data_preview`.`upload_id` AS `uploader_id`,
 
 MAX(`met_data_preview`.`temperatura_interna`) AS `max_temperatura_interna`,
 MIN(`met_data_preview`.`temperatura_interna`) AS `min_temperatura_interna`,
@@ -39,4 +39,4 @@ AVG(`met_data_preview`.`sensacion_termica`) AS `avg_sensacion_termica`,
 MAX(`met_data_preview`.`lluvia_24_horas`) AS `lluvia_24_horas_total`
 
 FROM `met_data_preview`
-GROUP BY `fecha`,`met_data_preview`.`station_id`,`met_data_preview`.`uploader_id`
+GROUP BY `fecha`,`met_data_preview`.`station_id`,`met_data_preview`.`upload_id`
