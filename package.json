@@ -41,6 +41,6 @@
         "vue-select": "^4.0.0-beta.3",
         "vue-template-compiler": "^2.6.11",
         "vue3-simple-file-input": "^1.0.3",
-        "webpack": "^5.69.1"
+        "webpack": "^5.94.0"
     }
 }
